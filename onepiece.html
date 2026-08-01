@@ -88,6 +88,13 @@ img{max-width:100%}
 .srch a:hover{text-decoration:underline}
 .srch .sep{margin:0 4px; color:var(--line)}
 
+/* ── 商品ごとの抽選・予約受付ページ（src/lottery_research.py がリサーチ・照合） ── */
+.lotlinks{display:block; margin-top:4px; font-size:11px; color:var(--muted); white-space:nowrap}
+.lotlinks .lbl{font-weight:800; color:var(--ink); margin-right:4px}
+.lotlinks a{color:var(--accent); font-weight:700}
+.lotlinks a:hover{text-decoration:underline}
+.lotlinks .sep{margin:0 4px; color:var(--line)}
+
 /* ── 画像 ── */
 .ph{display:flex; align-items:center; justify-content:center; background:var(--tint);
   color:var(--muted); font-weight:700; text-align:center; padding:8px; font-size:12px}
@@ -220,7 +227,7 @@ img{max-width:100%}
 <header class="mast">
   <div class="mast-in">
     <div class="brand">新商品<b>ウォッチ</b></div>
-    <div class="today num">2026年8月1日（土） 16:08更新</div>
+    <div class="today num">2026年8月1日（土） 17:43更新</div>
     <a class="theme-toggle" href="https://docs.google.com/spreadsheets/d/1g8d_tYSgmwsxorlktBztrlCTUnI-iZyjKpcMLdGV1KU/edit" target="_blank" rel="noopener">📋 台帳</a>
     <div class="switch" role="tablist" aria-label="デザイン案の切り替え">
       <button id="bA" class="on" onclick="show('A')">ポータル</button>
@@ -245,7 +252,7 @@ img{max-width:100%}
 </main>
 
 <script>
-const DATA = [{"cat": "トレカ", "title": "ONE PIECEカードゲーム ブースターパック『世界最強の戦士』【OP-17】", "maker": "株式会社バンダイ", "date": "2026-08-22", "kind": "予約", "price": 240, "url": "https://www.onepiece-cardgame.com/", "img": "https://www.onepiece-cardgame.com/ogp.png", "first_seen": "2026-08-01", "en_q": "One Piece Card Game OP-17 booster pack"}, {"cat": "フィギュア", "title": "一番くじ ワンピース -エルバフ編- GIANT BASH!! Vol.1", "maker": "BANDAI SPIRITS", "date": "2026-07-03", "kind": "発売", "price": 790, "url": "https://1kuji.com/products/onep103", "img": "https://assets.1kuji.com/uploads/product/image/10709/6d3ab733-b082-4ba1-a0db-914642934d53.webp", "first_seen": "2026-08-01", "en_q": "Ichiban Kuji One Piece Elbaf GIANT BASH Vol.1"}, {"cat": "フィギュア", "title": "一番くじ ワンピース -エルバフ編- GIANT BASH!! Vol.2", "maker": "BANDAI SPIRITS", "date": "2026-08-08", "kind": "発売", "price": 790, "url": "https://1kuji.com/products/onep104", "img": "https://assets.1kuji.com/uploads/product/image/10710/a114da77-054e-468a-b19e-c743e6dee1cb.webp", "first_seen": "2026-08-01", "en_q": "Ichiban Kuji One Piece Elbaf GIANT BASH Vol.2"}, {"cat": "トレカ", "title": "プレミアムカードコレクション - ベストセレクション vol.7 -", "maker": "バンダイ", "date": "未定", "kind": "発売", "price": 2640, "url": "https://www.onepiece-cardgame.com/products/card_collection_007.html", "img": "https://www.onepiece-cardgame.com/onepiececg/bccard/jp/product/2026/06/18/xOY6wLRW2Y4HOZ4q/img_noimage_premium-card_collection.webp?_=8208f5c9cf00eaeb0829d02405e9064e", "first_seen": "2026-08-01", "en_q": "Premium Card Collection Best Selection Vol.7"}, {"cat": "トレカ", "title": "ONE PIECEカードゲーム BASE SHOPカードケース vol.1 -ボア・ハンコック-", "maker": "バンダイ", "date": "2026-09-04", "kind": "発売", "price": 2970, "url": "https://www.onepiece-cardgame.com/products/cardcase005.html", "img": "https://www.onepiece-cardgame.com/onepiececg/bccard/jp/products/2026/07/21/K5kNgCbfmEVHI4Ny/img_item01.webp?_=8208f5c9cf00eaeb0829d02405e9064e", "first_seen": "2026-08-01", "en_q": "One Piece Card Game Base Shop Hancock Card Case"}, {"cat": "トレカ", "title": "ブースターパック 世界最強の戦士【OP-17】", "maker": "バンダイ", "date": "2026-08-22", "kind": "発売", "price": 240, "url": "https://www.onepiece-cardgame.com/products/op17.html", "img": "https://www.onepiece-cardgame.com/onepiececg/bccard/jp/products/2026/07/09/tcwu3SGNVIoWLZ3o/img_item01.webp?_=8208f5c9cf00eaeb0829d02405e9064e", "first_seen": "2026-08-01", "en_q": "One Piece Card Game OP-17 Booster Pack"}, {"cat": "トレカ", "title": "オフィシャルプレイマット リミテッドエディションvol.6", "maker": "バンダイ", "date": "未定", "kind": "発売", "price": 4730, "url": "https://www.onepiece-cardgame.com/products/playmat_limited006.html", "img": "https://www.onepiece-cardgame.com/onepiececg/bccard/jp/product/2026/06/18/S0ikUaMJzsbkFHe9/img_item01.webp?_=8208f5c9cf00eaeb0829d02405e9064e", "first_seen": "2026-08-01", "en_q": "One Piece Card Game Official Playmat Limited Vol.6"}, {"cat": "トレカ", "title": "リミテッドカードスリーブ プレミアムマットvol.6", "maker": "バンダイ", "date": "未定", "kind": "発売", "price": 1100, "url": "https://www.onepiece-cardgame.com/products/sleeve041.html", "img": "https://www.onepiece-cardgame.com/onepiececg/bccard/jp/products/2026/06/17/3bvtf9OBglsmqaxB/img_item01.webp?_=8208f5c9cf00eaeb0829d02405e9064e", "first_seen": "2026-08-01", "en_q": "One Piece Card Game Limited Card Sleeves Vol.6"}, {"cat": "トレカ", "title": "オフィシャルカードスリーブ 16", "maker": "バンダイ", "date": "2026-08-22", "kind": "発売", "price": 990, "url": "https://www.onepiece-cardgame.com/products/sleeve042.html", "img": "https://www.onepiece-cardgame.com/onepiececg/bccard/jp/products/2026/07/21/4qVkAXP7VO1CiqH2/img_item01.webp?_=8208f5c9cf00eaeb0829d02405e9064e", "first_seen": "2026-08-01", "en_q": "One Piece Card Game Official Card Sleeves 16"}, {"cat": "トレカ", "title": "スタートデッキ 緑 ロロノア・ゾロ【ST-32】", "maker": "バンダイ", "date": "2026-07-11", "kind": "発売", "price": 550, "url": "https://www.onepiece-cardgame.com/products/st32.html", "img": "https://www.onepiece-cardgame.com/onepiececg/bccard/jp/products/2026/06/01/b42jY1zyAMuNXKBa/img_item01.webp?_=8208f5c9cf00eaeb0829d02405e9064e", "first_seen": "2026-08-01", "en_q": "One Piece Card Game ST-32 Roronoa Zoro"}, {"cat": "トレカ", "title": "スタートデッキ 青 クザン【ST-33】", "maker": "バンダイ", "date": "2026-07-11", "kind": "発売", "price": 550, "url": "https://www.onepiece-cardgame.com/products/st33.html", "img": "https://www.onepiece-cardgame.com/onepiececg/bccard/jp/products/2026/06/01/weP4WcvMyAX5VOR7/img_item01.webp?_=8208f5c9cf00eaeb0829d02405e9064e", "first_seen": "2026-08-01", "en_q": "One Piece Card Game ST-33 Kuzan"}, {"cat": "トレカ", "title": "スタートデッキ 紫 シャーロット・カタクリ【ST-34】", "maker": "バンダイ", "date": "2026-07-11", "kind": "発売", "price": 550, "url": "https://www.onepiece-cardgame.com/products/st34.html", "img": "https://www.onepiece-cardgame.com/onepiececg/bccard/jp/products/2026/06/01/t5LIBWX0muRucLKS/img_item01.webp?_=8208f5c9cf00eaeb0829d02405e9064e", "first_seen": "2026-08-01", "en_q": "One Piece Card Game ST-34 Katakuri"}, {"cat": "トレカ", "title": "スタートデッキ 赤黒 サボ【ST-35】", "maker": "バンダイ", "date": "2026-07-11", "kind": "発売", "price": 550, "url": "https://www.onepiece-cardgame.com/products/st35.html", "img": "https://www.onepiece-cardgame.com/onepiececg/bccard/jp/products/2026/06/01/XrIHnR2RnQclTTEn/img_item01.webp?_=8208f5c9cf00eaeb0829d02405e9064e", "first_seen": "2026-08-01", "en_q": "One Piece Card Game ST-35 Sabo"}, {"cat": "トレカ", "title": "スタートデッキ 黄 ユースタス・キッド【ST-36】", "maker": "バンダイ", "date": "2026-07-11", "kind": "発売", "price": 550, "url": "https://www.onepiece-cardgame.com/products/st36.html", "img": "https://www.onepiece-cardgame.com/onepiececg/bccard/jp/products/2026/06/01/sjtHEth2Ti1WlWrg/img_item01.webp?_=8208f5c9cf00eaeb0829d02405e9064e", "first_seen": "2026-08-01", "en_q": "One Piece Card Game ST-36 Eustass Kid"}];
+const DATA = [{"cat": "トレカ", "title": "ONE PIECEカードゲーム ブースターパック『世界最強の戦士』【OP-17】", "maker": "株式会社バンダイ", "date": "2026-08-22", "kind": "予約", "price": 240, "url": "https://www.onepiece-cardgame.com/", "img": "https://www.onepiece-cardgame.com/ogp.png", "first_seen": "2026-08-01", "en_q": "One Piece Card Game OP-17 booster pack", "lottery": []}, {"cat": "フィギュア", "title": "一番くじ ワンピース -エルバフ編- GIANT BASH!! Vol.1", "maker": "BANDAI SPIRITS", "date": "2026-07-03", "kind": "発売", "price": 790, "url": "https://1kuji.com/products/onep103", "img": "https://assets.1kuji.com/uploads/product/image/10709/6d3ab733-b082-4ba1-a0db-914642934d53.webp", "first_seen": "2026-08-01", "en_q": "Ichiban Kuji One Piece Elbaf GIANT BASH Vol.1", "lottery": []}, {"cat": "フィギュア", "title": "一番くじ ワンピース -エルバフ編- GIANT BASH!! Vol.2", "maker": "BANDAI SPIRITS", "date": "2026-08-08", "kind": "発売", "price": 790, "url": "https://1kuji.com/products/onep104", "img": "https://assets.1kuji.com/uploads/product/image/10710/a114da77-054e-468a-b19e-c743e6dee1cb.webp", "first_seen": "2026-08-01", "en_q": "Ichiban Kuji One Piece Elbaf GIANT BASH Vol.2", "lottery": []}, {"cat": "トレカ", "title": "プレミアムカードコレクション - ベストセレクション vol.7 -", "maker": "バンダイ", "date": "未定", "kind": "発売", "price": 2640, "url": "https://www.onepiece-cardgame.com/products/card_collection_007.html", "img": "https://www.onepiece-cardgame.com/onepiececg/bccard/jp/product/2026/06/18/xOY6wLRW2Y4HOZ4q/img_noimage_premium-card_collection.webp?_=8208f5c9cf00eaeb0829d02405e9064e", "first_seen": "2026-08-01", "en_q": "Premium Card Collection Best Selection Vol.7", "lottery": []}, {"cat": "トレカ", "title": "ONE PIECEカードゲーム BASE SHOPカードケース vol.1 -ボア・ハンコック-", "maker": "バンダイ", "date": "2026-09-04", "kind": "発売", "price": 2970, "url": "https://www.onepiece-cardgame.com/products/cardcase005.html", "img": "https://www.onepiece-cardgame.com/onepiececg/bccard/jp/products/2026/07/21/K5kNgCbfmEVHI4Ny/img_item01.webp?_=8208f5c9cf00eaeb0829d02405e9064e", "first_seen": "2026-08-01", "en_q": "One Piece Card Game Base Shop Hancock Card Case", "lottery": []}, {"cat": "トレカ", "title": "ブースターパック 世界最強の戦士【OP-17】", "maker": "バンダイ", "date": "2026-08-22", "kind": "発売", "price": 240, "url": "https://www.onepiece-cardgame.com/products/op17.html", "img": "https://www.onepiece-cardgame.com/onepiececg/bccard/jp/products/2026/07/09/tcwu3SGNVIoWLZ3o/img_item01.webp?_=8208f5c9cf00eaeb0829d02405e9064e", "first_seen": "2026-08-01", "en_q": "One Piece Card Game OP-17 Booster Pack", "lottery": [{"site": "あみあみ", "type": "抽選", "url": "https://form.amiami.jp/draw20260730", "verified": true}]}, {"cat": "トレカ", "title": "オフィシャルプレイマット リミテッドエディションvol.6", "maker": "バンダイ", "date": "未定", "kind": "発売", "price": 4730, "url": "https://www.onepiece-cardgame.com/products/playmat_limited006.html", "img": "https://www.onepiece-cardgame.com/onepiececg/bccard/jp/product/2026/06/18/S0ikUaMJzsbkFHe9/img_item01.webp?_=8208f5c9cf00eaeb0829d02405e9064e", "first_seen": "2026-08-01", "en_q": "One Piece Card Game Official Playmat Limited Vol.6", "lottery": []}, {"cat": "トレカ", "title": "リミテッドカードスリーブ プレミアムマットvol.6", "maker": "バンダイ", "date": "未定", "kind": "発売", "price": 1100, "url": "https://www.onepiece-cardgame.com/products/sleeve041.html", "img": "https://www.onepiece-cardgame.com/onepiececg/bccard/jp/products/2026/06/17/3bvtf9OBglsmqaxB/img_item01.webp?_=8208f5c9cf00eaeb0829d02405e9064e", "first_seen": "2026-08-01", "en_q": "One Piece Card Game Limited Card Sleeves Vol.6", "lottery": []}, {"cat": "トレカ", "title": "オフィシャルカードスリーブ 16", "maker": "バンダイ", "date": "2026-08-22", "kind": "発売", "price": 990, "url": "https://www.onepiece-cardgame.com/products/sleeve042.html", "img": "https://www.onepiece-cardgame.com/onepiececg/bccard/jp/products/2026/07/21/4qVkAXP7VO1CiqH2/img_item01.webp?_=8208f5c9cf00eaeb0829d02405e9064e", "first_seen": "2026-08-01", "en_q": "One Piece Card Game Official Card Sleeves 16", "lottery": [{"site": "バトンストア", "type": "予約", "url": "https://baton-store.jp/view/item/000000039259", "verified": true}, {"site": "ヨドバシ.com", "type": "予約", "url": "https://www.yodobashi.com/product/100000001009949987/", "verified": false}, {"site": "ヨドバシ.com", "type": "予約", "url": "https://www.yodobashi.com/product/100000001009949986/", "verified": false}]}, {"cat": "トレカ", "title": "スタートデッキ 緑 ロロノア・ゾロ【ST-32】", "maker": "バンダイ", "date": "2026-07-11", "kind": "発売", "price": 550, "url": "https://www.onepiece-cardgame.com/products/st32.html", "img": "https://www.onepiece-cardgame.com/onepiececg/bccard/jp/products/2026/06/01/b42jY1zyAMuNXKBa/img_item01.webp?_=8208f5c9cf00eaeb0829d02405e9064e", "first_seen": "2026-08-01", "en_q": "One Piece Card Game ST-32 Roronoa Zoro", "lottery": []}, {"cat": "トレカ", "title": "スタートデッキ 青 クザン【ST-33】", "maker": "バンダイ", "date": "2026-07-11", "kind": "発売", "price": 550, "url": "https://www.onepiece-cardgame.com/products/st33.html", "img": "https://www.onepiece-cardgame.com/onepiececg/bccard/jp/products/2026/06/01/weP4WcvMyAX5VOR7/img_item01.webp?_=8208f5c9cf00eaeb0829d02405e9064e", "first_seen": "2026-08-01", "en_q": "One Piece Card Game ST-33 Kuzan", "lottery": []}, {"cat": "トレカ", "title": "スタートデッキ 紫 シャーロット・カタクリ【ST-34】", "maker": "バンダイ", "date": "2026-07-11", "kind": "発売", "price": 550, "url": "https://www.onepiece-cardgame.com/products/st34.html", "img": "https://www.onepiece-cardgame.com/onepiececg/bccard/jp/products/2026/06/01/t5LIBWX0muRucLKS/img_item01.webp?_=8208f5c9cf00eaeb0829d02405e9064e", "first_seen": "2026-08-01", "en_q": "One Piece Card Game ST-34 Katakuri", "lottery": []}, {"cat": "トレカ", "title": "スタートデッキ 赤黒 サボ【ST-35】", "maker": "バンダイ", "date": "2026-07-11", "kind": "発売", "price": 550, "url": "https://www.onepiece-cardgame.com/products/st35.html", "img": "https://www.onepiece-cardgame.com/onepiececg/bccard/jp/products/2026/06/01/XrIHnR2RnQclTTEn/img_item01.webp?_=8208f5c9cf00eaeb0829d02405e9064e", "first_seen": "2026-08-01", "en_q": "One Piece Card Game ST-35 Sabo", "lottery": []}, {"cat": "トレカ", "title": "スタートデッキ 黄 ユースタス・キッド【ST-36】", "maker": "バンダイ", "date": "2026-07-11", "kind": "発売", "price": 550, "url": "https://www.onepiece-cardgame.com/products/st36.html", "img": "https://www.onepiece-cardgame.com/onepiececg/bccard/jp/products/2026/06/01/sjtHEth2Ti1WlWrg/img_item01.webp?_=8208f5c9cf00eaeb0829d02405e9064e", "first_seen": "2026-08-01", "en_q": "One Piece Card Game ST-36 Eustass Kid", "lottery": []}];
 const STATS = {"new": 0, "changed": 0, "errors": 0};
 const LOTTERY_SITES = [{"name": "ポケモンセンターオンライン", "url": "https://www.pokemoncenter-online.com/"}, {"name": "楽天ブックス", "url": "https://books.rakuten.co.jp/"}, {"name": "あみあみ", "url": "https://www.amiami.jp/"}, {"name": "駿河屋", "url": "https://www.suruga-ya.jp/"}];
 const TODAY_ISO = "2026-08-01";
@@ -305,6 +312,22 @@ function searchLinks(item){
   return `<span class="srch">` + sites.map(([label, href]) =>
     `<a href="${href}" target="_blank" rel="noopener">${label}</a>`
   ).join(`<span class="sep">｜</span>`) + `</span>`;
+}
+function lotteryLinksRow(item){
+  // 商品ごとにリサーチ済みの抽選・予約受付ページ（src/lottery_research.py が
+  // 実fetchで照合してstateに保存したもの）を表示する行。固定の「抽選・予約
+  // サイト」一覧（lotteryBoxHtml/lotteryCompactHtml）とは別に、商品カード/行
+  // 直下に出す。verified=false（取得不能でまだ機械確認できていないURL）は
+  // サイト名の末尾に「?」を付け、title属性でその旨を示す（リンク自体は残す）。
+  const links = item.lottery || [];
+  if(!links.length) return "";
+  const parts = links.map(l => {
+    const label = l.verified ? esc(l.site) : esc(l.site) + "?";
+    const titleAttr = l.verified ? "" : ` title="自動確認できていません"`;
+    return `<a href="${esc(l.url)}" target="_blank" rel="noopener"${titleAttr}>${label}</a>`;
+  });
+  return `<span class="lotlinks"><span class="lbl">🎯 抽選・予約:</span>`
+    + parts.join(`<span class="sep">｜</span>`) + `</span>`;
 }
 function isNewItem(it){
   // 初回検出日(first_seen)が本レポートの基準日と同じ = 今回はじめて検出したアイテム
@@ -421,6 +444,7 @@ function renderA(){
             <div class="hl"><a href="${esc(hero.url)}" target="_blank" rel="noopener">${esc(hero.title)}</a></div>
             <div class="meta"><span>${esc(hero.maker || "")}</span><span class="num">${esc(fmtDate(hero))}</span><b class="num">${fmtPrice(hero)}</b></div>
             ${searchLinks(hero)}
+            ${lotteryLinksRow(hero)}
           </div>
         </div>
         <ul class="headline">
@@ -436,7 +460,7 @@ function renderA(){
       <div class="box" style="margin-top:16px">
         <div class="box-h">新着ヘッドライン</div>
         <ul class="dense">
-          ${newestItems.map(i => `<li>${thumb(i)}<div><div class="t"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a></div><div class="sub">${esc(i.cat)}｜${esc(i.maker||"メーカー不明")}｜<span class="num">${esc(fmtDate(i))}</span></div>${searchLinks(i)}</div></li>`).join("")}
+          ${newestItems.map(i => `<li>${thumb(i)}<div><div class="t"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a></div><div class="sub">${esc(i.cat)}｜${esc(i.maker||"メーカー不明")}｜<span class="num">${esc(fmtDate(i))}</span></div>${searchLinks(i)}${lotteryLinksRow(i)}</div></li>`).join("")}
         </ul>
       </div>
     </div>
@@ -527,6 +551,7 @@ function cardHtml(i){
         <div class="mk">${esc(i.cat)}｜${esc(i.maker || "メーカー不明")}</div>
         <div class="foot"><span class="dt num">${esc(fmtDate(i))}</span><span class="pr num">${fmtPrice(i)}</span></div>
         ${searchLinks(i)}
+        ${lotteryLinksRow(i)}
       </div>
     </div>`;
 }
@@ -571,6 +596,7 @@ function flistItemHtml(i){
     + `<div class="t"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a></div>`
     + `<div class="sub">${esc(i.cat)}｜<span class="num">${esc(fmtDate(i))}</span>｜${fmtPrice(i) || "価格未定"}</div>`
     + `${searchLinks(i)}`
+    + `${lotteryLinksRow(i)}`
     + `</div></div>`;
 }
 function renderC(){
@@ -590,6 +616,7 @@ function renderC(){
           <div class="t"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a></div>
           <div class="meta">${chips(i, true)}<b class="num">${fmtPrice(i)}</b>${attBar(i)}</div>
           ${searchLinks(i)}
+          ${lotteryLinksRow(i)}
         </div>
       </div>`).join("")}
     <div class="sec"><span class="name">新着・発売予定</span><span class="rule"></span><span class="cnt num">${rest.length}件</span></div>
