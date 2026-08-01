@@ -35,7 +35,7 @@ body{
   font-size:14px; line-height:1.55; -webkit-font-smoothing:antialiased;
 }
 a{color:inherit; text-decoration:none}
-a:hover .hl, .headline a:hover{text-decoration:underline}
+a:hover .hl, .headline a:hover, .hl a:hover{text-decoration:underline}
 img{max-width:100%}
 .num{font-variant-numeric:tabular-nums}
 
@@ -71,11 +71,21 @@ img{max-width:100%}
 .chip.cat{color:var(--muted); border:1px solid var(--line); font-weight:600}
 .chip.date-chip{color:var(--muted); border:1px solid var(--line); font-weight:600}
 
+/* ── 外部サイト検索リンク（メルカリ｜Amazon｜楽天） ── */
+.srch{display:block; margin-top:6px; font-size:11px; color:var(--muted); white-space:nowrap}
+.srch a{color:var(--indigo); font-weight:700}
+.srch a:hover{text-decoration:underline}
+.srch .sep{margin:0 4px; color:var(--line)}
+
 /* ── 画像 ── */
 .ph{display:flex; align-items:center; justify-content:center; background:var(--tint);
   color:var(--muted); font-weight:700; text-align:center; padding:8px; font-size:12px}
 .thumb{background:var(--tint); display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative}
 .thumb img{width:100%; height:100%; object-fit:contain}
+/* サムネイル画像を商品ページへのリンクにするラッパー。display:contents で
+   自身は箱を生成せず、中身のthumbがそのままgrid/flexの直接の子として扱われる
+   （hero/card/fcard/flist 各所の既存レイアウト計算に影響を与えないための工夫） */
+.tlink{display:contents}
 
 /* ════ 案A ポータル ════ */
 .pA .layout{display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:20px}
@@ -169,8 +179,8 @@ img{max-width:100%}
 .fcard .att i.f{background:var(--accent)}
 .fcard .att span{font-size:11px; color:var(--muted); margin-right:2px}
 .flist{background:var(--surface); border:1px solid var(--line); border-radius:10px; overflow:hidden}
-.flist a{display:flex; gap:12px; padding:11px 14px; border-top:1px solid var(--line); align-items:center}
-.flist a:first-child{border-top:0}
+.flist .frow{display:flex; gap:12px; padding:11px 14px; border-top:1px solid var(--line); align-items:center}
+.flist .frow:first-child{border-top:0}
 .flist .dsec{margin:0; padding:10px 14px 4px; border-top:1px solid var(--line)}
 .flist .dsec:first-child{border-top:0; padding-top:12px}
 .flist .thumb{flex:0 0 56px; width:56px; height:56px; border-radius:6px}
@@ -186,7 +196,7 @@ img{max-width:100%}
 <header class="mast">
   <div class="mast-in">
     <div class="brand">新商品<b>ウォッチ</b></div>
-    <div class="today num">2026年8月1日（土） 13:25更新</div>
+    <div class="today num">2026年8月1日（土） 13:33更新</div>
     <div class="switch" role="tablist" aria-label="デザイン案の切り替え">
       <button id="bA" class="on" onclick="show('A')">案A ポータル</button>
       <button id="bB" onclick="show('B')">案B ストア</button>
@@ -232,6 +242,20 @@ function fmtDate(it){
 function fmtPrice(it){
   const n = parseInt(String(it.price).replace(/,/g,""), 10);
   return isNaN(n) ? "" : "¥" + n.toLocaleString();
+}
+function searchLinks(title){
+  // 商品名で外部サイト（メルカリ／Amazon／楽天）を検索するリンク列。
+  // タイトル全文は長すぎるため検索語としては先頭40文字程度に丸める。
+  // encodeURIComponent の出力はHTML的に安全な文字集合のみなので esc() は不要。
+  const q = encodeURIComponent((title || "").slice(0, 40));
+  const sites = [
+    ["メルカリ", `https://jp.mercari.com/search?keyword=${q}`],
+    ["Amazon", `https://www.amazon.co.jp/s?k=${q}`],
+    ["楽天", `https://search.rakuten.co.jp/search/mall/${q}/`],
+  ];
+  return `<span class="srch">` + sites.map(([label, href]) =>
+    `<a href="${href}" target="_blank" rel="noopener">${label}</a>`
+  ).join(`<span class="sep">｜</span>`) + `</span>`;
 }
 function isNewItem(it){
   // 初回検出日(first_seen)が本レポートの基準日と同じ = 今回はじめて検出したアイテム
@@ -294,14 +318,15 @@ function renderA(){
     <div>
       <div class="box">
         <div class="box-h"><span class="tag">注目</span>今日のトピックス</div>
-        <a class="hero" href="${esc(hero.url)}" target="_blank" rel="noopener">
-          ${thumb(hero)}
+        <div class="hero">
+          <a class="tlink" href="${esc(hero.url)}" target="_blank" rel="noopener">${thumb(hero)}</a>
           <div>
             <div class="meta">${chips(hero, true)}</div>
-            <div class="hl">${esc(hero.title)}</div>
+            <div class="hl"><a href="${esc(hero.url)}" target="_blank" rel="noopener">${esc(hero.title)}</a></div>
             <div class="meta"><span>${esc(hero.maker || "")}</span><span class="num">${esc(fmtDate(hero))}</span><b class="num">${fmtPrice(hero)}</b></div>
+            ${searchLinks(hero.title)}
           </div>
-        </a>
+        </div>
         <ul class="headline">
           ${heads.map(i => `<li><span class="dot">・</span><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a><span class="d num">${esc(fmtDate(i))}</span></li>`).join("")}
         </ul>
@@ -315,7 +340,7 @@ function renderA(){
       <div class="box" style="margin-top:16px">
         <div class="box-h">新着ヘッドライン</div>
         <ul class="dense">
-          ${newestItems.map(i => `<li>${thumb(i)}<div><div class="t"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a></div><div class="sub">${esc(i.cat)}｜${esc(i.maker||"メーカー不明")}｜<span class="num">${esc(fmtDate(i))}</span></div></div></li>`).join("")}
+          ${newestItems.map(i => `<li>${thumb(i)}<div><div class="t"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a></div><div class="sub">${esc(i.cat)}｜${esc(i.maker||"メーカー不明")}｜<span class="num">${esc(fmtDate(i))}</span></div>${searchLinks(i.title)}</div></li>`).join("")}
         </ul>
       </div>
     </div>
@@ -395,15 +420,18 @@ function toggleGroupB(){
   document.getElementById("gridB").innerHTML = gridCards();
 }
 function cardHtml(i){
+  // カード全体を<a>にすると検索リンク列（別の<a>）を内包できないため、
+  // ラッパーはdivにし、画像とタイトルをそれぞれ商品ページへのリンクにする
   return `
-    <a class="card" href="${esc(i.url)}" target="_blank" rel="noopener">
-      <div class="imgbox">${thumb(i)}<div class="bdg">${chips(i, false)}</div></div>
+    <div class="card">
+      <div class="imgbox"><a class="tlink" href="${esc(i.url)}" target="_blank" rel="noopener">${thumb(i)}</a><div class="bdg">${chips(i, false)}</div></div>
       <div class="body">
-        <div class="t">${esc(i.title)}</div>
+        <div class="t"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a></div>
         <div class="mk">${esc(i.cat)}｜${esc(i.maker || "メーカー不明")}</div>
         <div class="foot"><span class="dt num">${esc(fmtDate(i))}</span><span class="pr num">${fmtPrice(i)}</span></div>
+        ${searchLinks(i.title)}
       </div>
-    </a>`;
+    </div>`;
 }
 function gridCards(){
   let list = DATA;
@@ -437,7 +465,15 @@ function attBar(it){
   return `<span class="att"><span>注目度</span>${[0,1,2].map(k => `<i class="${k < n ? "f" : ""}"></i>`).join("")}</span>`;
 }
 function flistItemHtml(i){
-  return `<a href="${esc(i.url)}" target="_blank" rel="noopener">${thumb(i)}<div style="min-width:0"><div class="t">${esc(i.title)}</div><div class="sub">${esc(i.cat)}｜<span class="num">${esc(fmtDate(i))}</span>｜${fmtPrice(i) || "価格未定"}</div></div></a>`;
+  // 行全体を<a>にすると検索リンク列を内包できないため、ラッパーはdiv(.frow)にし、
+  // 画像とタイトルをそれぞれ商品ページへのリンクにする
+  return `<div class="frow">`
+    + `<a class="tlink" href="${esc(i.url)}" target="_blank" rel="noopener">${thumb(i)}</a>`
+    + `<div style="min-width:0">`
+    + `<div class="t"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a></div>`
+    + `<div class="sub">${esc(i.cat)}｜<span class="num">${esc(fmtDate(i))}</span>｜${fmtPrice(i) || "価格未定"}</div>`
+    + `${searchLinks(i.title)}`
+    + `</div></div>`;
 }
 function renderC(){
   const el = document.getElementById("vC");
@@ -448,13 +484,14 @@ function renderC(){
     <div class="mh"><div class="l1">MORNING EDITION</div><div class="l2">8月1日（土）の朝刊</div></div>
     <div class="sec"><span class="name">今日の注目</span><span class="rule"></span><span class="cnt num">${top.length}件</span></div>
     ${top.map(i => `
-      <a class="fcard" href="${esc(i.url)}" target="_blank" rel="noopener">
-        ${thumb(i)}
+      <div class="fcard">
+        <a class="tlink" href="${esc(i.url)}" target="_blank" rel="noopener">${thumb(i)}</a>
         <div class="body">
-          <div class="t">${esc(i.title)}</div>
+          <div class="t"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a></div>
           <div class="meta">${chips(i, true)}<b class="num">${fmtPrice(i)}</b>${attBar(i)}</div>
+          ${searchLinks(i.title)}
         </div>
-      </a>`).join("")}
+      </div>`).join("")}
     <div class="sec"><span class="name">新着・発売予定</span><span class="rule"></span><span class="cnt num">${rest.length}件</span></div>
     <div class="flist">
       ${dateSectionsHtml(rest, flistItemHtml)}
