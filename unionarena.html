@@ -83,16 +83,20 @@ img{max-width:100%}
 .chip.date-chip{color:var(--muted); border:1px solid var(--line); font-weight:600}
 
 /* ── 外部サイト検索リンク（メルカリ｜Amazon｜楽天） ── */
-.srch{display:block; margin-top:6px; font-size:11px; color:var(--muted); white-space:nowrap}
+/* white-space:normal（折り返し可）。nowrapだと小さいカード幅では横にはみ出すため */
+.srch{display:block; margin-top:6px; font-size:11px; color:var(--muted); white-space:normal}
 .srch a{color:var(--indigo); font-weight:700}
 .srch a:hover{text-decoration:underline}
 .srch .sep{margin:0 4px; color:var(--line)}
 
-/* ── 商品ごとの抽選・予約受付ページ（src/lottery_research.py がリサーチ・照合） ── */
-.lotlinks{display:block; margin-top:4px; font-size:11px; color:var(--muted); white-space:nowrap}
+/* ── 商品ごとの抽選・予約受付ページ（src/lottery_research.py がリサーチ・照合）＋
+   🔍 Google検索（全商品共通）。verified=falseのリンクは実機で別商品ページに
+   飛ぶ誤りが確認されたため表示しない（stateには残すが表示側でのみ除外） ── */
+.lotlinks{display:block; margin-top:4px; font-size:11px; color:var(--muted); white-space:normal}
 .lotlinks .lbl{font-weight:800; color:var(--ink); margin-right:4px}
 .lotlinks a{color:var(--accent); font-weight:700}
 .lotlinks a:hover{text-decoration:underline}
+.lotlinks a.glink{color:var(--muted); font-weight:600}
 .lotlinks .sep{margin:0 4px; color:var(--line)}
 
 /* ── 画像 ── */
@@ -112,7 +116,7 @@ img{max-width:100%}
 .box-h{display:flex; align-items:center; gap:8px; padding:10px 14px; border-bottom:1px solid var(--line);
   font-size:15px; font-weight:800}
 .box-h .tag{font-size:11px; color:#fff; background:var(--accent); border-radius:3px; padding:1px 7px}
-.hero{display:grid; grid-template-columns:170px minmax(0,1fr); gap:14px; padding:14px}
+.hero{display:grid; grid-template-columns:170px minmax(0,1fr); gap:14px; padding:14px; cursor:pointer}
 @media(max-width:480px){.hero{grid-template-columns:110px minmax(0,1fr)}}
 .hero .thumb{aspect-ratio:1/1; border-radius:4px}
 .hero .hl{font-size:17px; font-weight:800; line-height:1.4; margin:2px 0 8px; text-wrap:balance}
@@ -129,7 +133,7 @@ img{max-width:100%}
   display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
 .hcard .d{font-size:11px; color:var(--muted); margin-top:2px}
 .dense{list-style:none; margin:0; padding:0}
-.dense li{display:flex; gap:10px; padding:10px 14px; border-top:1px solid var(--line); align-items:center}
+.dense li{display:flex; gap:10px; padding:10px 14px; border-top:1px solid var(--line); align-items:center; cursor:pointer}
 .dense .thumb{flex:0 0 52px; width:52px; height:52px; border-radius:4px}
 .dense .t{font-size:13px; font-weight:600; line-height:1.4;
   display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
@@ -166,7 +170,7 @@ img{max-width:100%}
 .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(185px,1fr)); gap:14px}
 .grid .dsec{grid-column:1/-1}
 .card{background:var(--surface); border:1px solid var(--line); border-radius:8px; overflow:hidden;
-  display:flex; flex-direction:column; transition:transform .12s ease, box-shadow .12s ease}
+  display:flex; flex-direction:column; transition:transform .12s ease, box-shadow .12s ease; cursor:pointer}
 @media(prefers-reduced-motion:no-preference){
   .card:hover{transform:translateY(-2px); box-shadow:0 6px 18px rgba(0,0,0,.10)}
 }
@@ -192,7 +196,7 @@ img{max-width:100%}
 .pC .sec .rule{height:1px; background:var(--line); flex:1}
 .pC .sec .cnt{font-size:12px; color:var(--muted); white-space:nowrap}
 .fcard{background:var(--surface); border:1px solid var(--line); border-radius:10px;
-  overflow:hidden; margin-bottom:14px; display:block}
+  overflow:hidden; margin-bottom:14px; display:block; cursor:pointer}
 .fcard .thumb{aspect-ratio:16/9; width:100%}
 .fcard .body{padding:12px 14px 14px}
 .fcard .t{font-size:16px; font-weight:800; line-height:1.4; text-wrap:balance}
@@ -202,7 +206,7 @@ img{max-width:100%}
 .fcard .att i.f{background:var(--accent)}
 .fcard .att span{font-size:11px; color:var(--muted); margin-right:2px}
 .flist{background:var(--surface); border:1px solid var(--line); border-radius:10px; overflow:hidden}
-.flist .frow{display:flex; gap:12px; padding:11px 14px; border-top:1px solid var(--line); align-items:center}
+.flist .frow{display:flex; gap:12px; padding:11px 14px; border-top:1px solid var(--line); align-items:center; cursor:pointer}
 .flist .frow:first-child{border-top:0}
 .flist .dsec{margin:0; padding:10px 14px 4px; border-top:1px solid var(--line)}
 .flist .dsec:first-child{border-top:0; padding-top:12px}
@@ -220,6 +224,46 @@ img{max-width:100%}
 .lotcompact .sep{margin:0 4px; color:var(--line)}
 
 .foot-note{margin-top:36px; text-align:center; color:var(--muted); font-size:12px}
+
+/* ── 商品詳細モーダル（カード/行クリックで開く。1個をJSで使い回す） ── */
+.modal-overlay{position:fixed; inset:0; background:rgba(20,22,28,.55); z-index:1000;
+  display:flex; align-items:flex-end; justify-content:center; padding:0}
+.modal-overlay[hidden]{display:none}
+@media(min-width:640px){
+  .modal-overlay{align-items:center; padding:20px}
+}
+.modal-sheet{background:var(--surface); color:var(--ink); width:100%; max-width:560px;
+  max-height:90vh; overflow-y:auto; -webkit-overflow-scrolling:touch;
+  border-radius:16px 16px 0 0; position:relative; padding:22px 18px 24px}
+@media(min-width:640px){
+  .modal-sheet{border-radius:12px}
+}
+@media(prefers-reduced-motion:no-preference){
+  .modal-sheet{animation:modal-in .18s ease-out}
+}
+@keyframes modal-in{from{transform:translateY(18px); opacity:0} to{transform:translateY(0); opacity:1}}
+.modal-close{position:absolute; top:10px; right:10px; width:34px; height:34px; border-radius:50%;
+  border:1px solid var(--line); background:var(--surface); color:var(--ink); font-size:18px;
+  line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  font-family:inherit}
+.modal-close:hover{background:var(--tint)}
+.modal-close:focus-visible{outline:2px solid var(--indigo); outline-offset:2px}
+.modal-thumb{aspect-ratio:1/1; max-height:300px; border-radius:8px; margin-bottom:14px; overflow:hidden}
+.modal-thumb .thumb{width:100%; height:100%}
+.modal-title{font-size:18px; font-weight:800; line-height:1.4; margin:0 0 10px; padding-right:32px}
+.modal-chips{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px}
+.modal-details{border-top:1px solid var(--line); padding-top:10px; margin-bottom:16px}
+.modal-row{display:flex; gap:10px; padding:5px 0; font-size:13px}
+.modal-row .modal-label{flex:0 0 84px; color:var(--muted); font-weight:600}
+.modal-row .modal-value{flex:1; min-width:0; word-break:break-word}
+.modal-links{display:flex; flex-wrap:wrap; gap:8px}
+.modal-link{font-size:12.5px; font-weight:700; padding:7px 12px; border-radius:6px;
+  border:1px solid var(--line); color:var(--indigo); background:var(--surface)}
+.modal-link:hover{background:var(--tint)}
+.modal-link:focus-visible{outline:2px solid var(--indigo); outline-offset:2px}
+.modal-link.primary{background:var(--indigo); color:#fff; border-color:var(--indigo)}
+.modal-link.accent{color:var(--accent); border-color:var(--accent)}
+.modal-link.muted{color:var(--muted)}
 </style>
 </head>
 <body>
@@ -227,7 +271,7 @@ img{max-width:100%}
 <header class="mast">
   <div class="mast-in">
     <div class="brand">新商品<b>ウォッチ</b></div>
-    <div class="today num">2026年8月1日（土） 17:43更新</div>
+    <div class="today num">2026年8月1日（土） 18:12更新</div>
     <a class="theme-toggle" href="https://docs.google.com/spreadsheets/d/1g8d_tYSgmwsxorlktBztrlCTUnI-iZyjKpcMLdGV1KU/edit" target="_blank" rel="noopener">📋 台帳</a>
     <div class="switch" role="tablist" aria-label="デザイン案の切り替え">
       <button id="bA" class="on" onclick="show('A')">ポータル</button>
@@ -251,11 +295,23 @@ img{max-width:100%}
   <p class="foot-note">新商品ウォッチ — 毎朝7時に自動更新</p>
 </main>
 
+<div id="modalOverlay" class="modal-overlay" hidden onclick="handleOverlayClick(event)">
+  <div id="modalSheet" class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button id="modalClose" class="modal-close" aria-label="閉じる" onclick="closeModal()">×</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
 <script>
-const DATA = [{"cat": "トレカ", "title": "UNION ARENA ブースターパック 天元突破グレンラガン【UA56BT】", "maker": "バンダイ", "date": "2026-08-28", "kind": "発売", "price": 385, "url": "https://unionarena-tcg.com/", "img": "https://www.unionarena-tcg.com/ogp.png?v0", "first_seen": "2026-08-01", "en_q": "UNION ARENA Gurren Lagann UA56BT booster pack", "lottery": [{"site": "ヨドバシ.com", "type": "予約", "url": "https://www.yodobashi.com/product/100000001009893931/", "verified": false}]}, {"cat": "トレカ", "title": "ブースターパック BLEACH 千年血戦篇 Vol.3", "maker": "バンダイ", "date": "2026-09-11", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/ex_blc-3.php", "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/ex_blc-3/img_thumbnail.png", "first_seen": "2026-08-01", "en_q": "BLEACH Thousand-Year Blood War Vol.3 booster pack", "lottery": []}, {"cat": "トレカ", "title": "ブースターパック 魔法少女まどか☆マギカ Magia Exedra", "maker": "バンダイ", "date": "2026-09-25", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/ex_mmm.php", "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/ex_mmm/img_thumbnail.png", "first_seen": "2026-08-01", "en_q": "Puella Magi Madoka Magica Magia Exedra booster pack", "lottery": []}, {"cat": "トレカ", "title": "ブースターパック アイドルマスター シンデレラガールズ", "maker": "バンダイ", "date": "2026-07-31", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/imc-1.php", "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/imc-1/img_thumbnail.png?v", "first_seen": "2026-08-01", "en_q": "Idolmaster Cinderella Girls booster pack", "lottery": []}, {"cat": "トレカ", "title": "ブースターパック 天元突破グレンラガン", "maker": "バンダイ", "date": "2026-08-28", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/ttg-1.php", "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/ttg-1/img_thumbnail.png", "first_seen": "2026-08-01", "en_q": "Gurren Lagann booster pack", "lottery": [{"site": "ヨドバシ.com", "type": "予約", "url": "https://www.yodobashi.com/product/100000001009893962/", "verified": false}]}, {"cat": "トレカ", "title": "アドバンスドデッキ BLEACH 千年血戦篇", "maker": "バンダイ", "date": "2026-09-11", "kind": "発売", "price": 2640, "url": "https://www.unionarena-tcg.com/jp/products/decks/dc-blc.php", "img": "https://www.unionarena-tcg.com/jp/images/products/decks/dc-blc/img_thumbnail.png", "first_seen": "2026-08-01", "en_q": "BLEACH Thousand-Year Blood War Advanced Deck", "lottery": []}, {"cat": "トレカ", "title": "スタートデッキ アイドルマスター シンデレラガールズ", "maker": "バンダイ", "date": "2026-07-31", "kind": "発売", "price": 1650, "url": "https://www.unionarena-tcg.com/jp/products/decks/imc-1.php", "img": "https://www.unionarena-tcg.com/jp/images/products/decks/imc-1/img_thumbnail.png?v", "first_seen": "2026-08-01", "en_q": "Idolmaster Cinderella Girls Start Deck", "lottery": []}];
+const DATA = [{"key": "gemini:https://unionarena-tcg.com/", "cat": "トレカ", "title": "UNION ARENA ブースターパック 天元突破グレンラガン【UA56BT】", "maker": "バンダイ", "date": "2026-08-28", "preorder_start": "未定", "lottery_deadline": "未定", "kind": "発売", "price": 385, "url": "https://unionarena-tcg.com/", "img": "https://www.unionarena-tcg.com/ogp.png?v0", "first_seen": "2026-08-01", "en_q": "UNION ARENA Gurren Lagann UA56BT booster pack", "lottery": [{"site": "ヨドバシ.com", "type": "予約", "url": "https://www.yodobashi.com/product/100000001009893931/", "verified": false}]}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/boosters/ex_blc-3.php", "cat": "トレカ", "title": "ブースターパック BLEACH 千年血戦篇 Vol.3", "maker": "バンダイ", "date": "2026-09-11", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/ex_blc-3.php", "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/ex_blc-3/img_thumbnail.png", "first_seen": "2026-08-01", "en_q": "BLEACH Thousand-Year Blood War Vol.3 booster pack", "lottery": []}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/boosters/ex_mmm.php", "cat": "トレカ", "title": "ブースターパック 魔法少女まどか☆マギカ Magia Exedra", "maker": "バンダイ", "date": "2026-09-25", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/ex_mmm.php", "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/ex_mmm/img_thumbnail.png", "first_seen": "2026-08-01", "en_q": "Puella Magi Madoka Magica Magia Exedra booster pack", "lottery": []}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/boosters/imc-1.php", "cat": "トレカ", "title": "ブースターパック アイドルマスター シンデレラガールズ", "maker": "バンダイ", "date": "2026-07-31", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/imc-1.php", "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/imc-1/img_thumbnail.png?v", "first_seen": "2026-08-01", "en_q": "Idolmaster Cinderella Girls booster pack", "lottery": []}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/boosters/ttg-1.php", "cat": "トレカ", "title": "ブースターパック 天元突破グレンラガン", "maker": "バンダイ", "date": "2026-08-28", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/ttg-1.php", "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/ttg-1/img_thumbnail.png", "first_seen": "2026-08-01", "en_q": "Gurren Lagann booster pack", "lottery": [{"site": "ヨドバシ.com", "type": "予約", "url": "https://www.yodobashi.com/product/100000001009893962/", "verified": false}]}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/decks/dc-blc.php", "cat": "トレカ", "title": "アドバンスドデッキ BLEACH 千年血戦篇", "maker": "バンダイ", "date": "2026-09-11", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 2640, "url": "https://www.unionarena-tcg.com/jp/products/decks/dc-blc.php", "img": "https://www.unionarena-tcg.com/jp/images/products/decks/dc-blc/img_thumbnail.png", "first_seen": "2026-08-01", "en_q": "BLEACH Thousand-Year Blood War Advanced Deck", "lottery": []}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/decks/imc-1.php", "cat": "トレカ", "title": "スタートデッキ アイドルマスター シンデレラガールズ", "maker": "バンダイ", "date": "2026-07-31", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 1650, "url": "https://www.unionarena-tcg.com/jp/products/decks/imc-1.php", "img": "https://www.unionarena-tcg.com/jp/images/products/decks/imc-1/img_thumbnail.png?v", "first_seen": "2026-08-01", "en_q": "Idolmaster Cinderella Girls Start Deck", "lottery": []}];
 const STATS = {"new": 0, "changed": 0, "errors": 0};
 const LOTTERY_SITES = [{"name": "ポケモンセンターオンライン", "url": "https://www.pokemoncenter-online.com/"}, {"name": "楽天ブックス", "url": "https://books.rakuten.co.jp/"}, {"name": "あみあみ", "url": "https://www.amiami.jp/"}, {"name": "駿河屋", "url": "https://www.suruga-ya.jp/"}];
 const TODAY_ISO = "2026-08-01";
+// key(state上の"source:id") → item のマップ。カード/行クリック時の商品詳細
+// モーダル表示で使う（data-key属性から引く。onclick文字列へキーを直接
+// 埋め込まないことで、URL由来のkeyに含まれうる引用符等によるHTML破壊を避ける）。
+const KEY_TO_ITEM = {};
+DATA.forEach(function(it){ if(it.key) KEY_TO_ITEM[it.key] = it; });
 
 function parseDate(s){
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || "");
@@ -313,19 +369,26 @@ function searchLinks(item){
     `<a href="${href}" target="_blank" rel="noopener">${label}</a>`
   ).join(`<span class="sep">｜</span>`) + `</span>`;
 }
+function googleLotterySearchUrl(item){
+  // 「<タイトル> 抽選 予約」でGoogle検索するURL（全商品共通のフォールバック）。
+  const q = encodeURIComponent((item.title || "") + " 抽選 予約");
+  return `https://www.google.com/search?q=${q}`;
+}
 function lotteryLinksRow(item){
   // 商品ごとにリサーチ済みの抽選・予約受付ページ（src/lottery_research.py が
-  // 実fetchで照合してstateに保存したもの）を表示する行。固定の「抽選・予約
-  // サイト」一覧（lotteryBoxHtml/lotteryCompactHtml）とは別に、商品カード/行
-  // 直下に出す。verified=false（取得不能でまだ機械確認できていないURL）は
-  // サイト名の末尾に「?」を付け、title属性でその旨を示す（リンク自体は残す）。
+  // 実fetchで照合してstateに保存したもの）＋ 🔍 Googleで探す（全商品共通）を
+  // 表示する行。固定の「抽選・予約サイト」一覧（lotteryBoxHtml/lotteryCompactHtml）
+  // とは別に、商品カード/行直下に出す。
+  // 実機検証で verified=false のリンク（agyが推測した商品IDのURL等）が実際には
+  // 別商品のページに飛ぶ誤りが確認されたため、表示はverified=trueのみに限定する
+  // （stateのデータ自体は削除せず残す。表示側フィルタのみ）。
   const links = item.lottery || [];
-  if(!links.length) return "";
-  const parts = links.map(l => {
-    const label = l.verified ? esc(l.site) : esc(l.site) + "?";
-    const titleAttr = l.verified ? "" : ` title="自動確認できていません"`;
-    return `<a href="${esc(l.url)}" target="_blank" rel="noopener"${titleAttr}>${label}</a>`;
-  });
+  const verified = links.filter(l => l.verified);
+  const parts = verified.map(l =>
+    `<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.site)}</a>`
+  );
+  // 🔍 Googleで探すリンクは全商品に常時表示（目立ちすぎないよう.glinkで弱めの色）
+  parts.push(`<a href="${googleLotterySearchUrl(item)}" target="_blank" rel="noopener" class="glink">🔍 抽選・予約を探す</a>`);
   return `<span class="lotlinks"><span class="lbl">🎯 抽選・予約:</span>`
     + parts.join(`<span class="sep">｜</span>`) + `</span>`;
 }
@@ -437,7 +500,7 @@ function renderA(){
     <div>
       <div class="box">
         <div class="box-h"><span class="tag">注目</span>今日のトピックス</div>
-        <div class="hero">
+        <div class="hero" data-key="${esc(hero.key)}" onclick="handleCardClick(event)">
           <a class="tlink" href="${esc(hero.url)}" target="_blank" rel="noopener">${thumb(hero)}</a>
           <div>
             <div class="meta">${chips(hero, true)}</div>
@@ -460,7 +523,7 @@ function renderA(){
       <div class="box" style="margin-top:16px">
         <div class="box-h">新着ヘッドライン</div>
         <ul class="dense">
-          ${newestItems.map(i => `<li>${thumb(i)}<div><div class="t"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a></div><div class="sub">${esc(i.cat)}｜${esc(i.maker||"メーカー不明")}｜<span class="num">${esc(fmtDate(i))}</span></div>${searchLinks(i)}${lotteryLinksRow(i)}</div></li>`).join("")}
+          ${newestItems.map(i => `<li data-key="${esc(i.key)}" onclick="handleCardClick(event)">${thumb(i)}<div><div class="t"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a></div><div class="sub">${esc(i.cat)}｜${esc(i.maker||"メーカー不明")}｜<span class="num">${esc(fmtDate(i))}</span></div>${searchLinks(i)}${lotteryLinksRow(i)}</div></li>`).join("")}
         </ul>
       </div>
     </div>
@@ -542,9 +605,10 @@ function toggleGroupB(){
 }
 function cardHtml(i){
   // カード全体を<a>にすると検索リンク列（別の<a>）を内包できないため、
-  // ラッパーはdivにし、画像とタイトルをそれぞれ商品ページへのリンクにする
+  // ラッパーはdivにし、画像とタイトルをそれぞれ商品ページへのリンクにする。
+  // カード自体のクリック（リンク以外の領域）で商品詳細モーダルを開く。
   return `
-    <div class="card">
+    <div class="card" data-key="${esc(i.key)}" onclick="handleCardClick(event)">
       <div class="imgbox"><a class="tlink" href="${esc(i.url)}" target="_blank" rel="noopener">${thumb(i)}</a><div class="bdg">${chips(i, false)}</div></div>
       <div class="body">
         <div class="t"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a></div>
@@ -589,8 +653,9 @@ function attBar(it){
 }
 function flistItemHtml(i){
   // 行全体を<a>にすると検索リンク列を内包できないため、ラッパーはdiv(.frow)にし、
-  // 画像とタイトルをそれぞれ商品ページへのリンクにする
-  return `<div class="frow">`
+  // 画像とタイトルをそれぞれ商品ページへのリンクにする。行のクリック
+  // （リンク以外の領域）で商品詳細モーダルを開く。
+  return `<div class="frow" data-key="${esc(i.key)}" onclick="handleCardClick(event)">`
     + `<a class="tlink" href="${esc(i.url)}" target="_blank" rel="noopener">${thumb(i)}</a>`
     + `<div style="min-width:0">`
     + `<div class="t"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a></div>`
@@ -610,7 +675,7 @@ function renderC(){
     <div class="mh"><div class="l1">MORNING EDITION</div><div class="l2">8月1日（土）の朝刊</div></div>
     <div class="sec"><span class="name">今日の注目</span><span class="rule"></span><span class="cnt num">${top.length}件</span></div>
     ${top.map(i => `
-      <div class="fcard">
+      <div class="fcard" data-key="${esc(i.key)}" onclick="handleCardClick(event)">
         <a class="tlink" href="${esc(i.url)}" target="_blank" rel="noopener">${thumb(i)}</a>
         <div class="body">
           <div class="t"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a></div>
@@ -625,6 +690,82 @@ function renderC(){
     </div>
     ${lotteryCompactHtml()}`;
 }
+
+/* ── 商品詳細モーダル ── */
+function modalDetailRow(label, value){
+  if(!value) return ""; // 値が無い項目は行自体を出さない（予約開始/抽選締切など）
+  return `<div class="modal-row"><span class="modal-label">${esc(label)}</span><span class="modal-value">${esc(value)}</span></div>`;
+}
+function modalLinksHtml(item){
+  // リンク集: 商品ページを開く／メルカリ／Amazon／楽天／eBay／
+  // 🎯verified抽選予約リンク（あれば）／🔍 Googleで探す
+  const title = item.title;
+  const q = encodeURIComponent((title || "").slice(0, 40));
+  const eq = encodeURIComponent(item.en_q ? item.en_q : extractEbayQuery(title));
+  const verifiedLottery = (item.lottery || []).filter(l => l.verified);
+  let html = `<div class="modal-links">`;
+  html += `<a class="modal-link primary" href="${esc(item.url)}" target="_blank" rel="noopener">商品ページを開く</a>`;
+  html += `<a class="modal-link" href="https://jp.mercari.com/search?keyword=${q}" target="_blank" rel="noopener">メルカリ</a>`;
+  html += `<a class="modal-link" href="https://www.amazon.co.jp/s?k=${q}" target="_blank" rel="noopener">Amazon</a>`;
+  html += `<a class="modal-link" href="https://search.rakuten.co.jp/search/mall/${q}/" target="_blank" rel="noopener">楽天</a>`;
+  html += `<a class="modal-link" href="https://www.ebay.com/sch/i.html?_nkw=${eq}" target="_blank" rel="noopener">eBay</a>`;
+  verifiedLottery.forEach(l => {
+    html += `<a class="modal-link accent" href="${esc(l.url)}" target="_blank" rel="noopener">🎯 ${esc(l.site)}</a>`;
+  });
+  html += `<a class="modal-link muted" href="${googleLotterySearchUrl(item)}" target="_blank" rel="noopener">🔍 抽選・予約をGoogleで探す</a>`;
+  html += `</div>`;
+  return html;
+}
+function modalContentHtml(item){
+  return `
+    <div class="modal-thumb">${thumb(item)}</div>
+    <h2 id="modalTitle" class="modal-title">${esc(item.title)}</h2>
+    <div class="modal-chips">${chips(item, true)}</div>
+    <div class="modal-details">
+      ${modalDetailRow("カテゴリ", item.cat)}
+      ${modalDetailRow("種別", item.kind)}
+      ${modalDetailRow("メーカー", item.maker)}
+      ${modalDetailRow("発売日", item.date ? fmtDate(item) : "")}
+      ${modalDetailRow("予約開始", item.preorder_start)}
+      ${modalDetailRow("抽選締切", item.lottery_deadline)}
+      ${modalDetailRow("価格", fmtPrice(item))}
+    </div>
+    ${modalLinksHtml(item)}`;
+}
+function openModal(item){
+  const overlay = document.getElementById("modalOverlay");
+  const body = document.getElementById("modalBody");
+  if(!overlay || !body) return;
+  body.innerHTML = modalContentHtml(item);
+  overlay.hidden = false;
+  document.body.style.overflow = "hidden"; // 開いている間は背景をスクロールさせない
+  const closeBtn = document.getElementById("modalClose");
+  if(closeBtn) closeBtn.focus(); // フォーカス管理は簡易に：閉じるボタンへ
+}
+function closeModal(){
+  const overlay = document.getElementById("modalOverlay");
+  if(!overlay || overlay.hidden) return;
+  overlay.hidden = true;
+  document.body.style.overflow = "";
+}
+function openModalByKey(key){
+  const item = KEY_TO_ITEM[key];
+  if(item) openModal(item);
+}
+function handleCardClick(e){
+  // カード/行の内部リンク（画像・タイトル・検索リンク等）のクリックでは
+  // モーダルを開かない（リンク自身の遷移を優先する）
+  if(e.target.closest("a")) return;
+  const key = e.currentTarget.getAttribute("data-key");
+  if(key) openModalByKey(key);
+}
+function handleOverlayClick(e){
+  // オーバーレイの背景部分（シート自体ではない）をクリックしたときだけ閉じる
+  if(e.target.id === "modalOverlay") closeModal();
+}
+document.addEventListener("keydown", function(e){
+  if(e.key === "Escape") closeModal();
+});
 
 function show(v){
   for(const k of ["A","B","C"]){
