@@ -1,0 +1,654 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>新商品ウォッチ</title>
+<style>
+:root{
+  --bg:#F3F5F7; --surface:#FFFFFF; --ink:#1B2330; --muted:#5A6474;
+  --line:#E2E6EB; --accent:#D7263D; --indigo:#2B4C8C; --amber:#B26E0A;
+  --green:#2E7D5B; --purple:#7B4FA6; --tint:#EDF0F4;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#12161E; --surface:#1A202B; --ink:#E8EBF0; --muted:#98A2B3;
+    --line:#2A3140; --accent:#F0455C; --indigo:#8CA9E0; --amber:#E0A44B;
+    --green:#5CB48E; --purple:#B08BD8; --tint:#232A37;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#12161E; --surface:#1A202B; --ink:#E8EBF0; --muted:#98A2B3;
+  --line:#2A3140; --accent:#F0455C; --indigo:#8CA9E0; --amber:#E0A44B;
+  --green:#5CB48E; --purple:#B08BD8; --tint:#232A37;
+}
+:root[data-theme="light"]{
+  --bg:#F3F5F7; --surface:#FFFFFF; --ink:#1B2330; --muted:#5A6474;
+  --line:#E2E6EB; --accent:#D7263D; --indigo:#2B4C8C; --amber:#B26E0A;
+  --green:#2E7D5B; --purple:#7B4FA6; --tint:#EDF0F4;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+  font-size:14px; line-height:1.55; -webkit-font-smoothing:antialiased;
+}
+a{color:inherit; text-decoration:none}
+a:hover .hl, .headline a:hover, .hl a:hover{text-decoration:underline}
+img{max-width:100%}
+.num{font-variant-numeric:tabular-nums}
+
+/* ── マストヘッド ── */
+.mast{background:var(--surface); border-bottom:1px solid var(--line)}
+.mast-in{max-width:1080px; margin:0 auto; padding:14px 16px;
+  display:flex; flex-wrap:wrap; align-items:baseline; gap:8px 16px}
+.brand{font-size:22px; font-weight:800; letter-spacing:.02em}
+.brand b{color:var(--accent)}
+.today{color:var(--muted); font-size:12.5px}
+.switch{display:flex; gap:0; margin-left:auto; border:1px solid var(--line);
+  border-radius:6px; overflow:hidden}
+.switch button{appearance:none; border:0; background:var(--surface); color:var(--muted);
+  padding:7px 14px; font-size:13px; font-weight:600; cursor:pointer; font-family:inherit}
+.switch button+button{border-left:1px solid var(--line)}
+.switch button.on{background:var(--ink); color:var(--bg)}
+.switch button:focus-visible{outline:2px solid var(--indigo); outline-offset:-2px}
+.theme-toggle{appearance:none; border:1px solid var(--line); border-radius:6px;
+  background:var(--surface); color:var(--muted); padding:7px 10px; font-size:13px;
+  font-weight:600; cursor:pointer; font-family:inherit}
+.theme-toggle:focus-visible{outline:2px solid var(--indigo); outline-offset:-2px}
+.wrap{max-width:1080px; margin:0 auto; padding:20px 16px 60px}
+
+/* ── シリーズ切り替えナビ（全体｜ポケモン｜…） ── */
+.pagenav{max-width:1080px; margin:0 auto; padding:0 16px 10px; display:flex;
+  flex-wrap:wrap; gap:2px; font-size:12.5px; color:var(--muted)}
+.pagenav a{color:var(--muted)}
+.pagenav a.on{color:var(--accent); font-weight:800}
+.pagenav a:hover{text-decoration:underline}
+.pagenav .sep{margin:0 5px; color:var(--line)}
+
+/* ── カテゴリ絞り込みタブ（全ページ・全レイアウト共通） ── */
+.cattabs{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px}
+
+/* ── バッジ ── */
+.chip{display:inline-block; padding:1px 7px; border-radius:3px; font-size:11px;
+  font-weight:700; line-height:1.7; white-space:nowrap}
+.chip.soon{background:var(--accent); color:#fff}
+.chip.today-chip{background:var(--accent); color:#fff}
+.chip.rel{color:var(--green); border:1px solid currentColor}
+.chip.pre{color:var(--indigo); border:1px solid currentColor}
+.chip.lot{color:var(--purple); border:1px solid currentColor}
+.chip.new{color:var(--indigo); border:1px solid currentColor}
+.chip.cat{color:var(--muted); border:1px solid var(--line); font-weight:600}
+.chip.date-chip{color:var(--muted); border:1px solid var(--line); font-weight:600}
+
+/* ── 外部サイト検索リンク（メルカリ｜Amazon｜楽天） ── */
+.srch{display:block; margin-top:6px; font-size:11px; color:var(--muted); white-space:nowrap}
+.srch a{color:var(--indigo); font-weight:700}
+.srch a:hover{text-decoration:underline}
+.srch .sep{margin:0 4px; color:var(--line)}
+
+/* ── 画像 ── */
+.ph{display:flex; align-items:center; justify-content:center; background:var(--tint);
+  color:var(--muted); font-weight:700; text-align:center; padding:8px; font-size:12px}
+.thumb{background:var(--tint); display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative}
+.thumb img{width:100%; height:100%; object-fit:contain}
+/* サムネイル画像を商品ページへのリンクにするラッパー。display:contents で
+   自身は箱を生成せず、中身のthumbがそのままgrid/flexの直接の子として扱われる
+   （hero/card/fcard/flist 各所の既存レイアウト計算に影響を与えないための工夫） */
+.tlink{display:contents}
+
+/* ════ 案A ポータル ════ */
+.pA .layout{display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:20px}
+@media(max-width:820px){.pA .layout{grid-template-columns:1fr}}
+.box{background:var(--surface); border:1px solid var(--line); border-radius:6px; overflow:hidden}
+.box-h{display:flex; align-items:center; gap:8px; padding:10px 14px; border-bottom:1px solid var(--line);
+  font-size:15px; font-weight:800}
+.box-h .tag{font-size:11px; color:#fff; background:var(--accent); border-radius:3px; padding:1px 7px}
+.hero{display:grid; grid-template-columns:170px minmax(0,1fr); gap:14px; padding:14px}
+@media(max-width:480px){.hero{grid-template-columns:110px minmax(0,1fr)}}
+.hero .thumb{aspect-ratio:1/1; border-radius:4px}
+.hero .hl{font-size:17px; font-weight:800; line-height:1.4; margin:2px 0 8px; text-wrap:balance}
+.hero .meta{display:flex; flex-wrap:wrap; gap:6px; align-items:center; font-size:12px; color:var(--muted)}
+.headline{list-style:none; margin:0; padding:4px 14px 10px}
+.headline li{padding:7px 0; border-top:1px solid var(--line); display:flex; gap:8px; align-items:baseline}
+.headline li:first-child{border-top:0}
+.headline .dot{color:var(--accent); font-weight:800}
+.headline .d{margin-left:auto; color:var(--muted); font-size:11.5px; white-space:nowrap}
+.hrow{display:flex; gap:10px; overflow-x:auto; padding:14px; scrollbar-width:thin}
+.hcard{flex:0 0 128px; min-width:0}
+.hcard .thumb{width:128px; height:128px; border-radius:4px}
+.hcard .t{font-size:12px; font-weight:600; line-height:1.35; margin-top:6px;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
+.hcard .d{font-size:11px; color:var(--muted); margin-top:2px}
+.dense{list-style:none; margin:0; padding:0}
+.dense li{display:flex; gap:10px; padding:10px 14px; border-top:1px solid var(--line); align-items:center}
+.dense .thumb{flex:0 0 52px; width:52px; height:52px; border-radius:4px}
+.dense .t{font-size:13px; font-weight:600; line-height:1.4;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
+.dense .sub{font-size:11.5px; color:var(--muted); margin-top:1px}
+.rail .box{margin-bottom:16px}
+.cal{padding:6px 14px 12px}
+.cal-d{font-size:12px; font-weight:800; color:var(--accent); margin:10px 0 4px}
+.cal-i{font-size:12.5px; padding:3px 0 3px 10px; border-left:2px solid var(--line); margin-left:2px}
+.stats{display:flex; gap:0; text-align:center; padding:12px 8px}
+.stats div{flex:1}
+.stats .n{font-size:22px; font-weight:800}
+.stats .l{font-size:11px; color:var(--muted)}
+.lotlist{list-style:none; margin:0; padding:6px 14px 12px}
+.lotlist li{padding:5px 0; border-top:1px solid var(--line); font-size:12.5px}
+.lotlist li:first-child{border-top:0}
+.lotlist a{color:var(--indigo); font-weight:600}
+.lotlist a:hover{text-decoration:underline}
+
+/* ── 日付グループ見出し（案B・案C 共通） ── */
+.dsec{margin:22px 0 10px; display:flex; align-items:center; gap:10px}
+.dsec:first-child{margin-top:0}
+.dsec .name{font-size:14px; font-weight:800; white-space:nowrap}
+.dsec .rule{height:1px; background:var(--line); flex:1}
+.dsec .cnt{font-size:12px; color:var(--muted); white-space:nowrap}
+
+/* ════ 案B ストア ════ */
+.pB .filters{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px}
+.pB .filters button, .cattabs button{appearance:none; font-family:inherit; cursor:pointer; font-size:13px;
+  font-weight:600; padding:6px 14px; border-radius:999px; border:1px solid var(--line);
+  background:var(--surface); color:var(--ink)}
+.pB .filters button.on, .cattabs button.on{background:var(--indigo); border-color:var(--indigo); color:#fff}
+.pB .filters button:focus-visible, .cattabs button:focus-visible{outline:2px solid var(--indigo); outline-offset:2px}
+.pB .filters .grouptoggle{margin-left:auto}
+.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(185px,1fr)); gap:14px}
+.grid .dsec{grid-column:1/-1}
+.card{background:var(--surface); border:1px solid var(--line); border-radius:8px; overflow:hidden;
+  display:flex; flex-direction:column; transition:transform .12s ease, box-shadow .12s ease}
+@media(prefers-reduced-motion:no-preference){
+  .card:hover{transform:translateY(-2px); box-shadow:0 6px 18px rgba(0,0,0,.10)}
+}
+.card .imgbox{position:relative; aspect-ratio:1/1}
+.card .thumb{width:100%; height:100%}
+.card .ph{width:100%; height:100%}
+.card .bdg{position:absolute; top:8px; left:8px; display:flex; flex-direction:column; gap:4px; align-items:flex-start}
+.card .body{padding:10px 12px 12px; display:flex; flex-direction:column; gap:4px; flex:1}
+.card .t{font-size:13px; font-weight:700; line-height:1.4;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
+.card .mk{font-size:11.5px; color:var(--muted)}
+.card .foot{margin-top:auto; display:flex; justify-content:space-between; align-items:baseline; padding-top:6px}
+.card .dt{font-size:12px; color:var(--muted)}
+.card .pr{font-size:14px; font-weight:800}
+
+/* ════ 案C 朝刊フィード ════ */
+.pC{max-width:560px; margin:0 auto}
+.pC .mh{text-align:center; padding:6px 0 18px}
+.pC .mh .l1{font-size:12px; letter-spacing:.25em; color:var(--muted); font-weight:700}
+.pC .mh .l2{font-size:24px; font-weight:800; margin-top:2px}
+.pC .sec{margin:26px 0 10px; display:flex; align-items:center; gap:10px}
+.pC .sec .name{font-size:16px; font-weight:800; white-space:nowrap}
+.pC .sec .rule{height:1px; background:var(--line); flex:1}
+.pC .sec .cnt{font-size:12px; color:var(--muted); white-space:nowrap}
+.fcard{background:var(--surface); border:1px solid var(--line); border-radius:10px;
+  overflow:hidden; margin-bottom:14px; display:block}
+.fcard .thumb{aspect-ratio:16/9; width:100%}
+.fcard .body{padding:12px 14px 14px}
+.fcard .t{font-size:16px; font-weight:800; line-height:1.4; text-wrap:balance}
+.fcard .meta{display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-top:8px}
+.fcard .att{margin-left:auto; display:flex; gap:3px; align-items:center}
+.fcard .att i{width:8px; height:8px; border-radius:2px; background:var(--line)}
+.fcard .att i.f{background:var(--accent)}
+.fcard .att span{font-size:11px; color:var(--muted); margin-right:2px}
+.flist{background:var(--surface); border:1px solid var(--line); border-radius:10px; overflow:hidden}
+.flist .frow{display:flex; gap:12px; padding:11px 14px; border-top:1px solid var(--line); align-items:center}
+.flist .frow:first-child{border-top:0}
+.flist .dsec{margin:0; padding:10px 14px 4px; border-top:1px solid var(--line)}
+.flist .dsec:first-child{border-top:0; padding-top:12px}
+.flist .thumb{flex:0 0 56px; width:56px; height:56px; border-radius:6px}
+.flist .t{font-size:13.5px; font-weight:700; line-height:1.4;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
+.flist .sub{font-size:11.5px; color:var(--muted); margin-top:2px}
+
+/* ── 抽選・予約サイト（案B/案C 末尾のコンパクトリンク集） ── */
+.lotcompact{margin-top:24px; padding-top:14px; border-top:1px solid var(--line);
+  font-size:12px; color:var(--muted); display:flex; flex-wrap:wrap; align-items:center; gap:2px}
+.lotcompact .ttl{font-weight:800; color:var(--ink); margin-right:6px}
+.lotcompact a{color:var(--indigo); font-weight:600}
+.lotcompact a:hover{text-decoration:underline}
+.lotcompact .sep{margin:0 4px; color:var(--line)}
+
+.foot-note{margin-top:36px; text-align:center; color:var(--muted); font-size:12px}
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="mast-in">
+    <div class="brand">新商品<b>ウォッチ</b></div>
+    <div class="today num">2026年8月1日（土） 16:08更新</div>
+    <a class="theme-toggle" href="https://docs.google.com/spreadsheets/d/1g8d_tYSgmwsxorlktBztrlCTUnI-iZyjKpcMLdGV1KU/edit" target="_blank" rel="noopener">📋 台帳</a>
+    <div class="switch" role="tablist" aria-label="デザイン案の切り替え">
+      <button id="bA" class="on" onclick="show('A')">ポータル</button>
+      <button id="bB" onclick="show('B')">ストア</button>
+      <button id="bC" onclick="show('C')">朝刊</button>
+    </div>
+    <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()" aria-label="テーマ切り替え">🌙 ダーク</button>
+  </div>
+  <nav class="pagenav" aria-label="シリーズ切り替え"><a href="index.html">全体</a><span class="sep">｜</span><a href="pokemon.html">ポケモン</a><span class="sep">｜</span><a href="onepiece.html">ワンピース</a><span class="sep">｜</span><a href="weiss.html">ヴァイス</a><span class="sep">｜</span><a href="hololive.html">ホロライブ</a><span class="sep">｜</span><a href="unionarena.html">ユニオン</a><span class="sep">｜</span><a href="lorcana.html">ロルカナ</a><span class="sep">｜</span><a href="dragonball.html" class="on">ドラゴンボール</a></nav>
+</header>
+
+<main class="wrap">
+  <div class="cattabs" role="tablist" aria-label="カテゴリ絞り込み">
+    <button data-cat="all" class="on" onclick="setCat('all', this)">すべて</button>
+    <button data-cat="トレカ" onclick="setCat('トレカ', this)">トレカ</button>
+    <button data-cat="フィギュア" onclick="setCat('フィギュア', this)">フィギュア</button>
+  </div>
+  <div id="vA" class="pA"></div>
+  <div id="vB" class="pB" hidden></div>
+  <div id="vC" class="pC" hidden></div>
+  <p class="foot-note">新商品ウォッチ — 毎朝7時に自動更新</p>
+</main>
+
+<script>
+const DATA = [{"cat": "トレカ", "title": "STORY BOOSTER 01 [ST01]", "maker": "バンダイ", "date": "2026-08-08", "kind": "発売", "price": 330, "url": "https://www.dbs-cardgame.com/fw/jp/products/01_401.html", "img": "https://www.dbs-cardgame.com/fw/bccard/jp/news/2026/04/16/vPwteBkMiGXGn5Zz/ST01_jp.png", "first_seen": "2026-08-01", "en_q": "STORY BOOSTER 01 ST01 booster pack"}, {"cat": "トレカ", "title": "ブースターパック BRIGHTNESS OF HOPE [FB11]", "maker": "バンダイ", "date": "2026-09-12", "kind": "発売", "price": 240, "url": "https://www.dbs-cardgame.com/fw/jp/products/01_422.html", "img": "https://www.dbs-cardgame.com/fw/bccard/jp/news/2026/07/13/4Oupen8o11wtcmPh/FB11_jp.png", "first_seen": "2026-08-01", "en_q": "Dragon Ball Fusion World BRIGHTNESS OF HOPE FB11 booster pack"}, {"cat": "フィギュア", "title": "一番くじ ドラゴンボールGT", "maker": "BANDAI SPIRITS", "date": "2026-08-22", "kind": "発売", "price": 790, "url": "https://1kuji.com/products/db_gt", "img": "https://assets.1kuji.com/uploads/product/image/10725/2461f8c7-c647-4111-b22e-5ad165614809.png", "first_seen": "2026-08-01", "en_q": "Ichiban Kuji Dragon Ball GT"}, {"cat": "フィギュア", "title": "一番くじ ドラゴンボール スペクタクルバトル", "maker": "BANDAI SPIRITS", "date": "2026-07-11", "kind": "発売", "price": 800, "url": "https://1kuji.com/products/db_sb", "img": "https://assets.1kuji.com/uploads/product/image/10693/8cd4838b-0a2e-42be-9f72-e8673f1eca50.png", "first_seen": "2026-08-01", "en_q": "Ichiban Kuji Dragon Ball Spectacle Battle"}];
+const STATS = {"new": 0, "changed": 0, "errors": 0};
+const LOTTERY_SITES = [{"name": "ポケモンセンターオンライン", "url": "https://www.pokemoncenter-online.com/"}, {"name": "楽天ブックス", "url": "https://books.rakuten.co.jp/"}, {"name": "あみあみ", "url": "https://www.amiami.jp/"}, {"name": "駿河屋", "url": "https://www.suruga-ya.jp/"}];
+const TODAY_ISO = "2026-08-01";
+
+function parseDate(s){
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || "");
+  if(!m) return null;
+  return new Date(+m[1], +m[2]-1, +m[3]);
+}
+const TODAY = parseDate(TODAY_ISO) || new Date();
+function days(it){
+  const d = parseDate(it.date);
+  if(!d) return null;
+  return Math.round((d - TODAY) / 86400000);
+}
+function daysSince(dateStr){
+  const d = parseDate(dateStr);
+  if(!d) return null;
+  return Math.round((TODAY - d) / 86400000);
+}
+function esc(s){return (s||"").replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function fmtDate(it){
+  if(!it.date) return "日付未定";
+  return it.date === "未定" ? "発売日未定" : it.date;
+}
+function fmtPrice(it){
+  const n = parseInt(String(it.price).replace(/,/g,""), 10);
+  return isNaN(n) ? "" : "¥" + n.toLocaleString();
+}
+function extractEbayQuery(title){
+  // eBay(英語圏サイト)は日本語タイトルのままだとヒットしにくいため、
+  // タイトルから英数字トークン（連続する [A-Za-z0-9!'&.-] の並び。型番・型式・
+  // 英単語等）を抽出し、2文字以上のものだけをスペース区切りで連結する。
+  // 該当トークンが無ければタイトル先頭40文字をそのまま使う（フォールバック）。
+  const tokens = (title || "").match(/[A-Za-z0-9!'&.-]+/g) || [];
+  const filtered = tokens.filter(t => t.length >= 2);
+  if(filtered.length > 0) return filtered.join(" ");
+  return (title || "").slice(0, 40);
+}
+function searchLinks(item){
+  // 商品（item）で外部サイト（メルカリ／Amazon／楽天／eBay）を検索するリンク列。
+  // メルカリ・Amazon・楽天はタイトル全文（長すぎるため先頭40文字程度に丸め）を
+  // そのまま検索語にする。eBayは item.en_q（src/translate.py がAntigravity CLIで
+  // 事前生成した英語検索クエリ）があればそれを使い、無ければ従来通り
+  // extractEbayQuery() で英数字トークンに絞ったものへフォールバックする。
+  // encodeURIComponent の出力はHTML的に安全な文字集合のみなので esc() は不要。
+  // 本ツールがeBay等へアクセスすることは一切なく、リンクを生成するのみ。
+  const title = item.title;
+  const q = encodeURIComponent((title || "").slice(0, 40));
+  const eq = encodeURIComponent(item.en_q ? item.en_q : extractEbayQuery(title));
+  const sites = [
+    ["メルカリ", `https://jp.mercari.com/search?keyword=${q}`],
+    ["Amazon", `https://www.amazon.co.jp/s?k=${q}`],
+    ["楽天", `https://search.rakuten.co.jp/search/mall/${q}/`],
+    ["eBay", `https://www.ebay.com/sch/i.html?_nkw=${eq}`],
+  ];
+  return `<span class="srch">` + sites.map(([label, href]) =>
+    `<a href="${href}" target="_blank" rel="noopener">${label}</a>`
+  ).join(`<span class="sep">｜</span>`) + `</span>`;
+}
+function isNewItem(it){
+  // 初回検出日(first_seen)が本レポートの基準日と同じ = 今回はじめて検出したアイテム
+  return daysSince(it.first_seen) === 0;
+}
+function chips(it, withCat){
+  const d = days(it); let h = "";
+  if(withCat) h += `<span class="chip cat">${esc(it.cat)}</span>`;
+  if(isNewItem(it)) h += `<span class="chip new">新着</span>`;
+  if(it.kind === "予約") h += `<span class="chip pre">予約受付中</span>`;
+  if(it.kind === "抽選") h += `<span class="chip lot">抽選</span>`;
+  if(d === 0) h += `<span class="chip today-chip">本日発売</span>`;
+  else if(d !== null && d > 0 && d <= 7) h += `<span class="chip soon">あと${d}日</span>`;
+  else if(d !== null && d < 0 && d >= -30) h += `<span class="chip rel">発売中</span>`;
+  else h += `<span class="chip date-chip num">${esc(fmtDate(it))}</span>`;
+  return h;
+}
+function imgFallback(img){
+  // 画像取得失敗時、モックアップの「画像なし」プレースホルダー(.ph)へ差し替える
+  img.style.display = "none";
+  const ph = img.nextElementSibling;
+  if(ph) ph.style.display = "flex";
+}
+function thumb(it, cls){
+  const label = esc((it.title || "").slice(0, 10)) + "…";
+  if(it.img){
+    return `<div class="thumb ${cls||""}"><img src="${esc(it.img)}" alt="" loading="lazy" onerror="imgFallback(this)">`
+      + `<div class="ph" style="display:none;position:absolute;inset:0;width:100%;height:100%">${label}</div></div>`;
+  }
+  return `<div class="ph thumb ${cls||""}">${label}</div>`;
+}
+function att(it){ // 注目度 0-3
+  const d = days(it); let n = 0;
+  if(d !== null && d >= 0 && d <= 3) n = 3;
+  else if(d !== null && d >= 0 && d <= 7) n = 2;
+  else if(d !== null && Math.abs(d) <= 14) n = 1;
+  if(it.kind !== "発売") n = Math.min(3, n + 1);
+  return n;
+}
+// もうすぐ発売／発売中／注目順／新着ヘッドライン は、いずれもページ共通のカテゴリタブ
+// （すべて／トレカ／フィギュア。setCat()参照）で絞り込んだ後のリストに対して計算する
+// 必要があるため、DATA直参照の定数ではなく関数にしてrender時に都度計算する。
+function computeSoon(list){
+  return list.filter(i => {const d = days(i); return d !== null && d >= 0 && d <= 14;})
+             .sort((a,b) => days(a) - days(b));
+}
+function computeRel(list){
+  return list.filter(i => {const d = days(i); return d !== null && d < 0;})
+             .sort((a,b) => days(b) - days(a));
+}
+function computeFeatured(list){
+  return [...list].sort((a,b) => att(b) - att(a) || (days(a)??99) - (days(b)??99));
+}
+function computeNewest(list){
+  // 新着ヘッドライン: 初回検出日が基準日から3日以内のアイテムを新しい順に最大20件
+  return list.filter(i => {const ds = daysSince(i.first_seen); return ds !== null && ds >= 0 && ds <= 3;})
+             .sort((a,b) => daysSince(a.first_seen) - daysSince(b.first_seen))
+             .slice(0, 20);
+}
+
+/* ── カテゴリ絞り込みタブ（すべて／トレカ／フィギュア。全ページ・全レイアウト共通） ── */
+let catFilter = "all"; // localStorage(rw_cat)で記憶
+function currentData(){
+  if(catFilter === "トレカ" || catFilter === "フィギュア") return DATA.filter(i => i.cat === catFilter);
+  return DATA;
+}
+function setCat(c, btn){
+  catFilter = c;
+  document.querySelectorAll(".cattabs button").forEach(b => b.classList.remove("on"));
+  btn.classList.add("on");
+  try{ localStorage.setItem("rw_cat", c); }catch(e){}
+  renderA(); renderB(); renderC();
+}
+
+/* ── 抽選・予約サイト一覧（config/pages.json の lottery_sites。案A=レール内ボックス／
+   案B・案C=末尾のコンパクトなリンク集） ── */
+function lotteryBoxHtml(){
+  if(!LOTTERY_SITES.length) return "";
+  return `<div class="box">
+    <div class="box-h">抽選・予約サイト</div>
+    <ul class="lotlist">
+      ${LOTTERY_SITES.map(s => `<li><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.name)}</a></li>`).join("")}
+    </ul>
+  </div>`;
+}
+function lotteryCompactHtml(){
+  if(!LOTTERY_SITES.length) return "";
+  return `<div class="lotcompact"><span class="ttl">抽選・予約サイト</span>`
+    + LOTTERY_SITES.map(s => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.name)}</a>`).join(`<span class="sep">｜</span>`)
+    + `</div>`;
+}
+
+/* ── 案A ── */
+function renderA(){
+  const el = document.getElementById("vA");
+  const list = currentData();
+  if(!list.length){ el.innerHTML = `<p style="color:var(--muted)">データがありません。</p>`; return; }
+  const soonItems = computeSoon(list);
+  const featured = computeFeatured(list);
+  const newestItems = computeNewest(list);
+  const hero = featured.find(i => i.img) || featured[0];
+  const heads = featured.filter(i => i !== hero).slice(0, 6);
+  const byDate = {};
+  soonItems.forEach(i => {(byDate[i.date] = byDate[i.date] || []).push(i);});
+  el.innerHTML = `
+  <div class="layout">
+    <div>
+      <div class="box">
+        <div class="box-h"><span class="tag">注目</span>今日のトピックス</div>
+        <div class="hero">
+          <a class="tlink" href="${esc(hero.url)}" target="_blank" rel="noopener">${thumb(hero)}</a>
+          <div>
+            <div class="meta">${chips(hero, true)}</div>
+            <div class="hl"><a href="${esc(hero.url)}" target="_blank" rel="noopener">${esc(hero.title)}</a></div>
+            <div class="meta"><span>${esc(hero.maker || "")}</span><span class="num">${esc(fmtDate(hero))}</span><b class="num">${fmtPrice(hero)}</b></div>
+            ${searchLinks(hero)}
+          </div>
+        </div>
+        <ul class="headline">
+          ${heads.map(i => `<li><span class="dot">・</span><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a><span class="d num">${esc(fmtDate(i))}</span></li>`).join("")}
+        </ul>
+      </div>
+      <div class="box" style="margin-top:16px">
+        <div class="box-h">もうすぐ発売（14日以内）</div>
+        <div class="hrow">
+          ${soonItems.map(i => `<a class="hcard" href="${esc(i.url)}" target="_blank" rel="noopener">${thumb(i)}<div class="t">${esc(i.title)}</div><div class="d num">${esc(fmtDate(i))} ${fmtPrice(i)}</div></a>`).join("")}
+        </div>
+      </div>
+      <div class="box" style="margin-top:16px">
+        <div class="box-h">新着ヘッドライン</div>
+        <ul class="dense">
+          ${newestItems.map(i => `<li>${thumb(i)}<div><div class="t"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a></div><div class="sub">${esc(i.cat)}｜${esc(i.maker||"メーカー不明")}｜<span class="num">${esc(fmtDate(i))}</span></div>${searchLinks(i)}</div></li>`).join("")}
+        </ul>
+      </div>
+    </div>
+    <div class="rail">
+      <div class="box">
+        <div class="box-h">今朝の収集サマリー</div>
+        <div class="stats">
+          <div><div class="n num">${STATS.new}</div><div class="l">新規</div></div>
+          <div><div class="n num">${STATS.changed}</div><div class="l">変更</div></div>
+          <div><div class="n num">${STATS.errors}</div><div class="l">エラー</div></div>
+        </div>
+      </div>
+      <div class="box">
+        <div class="box-h">発売カレンダー</div>
+        <div class="cal">
+          ${Object.keys(byDate).sort().map(d => `<div class="cal-d num">${esc(d)}</div>` + byDate[d].map(i => `<div class="cal-i"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title.slice(0,26))}${i.title.length>26?"…":""}</a></div>`).join("")).join("")}
+        </div>
+      </div>
+      ${lotteryBoxHtml()}
+    </div>
+  </div>`;
+}
+
+/* ── 日付グループ化（案B・案C 共通） ── */
+const WD_JA = ["日","月","火","水","木","金","土"]; // Date.getDay() 0=日曜 起点
+function isFullDate(s){
+  return /^\d{4}-\d{2}-\d{2}$/.test(s || "");
+}
+function dateGroupLabel(dateStr){
+  // 呼び出し側は isFullDate() で絞り込んだ "YYYY-MM-DD" のみを渡す前提
+  const d = parseDate(dateStr);
+  if(!d) return dateStr;
+  return `${dateStr}（${WD_JA[d.getDay()]}）`;
+}
+function groupItemsByDate(list){
+  // フル日付("YYYY-MM-DD")は日付ごとに束ね、それ以外("YYYY-MM"/"未定"/空)は
+  // 「日付未定・月のみ」グループへ最後にまとめる
+  const groups = {};
+  const undated = [];
+  list.forEach(i => {
+    if(isFullDate(i.date)) (groups[i.date] = groups[i.date] || []).push(i);
+    else undated.push(i);
+  });
+  const dates = Object.keys(groups).sort(); // 発売日昇順
+  return { dates, groups, undated };
+}
+function dateSectionsHtml(list, itemHtmlFn){
+  const { dates, groups, undated } = groupItemsByDate(list);
+  let html = "";
+  dates.forEach(d => {
+    html += `<div class="dsec"><span class="name num">${esc(dateGroupLabel(d))}</span><span class="rule"></span><span class="cnt num">${groups[d].length}件</span></div>`;
+    html += groups[d].map(itemHtmlFn).join("");
+  });
+  if(undated.length){
+    html += `<div class="dsec"><span class="name">日付未定・月のみ</span><span class="rule"></span><span class="cnt num">${undated.length}件</span></div>`;
+    html += undated.map(itemHtmlFn).join("");
+  }
+  return html;
+}
+
+/* ── 案B ── */
+let filterB = "all";
+let groupB = "date"; // 既定は「日付ごと」。localStorage(rw_group)で記憶
+function setFilter(f, btn){
+  filterB = f;
+  document.querySelectorAll(".pB .filters .catbtn").forEach(b => b.classList.remove("on"));
+  btn.classList.add("on");
+  document.getElementById("gridB").innerHTML = gridCards();
+}
+function toggleGroupB(){
+  groupB = groupB === "date" ? "flat" : "date";
+  try{ localStorage.setItem("rw_group", groupB); }catch(e){}
+  const btn = document.getElementById("groupToggleB");
+  if(btn){
+    btn.textContent = groupB === "date" ? "日付ごと" : "一覧";
+    btn.classList.toggle("on", groupB === "date");
+  }
+  document.getElementById("gridB").innerHTML = gridCards();
+}
+function cardHtml(i){
+  // カード全体を<a>にすると検索リンク列（別の<a>）を内包できないため、
+  // ラッパーはdivにし、画像とタイトルをそれぞれ商品ページへのリンクにする
+  return `
+    <div class="card">
+      <div class="imgbox"><a class="tlink" href="${esc(i.url)}" target="_blank" rel="noopener">${thumb(i)}</a><div class="bdg">${chips(i, false)}</div></div>
+      <div class="body">
+        <div class="t"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a></div>
+        <div class="mk">${esc(i.cat)}｜${esc(i.maker || "メーカー不明")}</div>
+        <div class="foot"><span class="dt num">${esc(fmtDate(i))}</span><span class="pr num">${fmtPrice(i)}</span></div>
+        ${searchLinks(i)}
+      </div>
+    </div>`;
+}
+function gridCards(){
+  // トレカ/フィギュアの絞り込みはページ共通の.cattabs（catFilter）に統合済みのため
+  // currentData()が既にカテゴリ絞り込み済み。ここでは日付・予約種別の絞り込みのみ行う。
+  const base = currentData();
+  let list = base;
+  if(filterB === "soon") list = computeSoon(base);
+  if(filterB === "yoyaku") list = base.filter(i => i.kind === "予約" || i.kind === "抽選");
+  if(filterB === "rel") list = computeRel(base);
+  if(!list.length) return `<p style="color:var(--muted)">該当する商品はありません。</p>`;
+  if(groupB !== "date") return list.map(cardHtml).join("");
+  return dateSectionsHtml(list, cardHtml);
+}
+function renderB(){
+  const el = document.getElementById("vB");
+  if(!currentData().length){ el.innerHTML = `<p style="color:var(--muted)">データがありません。</p>`; return; }
+  el.innerHTML = `
+    <div class="filters">
+      <button class="catbtn on" onclick="setFilter('all', this)">すべて</button>
+      <button class="catbtn" onclick="setFilter('soon', this)">もうすぐ発売</button>
+      <button class="catbtn" onclick="setFilter('yoyaku', this)">予約・抽選</button>
+      <button class="catbtn" onclick="setFilter('rel', this)">発売中</button>
+      <button id="groupToggleB" class="grouptoggle${groupB === "date" ? " on" : ""}" onclick="toggleGroupB()">${groupB === "date" ? "日付ごと" : "一覧"}</button>
+    </div>
+    <div class="grid" id="gridB">${gridCards()}</div>
+    ${lotteryCompactHtml()}`;
+}
+
+/* ── 案C ── */
+function attBar(it){
+  const n = att(it);
+  return `<span class="att"><span>注目度</span>${[0,1,2].map(k => `<i class="${k < n ? "f" : ""}"></i>`).join("")}</span>`;
+}
+function flistItemHtml(i){
+  // 行全体を<a>にすると検索リンク列を内包できないため、ラッパーはdiv(.frow)にし、
+  // 画像とタイトルをそれぞれ商品ページへのリンクにする
+  return `<div class="frow">`
+    + `<a class="tlink" href="${esc(i.url)}" target="_blank" rel="noopener">${thumb(i)}</a>`
+    + `<div style="min-width:0">`
+    + `<div class="t"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a></div>`
+    + `<div class="sub">${esc(i.cat)}｜<span class="num">${esc(fmtDate(i))}</span>｜${fmtPrice(i) || "価格未定"}</div>`
+    + `${searchLinks(i)}`
+    + `</div></div>`;
+}
+function renderC(){
+  const el = document.getElementById("vC");
+  const list = currentData();
+  if(!list.length){ el.innerHTML = `<p style="color:var(--muted)">データがありません。</p>`; return; }
+  const featured = computeFeatured(list);
+  const top = featured.filter(i => i.img).slice(0, 3);
+  const rest = list.filter(i => !top.includes(i)).slice(0, 30);
+  el.innerHTML = `
+    <div class="mh"><div class="l1">MORNING EDITION</div><div class="l2">8月1日（土）の朝刊</div></div>
+    <div class="sec"><span class="name">今日の注目</span><span class="rule"></span><span class="cnt num">${top.length}件</span></div>
+    ${top.map(i => `
+      <div class="fcard">
+        <a class="tlink" href="${esc(i.url)}" target="_blank" rel="noopener">${thumb(i)}</a>
+        <div class="body">
+          <div class="t"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a></div>
+          <div class="meta">${chips(i, true)}<b class="num">${fmtPrice(i)}</b>${attBar(i)}</div>
+          ${searchLinks(i)}
+        </div>
+      </div>`).join("")}
+    <div class="sec"><span class="name">新着・発売予定</span><span class="rule"></span><span class="cnt num">${rest.length}件</span></div>
+    <div class="flist">
+      ${dateSectionsHtml(rest, flistItemHtml)}
+    </div>
+    ${lotteryCompactHtml()}`;
+}
+
+function show(v){
+  for(const k of ["A","B","C"]){
+    document.getElementById("v"+k).hidden = (k !== v);
+    document.getElementById("b"+k).classList.toggle("on", k === v);
+  }
+  try{ localStorage.setItem("rw_view", v); }catch(e){}
+}
+
+function applyTheme(t){
+  document.documentElement.setAttribute("data-theme", t);
+  try{ localStorage.setItem("rw_theme", t); }catch(e){}
+  const btn = document.getElementById("themeToggle");
+  if(btn) btn.textContent = t === "dark" ? "☀ ライト" : "🌙 ダーク";
+}
+function toggleTheme(){
+  const cur = document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+  applyTheme(cur === "dark" ? "light" : "dark");
+}
+(function initTheme(){
+  let saved = null;
+  try{ saved = localStorage.getItem("rw_theme"); }catch(e){}
+  if(saved === "light" || saved === "dark"){
+    applyTheme(saved);
+  } else {
+    const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const btn = document.getElementById("themeToggle");
+    if(btn) btn.textContent = prefersDark ? "☀ ライト" : "🌙 ダーク";
+  }
+})();
+
+try{
+  const savedCat = localStorage.getItem("rw_cat");
+  if(savedCat === "all" || savedCat === "トレカ" || savedCat === "フィギュア") catFilter = savedCat;
+}catch(e){}
+document.querySelectorAll(".cattabs button").forEach(b => {
+  b.classList.toggle("on", b.getAttribute("data-cat") === catFilter);
+});
+
+try{
+  const savedGroup = localStorage.getItem("rw_group");
+  if(savedGroup === "date" || savedGroup === "flat") groupB = savedGroup;
+}catch(e){}
+
+renderA(); renderB(); renderC();
+let initialView = "A";
+try{
+  const savedView = localStorage.getItem("rw_view");
+  if(savedView === "A" || savedView === "B" || savedView === "C") initialView = savedView;
+}catch(e){}
+show(initialView);
+</script>
+</body>
+</html>
