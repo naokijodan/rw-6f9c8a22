@@ -271,7 +271,7 @@ img{max-width:100%}
 <header class="mast">
   <div class="mast-in">
     <div class="brand">新商品<b>ウォッチ</b></div>
-    <div class="today num">2026年8月2日（日） 08:59更新</div>
+    <div class="today num">2026年8月2日（日） 13:33更新</div>
     <a class="theme-toggle" href="https://docs.google.com/spreadsheets/d/1g8d_tYSgmwsxorlktBztrlCTUnI-iZyjKpcMLdGV1KU/edit" target="_blank" rel="noopener">📋 台帳</a>
     <div class="switch" role="tablist" aria-label="デザイン案の切り替え">
       <button id="bA" class="on" onclick="show('A')">ポータル</button>
@@ -288,6 +288,7 @@ img{max-width:100%}
     <button data-cat="all" class="on" onclick="setCat('all', this)">すべて</button>
     <button data-cat="トレカ" onclick="setCat('トレカ', this)">トレカ</button>
     <button data-cat="フィギュア" onclick="setCat('フィギュア', this)">フィギュア</button>
+    <button data-cat="くじ" onclick="setCat('くじ', this)">くじ</button>
   </div>
   <div id="vA" class="pA"></div>
   <div id="vB" class="pB" hidden></div>
@@ -304,7 +305,7 @@ img{max-width:100%}
 
 <script>
 const DATA = [{"key": "dragonball:https://www.dbs-cardgame.com/fw/jp/products/01_401.html", "cat": "トレカ", "title": "STORY BOOSTER 01 [ST01]", "maker": "バンダイ", "date": "2026-08-08", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 330, "url": "https://www.dbs-cardgame.com/fw/jp/products/01_401.html", "img": "https://www.dbs-cardgame.com/fw/bccard/jp/news/2026/04/16/vPwteBkMiGXGn5Zz/ST01_jp.png", "first_seen": "2026-08-01", "en_q": "STORY BOOSTER 01 ST01 booster pack", "lottery": []}, {"key": "dragonball:https://www.dbs-cardgame.com/fw/jp/products/01_422.html", "cat": "トレカ", "title": "ブースターパック BRIGHTNESS OF HOPE [FB11]", "maker": "バンダイ", "date": "2026-09-12", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 240, "url": "https://www.dbs-cardgame.com/fw/jp/products/01_422.html", "img": "https://www.dbs-cardgame.com/fw/bccard/jp/news/2026/07/13/4Oupen8o11wtcmPh/FB11_jp.png", "first_seen": "2026-08-01", "en_q": "Dragon Ball Fusion World BRIGHTNESS OF HOPE FB11 booster pack", "lottery": []}, {"key": "ichibankuji:https://1kuji.com/products/db_gt", "cat": "フィギュア", "title": "一番くじ ドラゴンボールGT", "maker": "BANDAI SPIRITS", "date": "2026-08-22", "preorder_start": "2026-08-24 17:00", "lottery_deadline": "", "kind": "発売", "price": 790, "url": "https://1kuji.com/products/db_gt", "img": "https://assets.1kuji.com/uploads/product/image/10725/2461f8c7-c647-4111-b22e-5ad165614809.png", "first_seen": "2026-08-01", "en_q": "Ichiban Kuji Dragon Ball GT", "lottery": []}, {"key": "ichibankuji:https://1kuji.com/products/db_sb", "cat": "フィギュア", "title": "一番くじ ドラゴンボール スペクタクルバトル", "maker": "BANDAI SPIRITS", "date": "2026-07-11", "preorder_start": "2026-07-14 13:00", "lottery_deadline": "", "kind": "発売", "price": 800, "url": "https://1kuji.com/products/db_sb", "img": "https://assets.1kuji.com/uploads/product/image/10693/8cd4838b-0a2e-42be-9f72-e8673f1eca50.png", "first_seen": "2026-08-01", "en_q": "Ichiban Kuji Dragon Ball Spectacle Battle", "lottery": []}];
-const STATS = {"new": 33, "changed": 27, "errors": 0};
+const STATS = {"new": 8, "changed": 2, "errors": 0};
 const LOTTERY_SITES = [{"name": "ポケモンセンターオンライン", "url": "https://www.pokemoncenter-online.com/"}, {"name": "楽天ブックス", "url": "https://books.rakuten.co.jp/"}, {"name": "あみあみ", "url": "https://www.amiami.jp/"}, {"name": "駿河屋", "url": "https://www.suruga-ya.jp/"}];
 const TODAY_ISO = "2026-08-02";
 // key(state上の"source:id") → item のマップ。カード/行クリック時の商品詳細
@@ -431,7 +432,7 @@ function att(it){ // 注目度 0-3
   return n;
 }
 // もうすぐ発売／発売中／注目順／新着ヘッドライン は、いずれもページ共通のカテゴリタブ
-// （すべて／トレカ／フィギュア。setCat()参照）で絞り込んだ後のリストに対して計算する
+// （すべて／トレカ／フィギュア／くじ。setCat()参照）で絞り込んだ後のリストに対して計算する
 // 必要があるため、DATA直参照の定数ではなく関数にしてrender時に都度計算する。
 function computeSoon(list){
   return list.filter(i => {const d = days(i); return d !== null && d >= 0 && d <= 14;})
@@ -451,9 +452,17 @@ function computeNewest(list){
              .slice(0, 20);
 }
 
-/* ── カテゴリ絞り込みタブ（すべて／トレカ／フィギュア。全ページ・全レイアウト共通） ── */
+/* ── カテゴリ絞り込みタブ（すべて／トレカ／フィギュア／くじ。全ページ・全レイアウト共通） ── */
 let catFilter = "all"; // localStorage(rw_cat)で記憶
+function isLotteryItem(it){
+  // 「くじ」タブ = くじ系の巡回先（一番くじ／スクエニくじ）由来のアイテム全部。
+  // これらは category=フィギュアのままstateに保存されている（カテゴリは変更しない）ため、
+  // cat比較ではなくkey（"source:id"）の接頭辞で判定する。判定はここ1箇所にまとめる。
+  const k = it.key || "";
+  return k.indexOf("ichibankuji:") === 0 || k.indexOf("sqexkuji:") === 0;
+}
 function currentData(){
+  if(catFilter === "くじ") return DATA.filter(isLotteryItem);
   if(catFilter === "トレカ" || catFilter === "フィギュア") return DATA.filter(i => i.cat === catFilter);
   return DATA;
 }
@@ -620,7 +629,7 @@ function cardHtml(i){
     </div>`;
 }
 function gridCards(){
-  // トレカ/フィギュアの絞り込みはページ共通の.cattabs（catFilter）に統合済みのため
+  // トレカ/フィギュア/くじの絞り込みはページ共通の.cattabs（catFilter）に統合済みのため
   // currentData()が既にカテゴリ絞り込み済み。ここでは日付・予約種別の絞り込みのみ行う。
   const base = currentData();
   let list = base;
@@ -799,7 +808,7 @@ function toggleTheme(){
 
 try{
   const savedCat = localStorage.getItem("rw_cat");
-  if(savedCat === "all" || savedCat === "トレカ" || savedCat === "フィギュア") catFilter = savedCat;
+  if(savedCat === "all" || savedCat === "トレカ" || savedCat === "フィギュア" || savedCat === "くじ") catFilter = savedCat;
 }catch(e){}
 document.querySelectorAll(".cattabs button").forEach(b => {
   b.classList.toggle("on", b.getAttribute("data-cat") === catFilter);

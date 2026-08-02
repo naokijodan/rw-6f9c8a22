@@ -271,7 +271,7 @@ img{max-width:100%}
 <header class="mast">
   <div class="mast-in">
     <div class="brand">新商品<b>ウォッチ</b></div>
-    <div class="today num">2026年8月2日（日） 08:59更新</div>
+    <div class="today num">2026年8月2日（日） 13:33更新</div>
     <a class="theme-toggle" href="https://docs.google.com/spreadsheets/d/1g8d_tYSgmwsxorlktBztrlCTUnI-iZyjKpcMLdGV1KU/edit" target="_blank" rel="noopener">📋 台帳</a>
     <div class="switch" role="tablist" aria-label="デザイン案の切り替え">
       <button id="bA" class="on" onclick="show('A')">ポータル</button>
@@ -288,6 +288,7 @@ img{max-width:100%}
     <button data-cat="all" class="on" onclick="setCat('all', this)">すべて</button>
     <button data-cat="トレカ" onclick="setCat('トレカ', this)">トレカ</button>
     <button data-cat="フィギュア" onclick="setCat('フィギュア', this)">フィギュア</button>
+    <button data-cat="くじ" onclick="setCat('くじ', this)">くじ</button>
   </div>
   <div id="vA" class="pA"></div>
   <div id="vB" class="pB" hidden></div>
@@ -303,8 +304,8 @@ img{max-width:100%}
 </div>
 
 <script>
-const DATA = [{"key": "gemini:https://www.30th.pokemon-card.com/", "cat": "トレカ", "title": "ポケモンカードゲーム 拡張パック 30th CELEBRATION", "maker": "株式会社ポケモン", "date": "2026-09-16", "preorder_start": "未定", "lottery_deadline": "未定", "kind": "予約", "price": 7200, "url": "https://www.30th.pokemon-card.com/", "img": "https://www.30th.pokemon-card.com/30th_ogp.jpg", "first_seen": "2026-08-01", "en_q": "Pokemon Card Game 30th CELEBRATION booster pack", "lottery": []}, {"key": "gemini:https://www.pokemon-card.com/", "cat": "トレカ", "title": "ポケモンカードゲーム MEGA 拡張パック ストームエメラルダ", "maker": "株式会社ポケモン", "date": "2026-07-31", "preorder_start": "未定", "lottery_deadline": "未定", "kind": "発売", "price": 6000, "url": "https://www.pokemon-card.com/", "img": "https://www.pokemon-card.com/assets/images/og.png?v=1998061658402", "first_seen": "2026-08-01", "en_q": "Pokemon Card Game Storm Emeralda booster pack", "lottery": []}, {"key": "gemini:https://www.pokemon-card.com/products/", "cat": "トレカ", "title": "ポケモンカードゲーム MEGA拡張パック ストームエメラルダ", "maker": "ポケモン", "date": "2026-07-31", "preorder_start": "未定", "lottery_deadline": "", "kind": "発売", "price": 200, "url": "https://www.pokemon-card.com/products/", "img": "https://www.pokemon-card.com/assets/images/og.png?v=1998061658402", "first_seen": "2026-08-01", "en_q": "Pokemon Card Game MEGA Storm Emeralda booster pack", "lottery": []}, {"key": "ichibankuji:https://1kuji.com/products/pk_masters", "cat": "フィギュア", "title": "一番くじ ポケモンマスターズ EX 7th Anniversary", "maker": "BANDAI SPIRITS", "date": "2026-08-29", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 850, "url": "https://1kuji.com/products/pk_masters", "img": "https://assets.1kuji.com/uploads/product/image/10698/00eed3af-e99f-44d5-aa79-60339c6b8e2d.gif", "first_seen": "2026-08-01", "en_q": "Ichiban Kuji Pokemon Masters EX 7th Anniversary", "lottery": []}, {"key": "pokemon:https://www.30th.pokemon-card.com/product/furbox", "cat": "トレカ", "title": "「30th CELEBRATION FUTURISTIC BOX」", "maker": "ポケモン", "date": "2026-09-16", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 27500, "url": "https://www.30th.pokemon-card.com/product/furbox", "img": "https://www.pokemon-card.com/products/2026/images/furbox.jpg", "first_seen": "2026-08-01", "en_q": "Pokemon 30th CELEBRATION FUTURISTIC BOX", "lottery": []}, {"key": "pokemon:https://www.30th.pokemon-card.com/product/m6a", "cat": "トレカ", "title": "拡張パック「30th CELEBRATION」", "maker": "ポケモン", "date": "2026-09-16", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 360, "url": "https://www.30th.pokemon-card.com/product/m6a", "img": "https://www.pokemon-card.com/products/2026/images/30th_celebration.jpg", "first_seen": "2026-08-01", "en_q": "Pokemon 30th CELEBRATION booster pack", "lottery": []}, {"key": "pokemon:https://www.30th.pokemon-card.com/product/mf", "cat": "トレカ", "title": "「30th CELEBRATION プレミアムデッキセット エーフィ・ブラッキー」", "maker": "ポケモン", "date": "2026-09-16", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 6200, "url": "https://www.30th.pokemon-card.com/product/mf", "img": "https://www.pokemon-card.com/products/2026/images/mfbox.jpg", "first_seen": "2026-08-01", "en_q": "Pokemon 30th CELEBRATION Premium Deck Set Espeon Umbreon", "lottery": []}, {"key": "pokemon:https://www.pokemon-card.com/ex/m6/", "cat": "トレカ", "title": "拡張パック「ストームエメラルダ」", "maker": "ポケモン", "date": "2026-07-31", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 200, "url": "https://www.pokemon-card.com/ex/m6/", "img": "https://www.pokemon-card.com/products/2026/images/stormemeralda.jpg", "first_seen": "2026-08-01", "en_q": "Pokemon Storm Emeralda booster pack", "lottery": []}, {"key": "pokemon:https://www.pokemon-card.com/ex/me/#mee", "cat": "トレカ", "title": "スターターセットex イーブイex", "maker": "ポケモン", "date": "2026-07-31", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 1800, "url": "https://www.pokemon-card.com/ex/me/#mee", "img": "https://www.pokemon-card.com/products/2026/images/starterset_i-vui.jpg", "first_seen": "2026-08-01", "en_q": "Pokemon Starter Set ex Eevee ex", "lottery": []}, {"key": "pokemon:https://www.pokemon-card.com/ex/me/#mem", "cat": "トレカ", "title": "スターターセットex ニャオハ＆マスカーニャex", "maker": "ポケモン", "date": "2026-07-31", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 1800, "url": "https://www.pokemon-card.com/ex/me/#mem", "img": "https://www.pokemon-card.com/products/2026/images/starterset_nyaoha_masuka-nya.jpg", "first_seen": "2026-08-01", "en_q": "Pokemon Starter Set ex Sprigatito Meowscarada ex", "lottery": []}, {"key": "pokemon:https://www.pokemon-card.com/ex/me/#mez", "cat": "トレカ", "title": "スターターセットex ゾロア＆ゾロアークex", "maker": "ポケモン", "date": "2026-07-31", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 1800, "url": "https://www.pokemon-card.com/ex/me/#mez", "img": "https://www.pokemon-card.com/products/2026/images/starterset_zoroa_zoroark.jpg", "first_seen": "2026-08-01", "en_q": "Pokemon Starter Set ex Zorua Zoroark ex", "lottery": []}];
-const STATS = {"new": 33, "changed": 27, "errors": 0};
+const DATA = [{"key": "gemini:https://www.30th.pokemon-card.com/", "cat": "トレカ", "title": "ポケモンカードゲーム 拡張パック 30th CELEBRATION", "maker": "株式会社ポケモン", "date": "2026-09-16", "preorder_start": "未定", "lottery_deadline": "未定", "kind": "予約", "price": 7200, "url": "https://www.30th.pokemon-card.com/", "img": "https://www.30th.pokemon-card.com/30th_ogp.jpg", "first_seen": "2026-08-01", "en_q": "Pokemon Card Game 30th CELEBRATION booster pack", "lottery": []}, {"key": "gemini:https://www.pokemon-card.com/", "cat": "トレカ", "title": "ポケモンカードゲーム MEGA 拡張パック ストームエメラルダ", "maker": "ポケモン", "date": "2026-07-31", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 200, "url": "https://www.pokemon-card.com/", "img": "https://www.pokemon-card.com/assets/images/og.png?v=1998061658402", "first_seen": "2026-08-01", "en_q": "Pokemon Card Game Storm Emeralda booster pack", "lottery": []}, {"key": "gemini:https://www.pokemon-card.com/products/", "cat": "トレカ", "title": "ポケモンカードゲーム 拡張パック ストームエメラルダ", "maker": "株式会社ポケモン", "date": "2026-07-31", "preorder_start": "未定", "lottery_deadline": "未定", "kind": "発売", "price": 200, "url": "https://www.pokemon-card.com/products/", "img": "https://www.pokemon-card.com/assets/images/og.png?v=1998061658402", "first_seen": "2026-08-01", "en_q": "Pokemon Card Game MEGA Storm Emeralda booster pack", "lottery": []}, {"key": "ichibankuji:https://1kuji.com/products/pk_masters", "cat": "フィギュア", "title": "一番くじ ポケモンマスターズ EX 7th Anniversary", "maker": "BANDAI SPIRITS", "date": "2026-08-29", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 850, "url": "https://1kuji.com/products/pk_masters", "img": "https://assets.1kuji.com/uploads/product/image/10698/00eed3af-e99f-44d5-aa79-60339c6b8e2d.gif", "first_seen": "2026-08-01", "en_q": "Ichiban Kuji Pokemon Masters EX 7th Anniversary", "lottery": []}, {"key": "pokemon:https://www.30th.pokemon-card.com/product/furbox", "cat": "トレカ", "title": "「30th CELEBRATION FUTURISTIC BOX」", "maker": "ポケモン", "date": "2026-09-16", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 27500, "url": "https://www.30th.pokemon-card.com/product/furbox", "img": "https://www.pokemon-card.com/products/2026/images/furbox.jpg", "first_seen": "2026-08-01", "en_q": "Pokemon 30th CELEBRATION FUTURISTIC BOX", "lottery": []}, {"key": "pokemon:https://www.30th.pokemon-card.com/product/m6a", "cat": "トレカ", "title": "拡張パック「30th CELEBRATION」", "maker": "ポケモン", "date": "2026-09-16", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 360, "url": "https://www.30th.pokemon-card.com/product/m6a", "img": "https://www.pokemon-card.com/products/2026/images/30th_celebration.jpg", "first_seen": "2026-08-01", "en_q": "Pokemon 30th CELEBRATION booster pack", "lottery": []}, {"key": "pokemon:https://www.30th.pokemon-card.com/product/mf", "cat": "トレカ", "title": "「30th CELEBRATION プレミアムデッキセット エーフィ・ブラッキー」", "maker": "ポケモン", "date": "2026-09-16", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 6200, "url": "https://www.30th.pokemon-card.com/product/mf", "img": "https://www.pokemon-card.com/products/2026/images/mfbox.jpg", "first_seen": "2026-08-01", "en_q": "Pokemon 30th CELEBRATION Premium Deck Set Espeon Umbreon", "lottery": []}, {"key": "pokemon:https://www.pokemon-card.com/ex/m6/", "cat": "トレカ", "title": "拡張パック「ストームエメラルダ」", "maker": "ポケモン", "date": "2026-07-31", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 200, "url": "https://www.pokemon-card.com/ex/m6/", "img": "https://www.pokemon-card.com/products/2026/images/stormemeralda.jpg", "first_seen": "2026-08-01", "en_q": "Pokemon Storm Emeralda booster pack", "lottery": []}, {"key": "pokemon:https://www.pokemon-card.com/ex/me/#mee", "cat": "トレカ", "title": "スターターセットex イーブイex", "maker": "ポケモン", "date": "2026-07-31", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 1800, "url": "https://www.pokemon-card.com/ex/me/#mee", "img": "https://www.pokemon-card.com/products/2026/images/starterset_i-vui.jpg", "first_seen": "2026-08-01", "en_q": "Pokemon Starter Set ex Eevee ex", "lottery": []}, {"key": "pokemon:https://www.pokemon-card.com/ex/me/#mem", "cat": "トレカ", "title": "スターターセットex ニャオハ＆マスカーニャex", "maker": "ポケモン", "date": "2026-07-31", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 1800, "url": "https://www.pokemon-card.com/ex/me/#mem", "img": "https://www.pokemon-card.com/products/2026/images/starterset_nyaoha_masuka-nya.jpg", "first_seen": "2026-08-01", "en_q": "Pokemon Starter Set ex Sprigatito Meowscarada ex", "lottery": []}, {"key": "pokemon:https://www.pokemon-card.com/ex/me/#mez", "cat": "トレカ", "title": "スターターセットex ゾロア＆ゾロアークex", "maker": "ポケモン", "date": "2026-07-31", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 1800, "url": "https://www.pokemon-card.com/ex/me/#mez", "img": "https://www.pokemon-card.com/products/2026/images/starterset_zoroa_zoroark.jpg", "first_seen": "2026-08-01", "en_q": "Pokemon Starter Set ex Zorua Zoroark ex", "lottery": []}];
+const STATS = {"new": 8, "changed": 2, "errors": 0};
 const LOTTERY_SITES = [{"name": "ポケモンセンターオンライン", "url": "https://www.pokemoncenter-online.com/"}, {"name": "楽天ブックス", "url": "https://books.rakuten.co.jp/"}, {"name": "あみあみ", "url": "https://www.amiami.jp/"}, {"name": "駿河屋", "url": "https://www.suruga-ya.jp/"}];
 const TODAY_ISO = "2026-08-02";
 // key(state上の"source:id") → item のマップ。カード/行クリック時の商品詳細
@@ -431,7 +432,7 @@ function att(it){ // 注目度 0-3
   return n;
 }
 // もうすぐ発売／発売中／注目順／新着ヘッドライン は、いずれもページ共通のカテゴリタブ
-// （すべて／トレカ／フィギュア。setCat()参照）で絞り込んだ後のリストに対して計算する
+// （すべて／トレカ／フィギュア／くじ。setCat()参照）で絞り込んだ後のリストに対して計算する
 // 必要があるため、DATA直参照の定数ではなく関数にしてrender時に都度計算する。
 function computeSoon(list){
   return list.filter(i => {const d = days(i); return d !== null && d >= 0 && d <= 14;})
@@ -451,9 +452,17 @@ function computeNewest(list){
              .slice(0, 20);
 }
 
-/* ── カテゴリ絞り込みタブ（すべて／トレカ／フィギュア。全ページ・全レイアウト共通） ── */
+/* ── カテゴリ絞り込みタブ（すべて／トレカ／フィギュア／くじ。全ページ・全レイアウト共通） ── */
 let catFilter = "all"; // localStorage(rw_cat)で記憶
+function isLotteryItem(it){
+  // 「くじ」タブ = くじ系の巡回先（一番くじ／スクエニくじ）由来のアイテム全部。
+  // これらは category=フィギュアのままstateに保存されている（カテゴリは変更しない）ため、
+  // cat比較ではなくkey（"source:id"）の接頭辞で判定する。判定はここ1箇所にまとめる。
+  const k = it.key || "";
+  return k.indexOf("ichibankuji:") === 0 || k.indexOf("sqexkuji:") === 0;
+}
 function currentData(){
+  if(catFilter === "くじ") return DATA.filter(isLotteryItem);
   if(catFilter === "トレカ" || catFilter === "フィギュア") return DATA.filter(i => i.cat === catFilter);
   return DATA;
 }
@@ -620,7 +629,7 @@ function cardHtml(i){
     </div>`;
 }
 function gridCards(){
-  // トレカ/フィギュアの絞り込みはページ共通の.cattabs（catFilter）に統合済みのため
+  // トレカ/フィギュア/くじの絞り込みはページ共通の.cattabs（catFilter）に統合済みのため
   // currentData()が既にカテゴリ絞り込み済み。ここでは日付・予約種別の絞り込みのみ行う。
   const base = currentData();
   let list = base;
@@ -799,7 +808,7 @@ function toggleTheme(){
 
 try{
   const savedCat = localStorage.getItem("rw_cat");
-  if(savedCat === "all" || savedCat === "トレカ" || savedCat === "フィギュア") catFilter = savedCat;
+  if(savedCat === "all" || savedCat === "トレカ" || savedCat === "フィギュア" || savedCat === "くじ") catFilter = savedCat;
 }catch(e){}
 document.querySelectorAll(".cattabs button").forEach(b => {
   b.classList.toggle("on", b.getAttribute("data-cat") === catFilter);
