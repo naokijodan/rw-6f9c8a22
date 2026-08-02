@@ -81,6 +81,7 @@ img{max-width:100%}
 .chip.new{color:var(--indigo); border:1px solid currentColor}
 .chip.cat{color:var(--muted); border:1px solid var(--line); font-weight:600}
 .chip.series{color:var(--amber); border:1px solid currentColor; font-weight:600}
+.chip.plat{color:var(--indigo); border:1px solid currentColor; font-weight:600}
 .chip.date-chip{color:var(--muted); border:1px solid var(--line); font-weight:600}
 
 /* ── 外部サイト検索リンク（メルカリ｜Amazon｜楽天） ── */
@@ -272,8 +273,8 @@ img{max-width:100%}
 <header class="mast">
   <div class="mast-in">
     <div class="brand">新商品<b>ウォッチ</b></div>
-    <div class="today num">2026年8月2日（日） 13:39更新</div>
-    
+    <div class="today num">2026年8月2日（日） 21:59更新</div>
+    <a class="theme-toggle" href="https://docs.google.com/spreadsheets/d/1g8d_tYSgmwsxorlktBztrlCTUnI-iZyjKpcMLdGV1KU/edit" target="_blank" rel="noopener">📋 台帳</a>
     <div class="switch" role="tablist" aria-label="デザイン案の切り替え">
       <button id="bA" class="on" onclick="show('A')">ポータル</button>
       <button id="bB" onclick="show('B')">ストア</button>
@@ -281,10 +282,11 @@ img{max-width:100%}
     </div>
     <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()" aria-label="テーマ切り替え">🌙 ダーク</button>
   </div>
-  <nav class="pagenav" aria-label="シリーズ切り替え"><a href="index.html">全体</a><span class="sep">｜</span><a href="pokemon.html">ポケモン</a><span class="sep">｜</span><a href="onepiece.html">ワンピース</a><span class="sep">｜</span><a href="weiss.html">ヴァイス</a><span class="sep">｜</span><a href="hololive.html">ホロライブ</a><span class="sep">｜</span><a href="unionarena.html" class="on">ユニオン</a><span class="sep">｜</span><a href="lorcana.html">ロルカナ</a><span class="sep">｜</span><a href="dragonball.html">ドラゴンボール</a></nav>
+  <nav class="pagenav" aria-label="シリーズ切り替え"><a href="index.html">全体</a><span class="sep">｜</span><a href="pokemon.html">ポケモン</a><span class="sep">｜</span><a href="onepiece.html">ワンピース</a><span class="sep">｜</span><a href="weiss.html">ヴァイス</a><span class="sep">｜</span><a href="hololive.html">ホロライブ</a><span class="sep">｜</span><a href="unionarena.html" class="on">ユニオン</a><span class="sep">｜</span><a href="lorcana.html">ロルカナ</a><span class="sep">｜</span><a href="dragonball.html">ドラゴンボール</a><span class="sep">｜</span><a href="comic.html">漫画</a><span class="sep">｜</span><a href="game.html">ゲーム</a></nav>
 </header>
 
 <main class="wrap">
+  
   <div class="cattabs" role="tablist" aria-label="カテゴリ絞り込み">
     <button data-cat="all" class="on" onclick="setCat('all', this)">すべて</button>
     <button data-cat="トレカ" onclick="setCat('トレカ', this)">トレカ</button>
@@ -305,10 +307,14 @@ img{max-width:100%}
 </div>
 
 <script>
-const DATA = [{"key": "gemini:https://unionarena-tcg.com/", "cat": "トレカ", "title": "UNION ARENA ブースターパック 天元突破グレンラガン【UA56BT】", "maker": "バンダイ", "date": "2026-08-28", "preorder_start": "未定", "lottery_deadline": "未定", "kind": "発売", "price": 385, "url": "https://unionarena-tcg.com/", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/ogp.png?v0", "first_seen": "2026-08-01", "en_q": "UNION ARENA Gurren Lagann UA56BT booster pack", "lottery": [{"site": "ヨドバシ.com", "type": "予約", "url": "https://www.yodobashi.com/product/100000001009893931/", "verified": false}]}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/boosters/ex_blc-3.php", "cat": "トレカ", "title": "ブースターパック BLEACH 千年血戦篇 Vol.3", "maker": "バンダイ", "date": "2026-09-11", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/ex_blc-3.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/ex_blc-3/img_thumbnail.png", "first_seen": "2026-08-01", "en_q": "BLEACH Thousand-Year Blood War Vol.3 booster pack", "lottery": []}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/boosters/ex_mmm.php", "cat": "トレカ", "title": "ブースターパック 魔法少女まどか☆マギカ Magia Exedra", "maker": "バンダイ", "date": "2026-09-25", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/ex_mmm.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/ex_mmm/img_thumbnail.png", "first_seen": "2026-08-01", "en_q": "Puella Magi Madoka Magica Magia Exedra booster pack", "lottery": []}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/boosters/imc-1.php", "cat": "トレカ", "title": "ブースターパック アイドルマスター シンデレラガールズ", "maker": "バンダイ", "date": "2026-07-31", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/imc-1.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/imc-1/img_thumbnail.png?v", "first_seen": "2026-08-01", "en_q": "Idolmaster Cinderella Girls booster pack", "lottery": []}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/boosters/ttg-1.php", "cat": "トレカ", "title": "ブースターパック 天元突破グレンラガン", "maker": "バンダイ", "date": "2026-08-28", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/ttg-1.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/ttg-1/img_thumbnail.png", "first_seen": "2026-08-01", "en_q": "Gurren Lagann booster pack", "lottery": [{"site": "ヨドバシ.com", "type": "予約", "url": "https://www.yodobashi.com/product/100000001009893962/", "verified": false}]}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/decks/dc-blc.php", "cat": "トレカ", "title": "アドバンスドデッキ BLEACH 千年血戦篇", "maker": "バンダイ", "date": "2026-09-11", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 2640, "url": "https://www.unionarena-tcg.com/jp/products/decks/dc-blc.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/decks/dc-blc/img_thumbnail.png", "first_seen": "2026-08-01", "en_q": "BLEACH Thousand-Year Blood War Advanced Deck", "lottery": []}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/decks/imc-1.php", "cat": "トレカ", "title": "スタートデッキ アイドルマスター シンデレラガールズ", "maker": "バンダイ", "date": "2026-07-31", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 1650, "url": "https://www.unionarena-tcg.com/jp/products/decks/imc-1.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/decks/imc-1/img_thumbnail.png?v", "first_seen": "2026-08-01", "en_q": "Idolmaster Cinderella Girls Start Deck", "lottery": []}];
-const STATS = {"new": 0, "changed": 0, "errors": 0};
+const DATA = [{"key": "gemini:https://unionarena-tcg.com/", "cat": "トレカ", "title": "UNION ARENA ブースターパック 天元突破グレンラガン【UA56BT】", "maker": "バンダイ", "date": "2026-08-28", "preorder_start": "未定", "lottery_deadline": "未定", "kind": "発売", "price": 385, "url": "https://unionarena-tcg.com/", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/ogp.png?v0", "first_seen": "2026-08-01", "en_q": "UNION ARENA Gurren Lagann UA56BT booster pack", "lottery": [{"site": "ヨドバシ.com", "type": "予約", "url": "https://www.yodobashi.com/product/100000001009893931/", "verified": false}], "platform": []}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/boosters/ex_blc-3.php", "cat": "トレカ", "title": "ブースターパック BLEACH 千年血戦篇 Vol.3", "maker": "バンダイ", "date": "2026-09-11", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/ex_blc-3.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/ex_blc-3/img_thumbnail.png", "first_seen": "2026-08-01", "en_q": "BLEACH Thousand-Year Blood War Vol.3 booster pack", "lottery": [], "platform": []}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/boosters/ex_mmm.php", "cat": "トレカ", "title": "ブースターパック 魔法少女まどか☆マギカ Magia Exedra", "maker": "バンダイ", "date": "2026-09-25", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/ex_mmm.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/ex_mmm/img_thumbnail.png", "first_seen": "2026-08-01", "en_q": "Puella Magi Madoka Magica Magia Exedra booster pack", "lottery": [], "platform": []}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/boosters/imc-1.php", "cat": "トレカ", "title": "ブースターパック アイドルマスター シンデレラガールズ", "maker": "バンダイ", "date": "2026-07-31", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/imc-1.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/imc-1/img_thumbnail.png?v", "first_seen": "2026-08-01", "en_q": "Idolmaster Cinderella Girls booster pack", "lottery": [], "platform": []}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/boosters/ttg-1.php", "cat": "トレカ", "title": "ブースターパック 天元突破グレンラガン", "maker": "バンダイ", "date": "2026-08-28", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/ttg-1.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/ttg-1/img_thumbnail.png", "first_seen": "2026-08-01", "en_q": "Gurren Lagann booster pack", "lottery": [{"site": "ヨドバシ.com", "type": "予約", "url": "https://www.yodobashi.com/product/100000001009893962/", "verified": false}], "platform": []}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/decks/dc-blc.php", "cat": "トレカ", "title": "アドバンスドデッキ BLEACH 千年血戦篇", "maker": "バンダイ", "date": "2026-09-11", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 2640, "url": "https://www.unionarena-tcg.com/jp/products/decks/dc-blc.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/decks/dc-blc/img_thumbnail.png", "first_seen": "2026-08-01", "en_q": "BLEACH Thousand-Year Blood War Advanced Deck", "lottery": [], "platform": []}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/decks/imc-1.php", "cat": "トレカ", "title": "スタートデッキ アイドルマスター シンデレラガールズ", "maker": "バンダイ", "date": "2026-07-31", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 1650, "url": "https://www.unionarena-tcg.com/jp/products/decks/imc-1.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/decks/imc-1/img_thumbnail.png?v", "first_seen": "2026-08-01", "en_q": "Idolmaster Cinderella Girls Start Deck", "lottery": [], "platform": []}];
+const STATS = {"new": 2686, "changed": 5, "errors": 0};
 const LOTTERY_SITES = [{"name": "ポケモンセンターオンライン", "url": "https://www.pokemoncenter-online.com/"}, {"name": "楽天ブックス", "url": "https://books.rakuten.co.jp/"}, {"name": "あみあみ", "url": "https://www.amiami.jp/"}, {"name": "駿河屋", "url": "https://www.suruga-ya.jp/"}];
 const TODAY_ISO = "2026-08-02";
+// "default"（トレカ/フィギュア/くじタブ）/ "comic"（出版社別タブ）/
+// "game"（プラットフォーム別タブ）。currentData()の絞り込み分岐と、
+// 絞り込み状態のlocalStorage保存キー分離（catStorageKey()）に使う。
+const PAGE_MODE = "default";
 // key(state上の"source:id") → item のマップ。カード/行クリック時の商品詳細
 // モーダル表示で使う（data-key属性から引く。onclick文字列へキーを直接
 // 埋め込まないことで、URL由来のkeyに含まれうる引用符等によるHTML破壊を避ける）。
@@ -402,6 +408,7 @@ function chips(it, withCat){
   const d = days(it); let h = "";
   if(withCat) h += `<span class="chip cat">${esc(it.cat)}</span>`;
   (it.series || []).forEach(name => { h += `<span class="chip series">${esc(name)}</span>`; });
+  (it.platform || []).forEach(p => { h += `<span class="chip plat">${esc(p)}</span>`; });
   if(isNewItem(it)) h += `<span class="chip new">新着</span>`;
   if(it.kind === "予約") h += `<span class="chip pre">予約受付中</span>`;
   if(it.kind === "抽選") h += `<span class="chip lot">抽選</span>`;
@@ -463,16 +470,46 @@ function isLotteryItem(it){
   const k = it.key || "";
   return k.indexOf("ichibankuji:") === 0 || k.indexOf("sqexkuji:") === 0;
 }
+// comic.html専用: 出版社名（it.maker。楽天ブックス/Fujisanアダプタでは
+// maker=publisherと同じ値が入る）を既知5社に分類し、どれにも一致しなければ
+// 「その他」（cattabsボタンの一覧はPython側 _CATTABS_DEFS["comic"] と対）。
+const COMIC_PUBLISHER_GROUPS = ["集英社","講談社","小学館","KADOKAWA","スクウェア・エニックス"];
+function comicPublisherGroup(maker){
+  const m = maker || "";
+  for(const g of COMIC_PUBLISHER_GROUPS){ if(m.indexOf(g) !== -1) return g; }
+  return "その他";
+}
+// game.html専用: it.platform（famitsuアダプタが返す機種名リスト）にtabが
+// 含まれるか。実データはXboxが"XboxSeriesX"表記のため、Xboxタブのみ部分一致。
+function gameHasPlatform(it, tab){
+  const list = it.platform || [];
+  if(tab === "Xbox") return list.some(p => p.indexOf("Xbox") !== -1);
+  return list.indexOf(tab) !== -1;
+}
 function currentData(){
+  if(PAGE_MODE === "comic"){
+    if(catFilter === "all") return DATA;
+    return DATA.filter(i => comicPublisherGroup(i.maker) === catFilter);
+  }
+  if(PAGE_MODE === "game"){
+    if(catFilter === "all") return DATA;
+    return DATA.filter(i => gameHasPlatform(i, catFilter));
+  }
   if(catFilter === "くじ") return DATA.filter(isLotteryItem);
   if(catFilter === "トレカ" || catFilter === "フィギュア") return DATA.filter(i => i.cat === catFilter);
   return DATA;
+}
+function catStorageKey(){
+  // ページ種別ごとにキーを分ける（comic.htmlの出版社絞り込み状態が
+  // game.htmlや既存ページのcatFilterへ誤って復元されるのを防ぐ）。
+  // 既存ページ(mode=default)は従来どおり"rw_cat"のまま（挙動を変えない）。
+  return PAGE_MODE === "default" ? "rw_cat" : "rw_cat_" + PAGE_MODE;
 }
 function setCat(c, btn){
   catFilter = c;
   document.querySelectorAll(".cattabs button").forEach(b => b.classList.remove("on"));
   btn.classList.add("on");
-  try{ localStorage.setItem("rw_cat", c); }catch(e){}
+  try{ localStorage.setItem(catStorageKey(), c); }catch(e){}
   renderA(); renderB(); renderC();
 }
 
@@ -809,8 +846,11 @@ function toggleTheme(){
 })();
 
 try{
-  const savedCat = localStorage.getItem("rw_cat");
-  if(savedCat === "all" || savedCat === "トレカ" || savedCat === "フィギュア" || savedCat === "くじ") catFilter = savedCat;
+  // 有効な絞り込み値は「このページに実在するcattabsボタンのdata-cat」から
+  // 動的に判定する（ページ種別ごとに語彙が違うため、固定リストで決め打ちしない）。
+  const validCats = Array.from(document.querySelectorAll(".cattabs button")).map(b => b.getAttribute("data-cat"));
+  const savedCat = localStorage.getItem(catStorageKey());
+  if(savedCat !== null && validCats.indexOf(savedCat) !== -1) catFilter = savedCat;
 }catch(e){}
 document.querySelectorAll(".cattabs button").forEach(b => {
   b.classList.toggle("on", b.getAttribute("data-cat") === catFilter);
