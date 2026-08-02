@@ -274,7 +274,7 @@ img{max-width:100%}
 <header class="mast">
   <div class="mast-in">
     <div class="brand">新商品<b>ウォッチ</b></div>
-    <div class="today num">2026年8月2日（日） 23:37更新</div>
+    <div class="today num">2026年8月3日（月） 07:38更新</div>
     <a class="theme-toggle" href="https://docs.google.com/spreadsheets/d/1g8d_tYSgmwsxorlktBztrlCTUnI-iZyjKpcMLdGV1KU/edit" target="_blank" rel="noopener">📋 台帳</a>
     <div class="switch" role="tablist" aria-label="デザイン案の切り替え">
       <button id="bA" class="on" onclick="show('A')">ポータル</button>
@@ -309,9 +309,9 @@ img{max-width:100%}
 
 <script>
 const DATA = [{"key": "dragonball:https://www.dbs-cardgame.com/fw/jp/products/01_401.html", "cat": "トレカ", "title": "STORY BOOSTER 01 [ST01]", "maker": "バンダイ", "date": "2026-08-08", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 330, "url": "https://www.dbs-cardgame.com/fw/jp/products/01_401.html", "series": ["ドラゴンボール"], "img": "https://www.dbs-cardgame.com/fw/bccard/jp/news/2026/04/16/vPwteBkMiGXGn5Zz/ST01_jp.png", "first_seen": "2026-08-01", "en_q": "STORY BOOSTER 01 ST01 booster pack", "lottery": [], "platform": [], "sport": ""}, {"key": "dragonball:https://www.dbs-cardgame.com/fw/jp/products/01_422.html", "cat": "トレカ", "title": "ブースターパック BRIGHTNESS OF HOPE [FB11]", "maker": "バンダイ", "date": "2026-09-12", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 240, "url": "https://www.dbs-cardgame.com/fw/jp/products/01_422.html", "series": ["ドラゴンボール"], "img": "https://www.dbs-cardgame.com/fw/bccard/jp/news/2026/07/13/4Oupen8o11wtcmPh/FB11_jp.png", "first_seen": "2026-08-01", "en_q": "Dragon Ball Fusion World BRIGHTNESS OF HOPE FB11 booster pack", "lottery": [], "platform": [], "sport": ""}, {"key": "ichibankuji:https://1kuji.com/products/db_gt", "cat": "フィギュア", "title": "一番くじ ドラゴンボールGT", "maker": "BANDAI SPIRITS", "date": "2026-08-22", "preorder_start": "2026-08-24 17:00", "lottery_deadline": "", "kind": "発売", "price": 790, "url": "https://1kuji.com/products/db_gt", "series": ["ドラゴンボール"], "img": "https://assets.1kuji.com/uploads/product/image/10725/2461f8c7-c647-4111-b22e-5ad165614809.png", "first_seen": "2026-08-01", "en_q": "Ichiban Kuji Dragon Ball GT", "lottery": [], "platform": [], "sport": ""}, {"key": "ichibankuji:https://1kuji.com/products/db_sb", "cat": "フィギュア", "title": "一番くじ ドラゴンボール スペクタクルバトル", "maker": "BANDAI SPIRITS", "date": "2026-07-11", "preorder_start": "2026-07-14 13:00", "lottery_deadline": "", "kind": "発売", "price": 800, "url": "https://1kuji.com/products/db_sb", "series": ["ドラゴンボール"], "img": "https://assets.1kuji.com/uploads/product/image/10693/8cd4838b-0a2e-42be-9f72-e8673f1eca50.png", "first_seen": "2026-08-01", "en_q": "Ichiban Kuji Dragon Ball Spectacle Battle", "lottery": [], "platform": [], "sport": ""}];
-const STATS = {"new": 8, "changed": 0, "errors": 0};
+const STATS = {"new": 25, "changed": 6, "errors": 0};
 const LOTTERY_SITES = [{"name": "ポケモンセンターオンライン", "url": "https://www.pokemoncenter-online.com/"}, {"name": "楽天ブックス", "url": "https://books.rakuten.co.jp/"}, {"name": "あみあみ", "url": "https://www.amiami.jp/"}, {"name": "駿河屋", "url": "https://www.suruga-ya.jp/"}];
-const TODAY_ISO = "2026-08-02";
+const TODAY_ISO = "2026-08-03";
 // "default"（トレカ/フィギュア/くじタブ）/ "comic"（出版社別タブ）/
 // "game"（プラットフォーム別タブ）。currentData()の絞り込み分岐と、
 // 絞り込み状態のlocalStorage保存キー分離（catStorageKey()）に使う。
@@ -736,7 +736,7 @@ function renderC(){
   const top = featured.filter(i => i.img).slice(0, 3);
   const rest = list.filter(i => !top.includes(i)).slice(0, 30);
   el.innerHTML = `
-    <div class="mh"><div class="l1">MORNING EDITION</div><div class="l2">8月2日（日）の朝刊</div></div>
+    <div class="mh"><div class="l1">MORNING EDITION</div><div class="l2">8月3日（月）の朝刊</div></div>
     <div class="sec"><span class="name">今日の注目</span><span class="rule"></span><span class="cnt num">${top.length}件</span></div>
     ${top.map(i => `
       <div class="fcard" data-key="${esc(i.key)}" onclick="handleCardClick(event)">
