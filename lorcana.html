@@ -274,7 +274,7 @@ img{max-width:100%}
 <header class="mast">
   <div class="mast-in">
     <div class="brand">新商品<b>ウォッチ</b></div>
-    <div class="today num">2026年8月3日（月） 07:38更新</div>
+    <div class="today num">2026年8月3日（月） 19:50更新</div>
     <a class="theme-toggle" href="https://docs.google.com/spreadsheets/d/1g8d_tYSgmwsxorlktBztrlCTUnI-iZyjKpcMLdGV1KU/edit" target="_blank" rel="noopener">📋 台帳</a>
     <div class="switch" role="tablist" aria-label="デザイン案の切り替え">
       <button id="bA" class="on" onclick="show('A')">ポータル</button>
@@ -283,7 +283,7 @@ img{max-width:100%}
     </div>
     <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()" aria-label="テーマ切り替え">🌙 ダーク</button>
   </div>
-  <nav class="pagenav" aria-label="シリーズ切り替え"><a href="index.html">全体</a><span class="sep">｜</span><a href="pokemon.html">ポケモン</a><span class="sep">｜</span><a href="onepiece.html">ワンピース</a><span class="sep">｜</span><a href="weiss.html">ヴァイス</a><span class="sep">｜</span><a href="hololive.html">ホロライブ</a><span class="sep">｜</span><a href="unionarena.html">ユニオン</a><span class="sep">｜</span><a href="lorcana.html" class="on">ロルカナ</a><span class="sep">｜</span><a href="dragonball.html">ドラゴンボール</a><span class="sep">｜</span><a href="comic.html">漫画</a><span class="sep">｜</span><a href="game.html">ゲーム</a><span class="sep">｜</span><a href="sports.html">スポーツ</a></nav>
+  <nav class="pagenav" aria-label="シリーズ切り替え"><a href="index.html">全体</a><span class="sep">｜</span><a href="pokemon.html">ポケモン</a><span class="sep">｜</span><a href="onepiece.html">ワンピース</a><span class="sep">｜</span><a href="weiss.html">ヴァイス</a><span class="sep">｜</span><a href="hololive.html">ホロライブ</a><span class="sep">｜</span><a href="unionarena.html">ユニオン</a><span class="sep">｜</span><a href="lorcana.html" class="on">ロルカナ</a><span class="sep">｜</span><a href="dragonball.html">ドラゴンボール</a><span class="sep">｜</span><a href="comic.html">漫画</a><span class="sep">｜</span><a href="game.html">ゲーム</a><span class="sep">｜</span><a href="sports.html">スポーツ</a><span class="sep">｜</span><a href="jump.html">ジャンプ</a></nav>
 </header>
 
 <main class="wrap">
@@ -308,13 +308,14 @@ img{max-width:100%}
 </div>
 
 <script>
-const DATA = [{"key": "lorcana:https://www.takaratomy.co.jp/products/disneylorcana/product/attack-of-the-vine/booster-pack/", "cat": "トレカ", "title": "ＡＴＴＡＣＫ ＯＦ ＴＨＥ ＶＩＮＥ!　ヴァインズ・アタック！ ブースターパック", "maker": "タカラトミー", "date": "2026-07-17", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 5280, "url": "https://www.takaratomy.co.jp/products/disneylorcana/product/attack-of-the-vine/booster-pack/", "series": ["ロルカナ"], "img": "https://www.takaratomy.co.jp/products/disneylorcana/img/product/attack-of-the-vine/booster-pack/pic_product01@2x.png?20260610", "first_seen": "2026-08-01", "en_q": "Attack of the Vine Booster Pack", "lottery": [], "platform": [], "sport": ""}];
-const STATS = {"new": 25, "changed": 6, "errors": 0};
+const DATA = [{"key": "lorcana:https://www.takaratomy.co.jp/products/disneylorcana/product/attack-of-the-vine/booster-pack/", "cat": "トレカ", "title": "ＡＴＴＡＣＫ ＯＦ ＴＨＥ ＶＩＮＥ!　ヴァインズ・アタック！ ブースターパック", "maker": "タカラトミー", "date": "2026-07-17", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 5280, "url": "https://www.takaratomy.co.jp/products/disneylorcana/product/attack-of-the-vine/booster-pack/", "series": ["ロルカナ"], "img": "https://www.takaratomy.co.jp/products/disneylorcana/img/product/attack-of-the-vine/booster-pack/pic_product01@2x.png?20260610", "first_seen": "2026-08-01", "en_q": "Attack of the Vine Booster Pack", "lottery": [], "platform": [], "sport": "", "genres": []}];
+const STATS = {"new": 3546, "changed": 7, "errors": 0};
 const LOTTERY_SITES = [{"name": "ポケモンセンターオンライン", "url": "https://www.pokemoncenter-online.com/"}, {"name": "楽天ブックス", "url": "https://books.rakuten.co.jp/"}, {"name": "あみあみ", "url": "https://www.amiami.jp/"}, {"name": "駿河屋", "url": "https://www.suruga-ya.jp/"}];
 const TODAY_ISO = "2026-08-03";
 // "default"（トレカ/フィギュア/くじタブ）/ "comic"（出版社別タブ）/
-// "game"（プラットフォーム別タブ）。currentData()の絞り込み分岐と、
-// 絞り込み状態のlocalStorage保存キー分離（catStorageKey()）に使う。
+// "game"（プラットフォーム別タブ）/ "sports"（競技別タブ）/ "jump"（ジャンル別タブ）。
+// currentData()の絞り込み分岐と、絞り込み状態のlocalStorage保存キー分離
+// （catStorageKey()）に使う。
 const PAGE_MODE = "default";
 // key(state上の"source:id") → item のマップ。カード/行クリック時の商品詳細
 // モーダル表示で使う（data-key属性から引く。onclick文字列へキーを直接
@@ -411,6 +412,7 @@ function chips(it, withCat){
   (it.series || []).forEach(name => { h += `<span class="chip series">${esc(name)}</span>`; });
   (it.platform || []).forEach(p => { h += `<span class="chip plat">${esc(p)}</span>`; });
   if(it.sport) h += `<span class="chip sport">${esc(it.sport)}</span>`;
+  (it.genres || []).forEach(g => { h += `<span class="chip plat">${esc(g)}</span>`; });
   if(isNewItem(it)) h += `<span class="chip new">新着</span>`;
   if(it.kind === "予約") h += `<span class="chip pre">予約受付中</span>`;
   if(it.kind === "抽選") h += `<span class="chip lot">抽選</span>`;
@@ -498,6 +500,20 @@ const SPORTS_KNOWN = ["野球","大相撲","サッカー","プロレス","ラグ
 function sportGroup(sport){
   return SPORTS_KNOWN.indexOf(sport || "") !== -1 ? sport : "その他";
 }
+// jump.html専用: jumpgoods由来(it.genres配列)/jumpshop由来/jumpnotice由来を
+// cattabsボタン（Python側 _CATTABS_DEFS["jump"]と対）の7分類にまとめる。
+// jumpshop/jumpnoticeはgenresフィールドを持たないため、it.key（"source:id"）の
+// 接頭辞で判定する（isLotteryItemと同じ考え方）。
+function jumpGenreGroup(it){
+  const k = it.key || "";
+  if(k.indexOf("jumpshop:") === 0) return "SHOP新商品";
+  if(k.indexOf("jumpnotice:") === 0) return "応全サ";
+  const genres = it.genres || [];
+  if(genres.indexOf("フィギュア・ぬいぐるみ") !== -1) return "フィギュア・ぬいぐるみ";
+  if(genres.indexOf("トレーディングカード") !== -1) return "トレカ";
+  if(genres.indexOf("くじ") !== -1) return "くじ";
+  return "雑貨・その他";
+}
 function currentData(){
   if(PAGE_MODE === "comic"){
     if(catFilter === "all") return DATA;
@@ -510,6 +526,10 @@ function currentData(){
   if(PAGE_MODE === "sports"){
     if(catFilter === "all") return DATA;
     return DATA.filter(i => sportGroup(i.sport) === catFilter);
+  }
+  if(PAGE_MODE === "jump"){
+    if(catFilter === "all") return DATA;
+    return DATA.filter(i => jumpGenreGroup(i) === catFilter);
   }
   if(catFilter === "くじ") return DATA.filter(isLotteryItem);
   if(catFilter === "トレカ" || catFilter === "フィギュア") return DATA.filter(i => i.cat === catFilter);
@@ -616,33 +636,59 @@ const WD_JA = ["日","月","火","水","木","金","土"]; // Date.getDay() 0=�
 function isFullDate(s){
   return /^\d{4}-\d{2}-\d{2}$/.test(s || "");
 }
+// フィギュア系ソース（プレバン・グッスマ等）は発売日が「YYYY-MM」（月まで）
+// までしか判明していない商品がある。フル日付("YYYY-MM-DD")と区別して
+// 専用の月グループにまとめる（"未定"・空・パース不能な値はここに含めない＝
+// 従来通り undated 行き。isFullDate/isMonthOnlyのどちらにも一致しない値だけが
+// undated に残る）。
+function isMonthOnly(s){
+  return /^\d{4}-\d{2}$/.test(s || "");
+}
 function dateGroupLabel(dateStr){
   // 呼び出し側は isFullDate() で絞り込んだ "YYYY-MM-DD" のみを渡す前提
   const d = parseDate(dateStr);
   if(!d) return dateStr;
   return `${dateStr}（${WD_JA[d.getDay()]}）`;
 }
+function monthGroupLabel(ym){
+  // 呼び出し側は isMonthOnly() で絞り込んだ "YYYY-MM" のみを渡す前提
+  const m = /^(\d{4})-(\d{2})$/.exec(ym);
+  if(!m) return ym;
+  return `${+m[1]}年${+m[2]}月発売予定`;
+}
 function groupItemsByDate(list){
-  // フル日付("YYYY-MM-DD")は日付ごとに束ね、それ以外("YYYY-MM"/"未定"/空)は
-  // 「日付未定・月のみ」グループへ最後にまとめる
+  // フル日付("YYYY-MM-DD")は日付ごとに、月のみ判明("YYYY-MM")は月ごとに束ねる。
+  // それ以外("未定"/空/パース不能)は「日付未定」グループへ最後にまとめる
+  // （"未定"の扱いは従来通り変更しない）。
   const groups = {};
+  const monthGroups = {};
   const undated = [];
   list.forEach(i => {
     if(isFullDate(i.date)) (groups[i.date] = groups[i.date] || []).push(i);
+    else if(isMonthOnly(i.date)) (monthGroups[i.date] = monthGroups[i.date] || []).push(i);
     else undated.push(i);
   });
-  const dates = Object.keys(groups).sort(); // 発売日昇順
-  return { dates, groups, undated };
+  // 日付グループと月グループを時系列で1本の並びにする。月グループの並び順は
+  // 「その月の日付グループの末尾」に来るよう、ソートキーに疑似的な日として
+  // "-99"（実在する最大の日"31"より大きく、翌月の"01"より確実に手前になる）を
+  // 付与する。全キーが同じ桁数の数字文字列（YYYY-MM-DD/YYYY-MM-99）になるため
+  // 文字列比較のままで時系列ソートとして成立する。
+  const ordered = Object.keys(groups).map(d => ({ kind: "date", key: d, sortKey: d }))
+    .concat(Object.keys(monthGroups).map(ym => ({ kind: "month", key: ym, sortKey: ym + "-99" })))
+    .sort((a, b) => a.sortKey < b.sortKey ? -1 : a.sortKey > b.sortKey ? 1 : 0);
+  return { ordered, groups, monthGroups, undated };
 }
 function dateSectionsHtml(list, itemHtmlFn){
-  const { dates, groups, undated } = groupItemsByDate(list);
+  const { ordered, groups, monthGroups, undated } = groupItemsByDate(list);
   let html = "";
-  dates.forEach(d => {
-    html += `<div class="dsec"><span class="name num">${esc(dateGroupLabel(d))}</span><span class="rule"></span><span class="cnt num">${groups[d].length}件</span></div>`;
-    html += groups[d].map(itemHtmlFn).join("");
+  ordered.forEach(o => {
+    const bucket = o.kind === "date" ? groups[o.key] : monthGroups[o.key];
+    const label = o.kind === "date" ? dateGroupLabel(o.key) : monthGroupLabel(o.key);
+    html += `<div class="dsec"><span class="name num">${esc(label)}</span><span class="rule"></span><span class="cnt num">${bucket.length}件</span></div>`;
+    html += bucket.map(itemHtmlFn).join("");
   });
   if(undated.length){
-    html += `<div class="dsec"><span class="name">日付未定・月のみ</span><span class="rule"></span><span class="cnt num">${undated.length}件</span></div>`;
+    html += `<div class="dsec"><span class="name">日付未定</span><span class="rule"></span><span class="cnt num">${undated.length}件</span></div>`;
     html += undated.map(itemHtmlFn).join("");
   }
   return html;
