@@ -70,6 +70,55 @@ img{max-width:100%}
 /* ── カテゴリ絞り込みタブ（全ページ・全レイアウト共通） ── */
 .cattabs{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px}
 
+/* ── フィルターバー（期間・キャラクター・キーワード検索・絞り込みサマリー。
+   全ページ・全レイアウト共通。cattabsの下、案A/B/Cの上に1つだけ表示する） ── */
+.filterbar{background:var(--surface); border:1px solid var(--line); border-radius:8px;
+  padding:12px 14px; margin-bottom:16px; display:flex; flex-direction:column; gap:10px}
+.fb-row{display:flex; flex-wrap:wrap; align-items:center; gap:8px}
+.fb-label{display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--muted); font-weight:600}
+.fb-dates input[type=date]{appearance:none; font-family:inherit; font-size:13px; padding:5px 8px;
+  border-radius:6px; border:1px solid var(--line); background:var(--surface); color:var(--ink)}
+.fb-tilde{color:var(--muted)}
+.fb-shortcuts{display:flex; flex-wrap:wrap; gap:6px; margin-left:auto}
+.fb-shortcuts button{appearance:none; font-family:inherit; cursor:pointer; font-size:12px;
+  font-weight:600; padding:5px 10px; border-radius:999px; border:1px solid var(--line);
+  background:var(--tint); color:var(--ink)}
+.fb-shortcuts button:hover{background:var(--line)}
+.fb-series{display:flex; flex-wrap:wrap; gap:6px; overflow-x:auto; padding-bottom:2px}
+.fb-chip{appearance:none; font-family:inherit; cursor:pointer; font-size:12px; font-weight:600;
+  padding:5px 11px; border-radius:999px; border:1px solid var(--line); background:var(--surface);
+  color:var(--ink); white-space:nowrap}
+.fb-chip.on{background:var(--amber); border-color:var(--amber); color:#fff}
+.fb-search input[type=text]{width:100%; font-family:inherit; font-size:13px; padding:7px 10px;
+  border-radius:6px; border:1px solid var(--line); background:var(--surface); color:var(--ink)}
+.fb-summary{font-size:12.5px; color:var(--muted); display:flex; flex-wrap:wrap; align-items:center; gap:8px}
+.fb-summary .fb-count{font-weight:800; color:var(--ink)}
+.fb-conds{color:var(--muted)}
+.fb-reset{appearance:none; font-family:inherit; cursor:pointer; font-size:12px; font-weight:700;
+  padding:4px 12px; border-radius:999px; border:1px solid var(--accent); background:var(--surface);
+  color:var(--accent)}
+.fb-reset:hover{background:var(--accent); color:#fff}
+.fb-shortcuts button:focus-visible, .fb-chip:focus-visible, .fb-reset:focus-visible{
+  outline:2px solid var(--indigo); outline-offset:2px}
+@media(max-width:560px){
+  .fb-dates{width:100%}
+  .fb-shortcuts{margin-left:0; width:100%}
+}
+
+/* ── 日付ジャンプ目次（案B・案C。折りたたみ式・横スクロールのチップ列） ── */
+.datejump{margin-bottom:14px; border:1px solid var(--line); border-radius:8px; background:var(--surface)}
+.datejump summary{cursor:pointer; padding:8px 12px; font-size:12.5px; font-weight:700; color:var(--ink);
+  list-style:none; display:flex; align-items:center; gap:4px}
+.datejump summary::-webkit-details-marker{display:none}
+.datejump summary::before{content:"▸"; color:var(--muted); font-size:11px; transition:transform .12s ease}
+.datejump[open] summary::before{transform:rotate(90deg)}
+.datejump-list{display:flex; gap:6px; overflow-x:auto; padding:0 12px 10px; scrollbar-width:thin}
+.datejump-btn{appearance:none; font-family:inherit; cursor:pointer; font-size:11.5px; font-weight:600;
+  padding:5px 10px; border-radius:6px; border:1px solid var(--line); background:var(--tint);
+  color:var(--ink); white-space:nowrap; flex:0 0 auto}
+.datejump-btn:hover{background:var(--line)}
+.datejump-btn:focus-visible{outline:2px solid var(--indigo); outline-offset:2px}
+
 /* ── バッジ ── */
 .chip{display:inline-block; padding:1px 7px; border-radius:3px; font-size:11px;
   font-weight:700; line-height:1.7; white-space:nowrap}
@@ -274,7 +323,7 @@ img{max-width:100%}
 <header class="mast">
   <div class="mast-in">
     <div class="brand">新商品<b>ウォッチ</b></div>
-    <div class="today num">2026年8月4日（火） 07:39更新</div>
+    <div class="today num">2026年8月4日（火） 08:50更新</div>
     <a class="theme-toggle" href="https://docs.google.com/spreadsheets/d/1g8d_tYSgmwsxorlktBztrlCTUnI-iZyjKpcMLdGV1KU/edit" target="_blank" rel="noopener">📋 台帳</a>
     <div class="switch" role="tablist" aria-label="デザイン案の切り替え">
       <button id="bA" class="on" onclick="show('A')">ポータル</button>
@@ -294,6 +343,7 @@ img{max-width:100%}
     <button data-cat="フィギュア" onclick="setCat('フィギュア', this)">フィギュア</button>
     <button data-cat="くじ" onclick="setCat('くじ', this)">くじ</button>
   </div>
+  <div id="filterbar" class="filterbar"></div>
   <div id="vA" class="pA"></div>
   <div id="vB" class="pB" hidden></div>
   <div id="vC" class="pC" hidden></div>
@@ -309,7 +359,7 @@ img{max-width:100%}
 
 <script>
 const DATA = [{"key": "lorcana:https://www.takaratomy.co.jp/products/disneylorcana/product/attack-of-the-vine/booster-pack/", "cat": "トレカ", "title": "ＡＴＴＡＣＫ ＯＦ ＴＨＥ ＶＩＮＥ!　ヴァインズ・アタック！ ブースターパック", "maker": "タカラトミー", "date": "2026-07-17", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 5280, "url": "https://www.takaratomy.co.jp/products/disneylorcana/product/attack-of-the-vine/booster-pack/", "series": ["ロルカナ"], "img": "https://www.takaratomy.co.jp/products/disneylorcana/img/product/attack-of-the-vine/booster-pack/pic_product01@2x.png?20260610", "first_seen": "2026-08-01", "en_q": "Attack of the Vine Booster Pack", "lottery": [], "platform": [], "sport": "", "genres": []}];
-const STATS = {"new": 9, "changed": 9, "errors": 0};
+const STATS = {"new": 0, "changed": 0, "errors": 0};
 const LOTTERY_SITES = [{"name": "ポケモンセンターオンライン", "url": "https://www.pokemoncenter-online.com/"}, {"name": "楽天ブックス", "url": "https://books.rakuten.co.jp/"}, {"name": "あみあみ", "url": "https://www.amiami.jp/"}, {"name": "駿河屋", "url": "https://www.suruga-ya.jp/"}];
 const TODAY_ISO = "2026-08-04";
 // "default"（トレカ/フィギュア/くじタブ）/ "comic"（出版社別タブ）/
@@ -317,11 +367,26 @@ const TODAY_ISO = "2026-08-04";
 // currentData()の絞り込み分岐と、絞り込み状態のlocalStorage保存キー分離
 // （catStorageKey()）に使う。
 const PAGE_MODE = "default";
+// ページ固有の識別子（"index"/シリーズid/"comic"/"game"/"sports"/"jump"）。
+// 期間・キャラクター・キーワード絞り込み状態のlocalStorage保存キー分離に使う
+// （PAGE_MODEは"default"で複数の実ページ間（例: pokemon.html と onepiece.html）
+// で共有される値のため、そのままキーに使うとDATAの中身が全く違うページ同士で
+// 絞り込み条件が混ざってしまう。cattabsの絞り込み(catStorageKey)は元々ページ間
+// 共有が意図されているため据え置き、今回の3条件だけPAGE_ID単位で分ける）。
+const PAGE_ID = "lorcana";
 // key(state上の"source:id") → item のマップ。カード/行クリック時の商品詳細
 // モーダル表示で使う（data-key属性から引く。onclick文字列へキーを直接
 // 埋め込まないことで、URL由来のkeyに含まれうる引用符等によるHTML破壊を避ける）。
 const KEY_TO_ITEM = {};
 DATA.forEach(function(it){ if(it.key) KEY_TO_ITEM[it.key] = it; });
+// このページのDATAに実在するシリーズラベル一覧（重複除去・ja比較でソート）。
+// キャラクター絞り込みチップの生成元。1件も無ければチップ列自体を出さない
+// （comic/game/sports/jump.htmlはseries_listを渡していないため常に空になる）。
+const ALL_SERIES = (function(){
+  const set = new Set();
+  DATA.forEach(function(it){ (it.series || []).forEach(function(s){ set.add(s); }); });
+  return Array.from(set).sort(function(a, b){ return a.localeCompare(b, "ja"); });
+})();
 
 function parseDate(s){
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || "");
@@ -514,7 +579,9 @@ function jumpGenreGroup(it){
   if(genres.indexOf("くじ") !== -1) return "くじ";
   return "雑貨・その他";
 }
-function currentData(){
+function baseData(){
+  // カテゴリ絞り込みタブ（cattabs／catFilter）だけを適用した状態。
+  // 期間・キャラクター・キーワードは currentData() 側で別途ANDする。
   if(PAGE_MODE === "comic"){
     if(catFilter === "all") return DATA;
     return DATA.filter(i => comicPublisherGroup(i.maker) === catFilter);
@@ -535,6 +602,210 @@ function currentData(){
   if(catFilter === "トレカ" || catFilter === "フィギュア") return DATA.filter(i => i.cat === catFilter);
   return DATA;
 }
+/* ── 期間・キャラクター・キーワード絞り込み（全ページ・全レイアウト共通） ──
+   3条件はAND。cattabs（baseData）の結果にさらに掛け合わせる。
+   案A/B/CいずれもこのcurrentData()を起点にリストを組み立てるため、
+   3レイアウトすべてに自動的に同じ絞り込みが効く。 */
+let dateFrom = ""; // "YYYY-MM-DD" or ""
+let dateTo = "";   // "YYYY-MM-DD" or ""
+let seriesFilter = new Set(); // 選択中のシリーズ名（OR条件）
+let searchQuery = "";
+function monthRange(ym){
+  const m = /^(\d{4})-(\d{2})$/.exec(ym || "");
+  if(!m) return null;
+  const y = +m[1], mo = +m[2];
+  return [new Date(y, mo - 1, 1), new Date(y, mo, 0)]; // その月の1日〜末日
+}
+function inDateRange(it){
+  const hasFrom = !!dateFrom, hasTo = !!dateTo;
+  if(!hasFrom && !hasTo) return true; // 期間未指定なら従来どおり全件通す（未定含む）
+  const fromD = hasFrom ? parseDate(dateFrom) : null;
+  const toD = hasTo ? parseDate(dateTo) : null;
+  if(isFullDate(it.date)){
+    const d = parseDate(it.date);
+    if(!d) return false;
+    if(fromD && d < fromD) return false;
+    if(toD && d > toD) return false;
+    return true;
+  }
+  if(isMonthOnly(it.date)){
+    // 月精度は「その月が指定範囲と1日でも重なれば表示」＝月の1日〜末日の
+    // レンジと指定期間のレンジが重なるかどうかで判定する。
+    const range = monthRange(it.date);
+    if(!range) return false;
+    const mStart = range[0], mEnd = range[1];
+    if(fromD && mEnd < fromD) return false;
+    if(toD && mStart > toD) return false;
+    return true;
+  }
+  // 発売日「未定」/空/パース不能: 期間指定が有効な間は非表示
+  return false;
+}
+function matchesSeriesFilter(it){
+  if(seriesFilter.size === 0) return true;
+  const labels = it.series || [];
+  for(let k = 0; k < labels.length; k++){ if(seriesFilter.has(labels[k])) return true; }
+  return false;
+}
+function matchesSearch(it){
+  const q = (searchQuery || "").trim();
+  if(!q) return true;
+  const terms = q.split(/\s+/).filter(Boolean).map(t => t.toLowerCase());
+  if(!terms.length) return true;
+  const hay = [it.title || "", it.maker || ""].concat(it.series || []).join(" ").toLowerCase();
+  return terms.every(t => hay.indexOf(t) !== -1);
+}
+function applyExtraFilters(list){
+  return list.filter(it => inDateRange(it) && matchesSeriesFilter(it) && matchesSearch(it));
+}
+function currentData(){
+  return applyExtraFilters(baseData());
+}
+function extraFilterStorageKey(){
+  // PAGE_ID単位（ページ実体単位）でキーを分ける。PAGE_MODEは複数の実ページ
+  // （例: pokemon.html/onepiece.html は両方"default"）で共有されるため使わない。
+  return "rw_filters_" + PAGE_ID;
+}
+function saveExtraFilters(){
+  try{
+    localStorage.setItem(extraFilterStorageKey(), JSON.stringify({
+      from: dateFrom, to: dateTo, series: Array.from(seriesFilter), q: searchQuery,
+    }));
+  }catch(e){}
+}
+function loadExtraFilters(){
+  try{
+    const raw = localStorage.getItem(extraFilterStorageKey());
+    if(!raw) return;
+    const obj = JSON.parse(raw);
+    if(typeof obj.from === "string") dateFrom = obj.from;
+    if(typeof obj.to === "string") dateTo = obj.to;
+    if(Array.isArray(obj.series)) seriesFilter = new Set(obj.series.filter(s => typeof s === "string"));
+    if(typeof obj.q === "string") searchQuery = obj.q;
+  }catch(e){}
+}
+function fmtISO(d){
+  const pad = n => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+function applyDateShortcut(kind){
+  if(kind === "clear"){
+    dateFrom = ""; dateTo = "";
+  } else if(kind === "week"){
+    const day = TODAY.getDay(); // 0=日曜
+    const mondayOffset = day === 0 ? -6 : 1 - day;
+    const monday = new Date(TODAY); monday.setDate(TODAY.getDate() + mondayOffset);
+    const sunday = new Date(monday); sunday.setDate(monday.getDate() + 6);
+    dateFrom = fmtISO(monday); dateTo = fmtISO(sunday);
+  } else if(kind === "month"){
+    const first = new Date(TODAY.getFullYear(), TODAY.getMonth(), 1);
+    const last = new Date(TODAY.getFullYear(), TODAY.getMonth() + 1, 0);
+    dateFrom = fmtISO(first); dateTo = fmtISO(last);
+  } else if(kind === "14d"){
+    const end = new Date(TODAY); end.setDate(TODAY.getDate() + 14);
+    dateFrom = fmtISO(TODAY); dateTo = fmtISO(end);
+  }
+  const fromEl = document.getElementById("fbFrom");
+  const toEl = document.getElementById("fbTo");
+  if(fromEl) fromEl.value = dateFrom;
+  if(toEl) toEl.value = dateTo;
+  saveExtraFilters();
+  renderAll();
+}
+function onDateInputChange(){
+  const fromEl = document.getElementById("fbFrom");
+  const toEl = document.getElementById("fbTo");
+  dateFrom = fromEl ? fromEl.value : "";
+  dateTo = toEl ? toEl.value : "";
+  saveExtraFilters();
+  renderAll();
+}
+function toggleSeriesFilter(name, btn){
+  if(seriesFilter.has(name)) seriesFilter.delete(name);
+  else seriesFilter.add(name);
+  if(btn) btn.classList.toggle("on", seriesFilter.has(name));
+  saveExtraFilters();
+  renderAll();
+}
+let searchDebounceTimer = null;
+function onSearchInput(){
+  const el = document.getElementById("fbSearch");
+  const val = el ? el.value : "";
+  if(searchDebounceTimer) clearTimeout(searchDebounceTimer);
+  searchDebounceTimer = setTimeout(function(){
+    searchQuery = val;
+    saveExtraFilters();
+    renderAll();
+  }, 150);
+}
+function resetAllFilters(){
+  dateFrom = ""; dateTo = ""; searchQuery = ""; seriesFilter = new Set();
+  saveExtraFilters();
+  renderFilterBar();
+  renderAll();
+}
+function activeFilterDescriptions(){
+  const parts = [];
+  if(dateFrom || dateTo){
+    parts.push(`期間: ${dateFrom ? esc(dateFrom) : "指定なし"}〜${dateTo ? esc(dateTo) : "指定なし"}`);
+  }
+  if(seriesFilter.size){
+    parts.push(`キャラ: ${Array.from(seriesFilter).map(esc).join("・")}`);
+  }
+  if(searchQuery.trim()){
+    parts.push(`検索: 「${esc(searchQuery.trim())}」`);
+  }
+  return parts;
+}
+function updateFilterSummary(){
+  const el = document.getElementById("fbSummary");
+  if(!el) return;
+  const n = currentData().length;
+  const parts = activeFilterDescriptions();
+  if(!parts.length){
+    el.innerHTML = `<span class="fb-count num">該当 ${n}件</span>`;
+    return;
+  }
+  el.innerHTML = `<span class="fb-count num">絞り込み中: ${n}件</span>`
+    + `<span class="fb-conds">（${parts.join(" ／ ")}）</span>`
+    + `<button type="button" class="fb-reset" onclick="resetAllFilters()">解除</button>`;
+}
+function renderFilterBar(){
+  const el = document.getElementById("filterbar");
+  if(!el) return;
+  const seriesChipsHtml = ALL_SERIES.length ? `
+    <div class="fb-series" id="fbSeries" role="group" aria-label="キャラクター絞り込み">
+      ${ALL_SERIES.map(name => `<button type="button" class="fb-chip${seriesFilter.has(name) ? " on" : ""}" data-series="${esc(name)}">${esc(name)}</button>`).join("")}
+    </div>` : "";
+  el.innerHTML = `
+    <div class="fb-row fb-dates">
+      <label class="fb-label">期間<input type="date" id="fbFrom" value="${esc(dateFrom)}" onchange="onDateInputChange()"></label>
+      <span class="fb-tilde">〜</span>
+      <label class="fb-label"><input type="date" id="fbTo" value="${esc(dateTo)}" onchange="onDateInputChange()"></label>
+      <div class="fb-shortcuts">
+        <button type="button" onclick="applyDateShortcut('week')">今週</button>
+        <button type="button" onclick="applyDateShortcut('month')">今月</button>
+        <button type="button" onclick="applyDateShortcut('14d')">2週間以内</button>
+        <button type="button" onclick="applyDateShortcut('clear')">クリア</button>
+      </div>
+    </div>
+    ${seriesChipsHtml}
+    <div class="fb-row fb-search">
+      <input type="text" id="fbSearch" value="${esc(searchQuery)}" placeholder="キーワード検索（スペース区切りでAND／商品名・メーカー・キャラ名）" oninput="onSearchInput()">
+    </div>
+    <div class="fb-row fb-summary" id="fbSummary"></div>`;
+  if(ALL_SERIES.length){
+    document.querySelectorAll("#fbSeries .fb-chip").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        toggleSeriesFilter(btn.getAttribute("data-series"), btn);
+      });
+    });
+  }
+}
+function renderAll(){
+  renderA(); renderB(); renderC();
+  updateFilterSummary();
+}
 function catStorageKey(){
   // ページ種別ごとにキーを分ける（comic.htmlの出版社絞り込み状態が
   // game.htmlや既存ページのcatFilterへ誤って復元されるのを防ぐ）。
@@ -546,7 +817,7 @@ function setCat(c, btn){
   document.querySelectorAll(".cattabs button").forEach(b => b.classList.remove("on"));
   btn.classList.add("on");
   try{ localStorage.setItem(catStorageKey(), c); }catch(e){}
-  renderA(); renderB(); renderC();
+  renderAll();
 }
 
 /* ── 抽選・予約サイト一覧（config/pages.json の lottery_sites。案A=レール内ボックス／
@@ -678,20 +949,51 @@ function groupItemsByDate(list){
     .sort((a, b) => a.sortKey < b.sortKey ? -1 : a.sortKey > b.sortKey ? 1 : 0);
   return { ordered, groups, monthGroups, undated };
 }
-function dateSectionsHtml(list, itemHtmlFn){
-  const { ordered, groups, monthGroups, undated } = groupItemsByDate(list);
+// groupItemsByDate()の戻り値(g)を1回だけ計算し、本文HTML（renderDateSectionsFromGroups）
+// と日付ジャンプ目次（renderJumpNavFromGroups）の両方に渡すことで、同じ集計を
+// 2回計算して結果がずれる事故を防ぐ（呼び出し側は必ずgを使い回すこと）。
+// idPrefix: 案B("secB")／案C("secC")でアンカーIDの名前空間を分ける
+// （案B・案Cは常に両方DOM上に存在し、hidden属性で表示切替するだけのため、
+// 同じ日付キーでもidが衝突しないようにする必要がある）。
+function renderDateSectionsFromGroups(g, itemHtmlFn, idPrefix){
+  const { ordered, groups, monthGroups, undated } = g;
   let html = "";
   ordered.forEach(o => {
     const bucket = o.kind === "date" ? groups[o.key] : monthGroups[o.key];
     const label = o.kind === "date" ? dateGroupLabel(o.key) : monthGroupLabel(o.key);
-    html += `<div class="dsec"><span class="name num">${esc(label)}</span><span class="rule"></span><span class="cnt num">${bucket.length}件</span></div>`;
+    const id = `${idPrefix}-${o.key}`;
+    html += `<div class="dsec" id="${esc(id)}"><span class="name num">${esc(label)}</span><span class="rule"></span><span class="cnt num">${bucket.length}件</span></div>`;
     html += bucket.map(itemHtmlFn).join("");
   });
   if(undated.length){
-    html += `<div class="dsec"><span class="name">日付未定</span><span class="rule"></span><span class="cnt num">${undated.length}件</span></div>`;
+    const id = `${idPrefix}-undated`;
+    html += `<div class="dsec" id="${esc(id)}"><span class="name">日付未定</span><span class="rule"></span><span class="cnt num">${undated.length}件</span></div>`;
     html += undated.map(itemHtmlFn).join("");
   }
   return html;
+}
+// 日付ジャンプ目次（折りたたみ式）。renderDateSectionsFromGroupsと同じidPrefix・
+// 同じ集計結果(g)から作るため、目次の項目数・件数は本文の見出しと必ず一致する。
+// グループが1件も無ければ目次自体を出さない（絞り込みで0件になった場合等）。
+function renderJumpNavFromGroups(g, idPrefix){
+  const { ordered, groups, monthGroups, undated } = g;
+  const items = ordered.map(o => {
+    const bucket = o.kind === "date" ? groups[o.key] : monthGroups[o.key];
+    const label = o.kind === "date" ? dateGroupLabel(o.key) : monthGroupLabel(o.key);
+    return { id: `${idPrefix}-${o.key}`, label: label, count: bucket.length };
+  });
+  if(undated.length) items.push({ id: `${idPrefix}-undated`, label: "日付未定", count: undated.length });
+  if(!items.length) return "";
+  return `<details class="datejump">
+    <summary>日付ジャンプ<span class="num">（${items.length}）</span></summary>
+    <div class="datejump-list">
+      ${items.map(it => `<button type="button" class="datejump-btn" onclick="jumpToSection('${esc(it.id)}')">${esc(it.label)} <span class="num">${it.count}件</span></button>`).join("")}
+    </div>
+  </details>`;
+}
+function jumpToSection(id){
+  const el = document.getElementById(id);
+  if(el) el.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 /* ── 案B ── */
@@ -701,7 +1003,7 @@ function setFilter(f, btn){
   filterB = f;
   document.querySelectorAll(".pB .filters .catbtn").forEach(b => b.classList.remove("on"));
   btn.classList.add("on");
-  document.getElementById("gridB").innerHTML = gridCards();
+  renderGridB();
 }
 function toggleGroupB(){
   groupB = groupB === "date" ? "flat" : "date";
@@ -711,7 +1013,7 @@ function toggleGroupB(){
     btn.textContent = groupB === "date" ? "日付ごと" : "一覧";
     btn.classList.toggle("on", groupB === "date");
   }
-  document.getElementById("gridB").innerHTML = gridCards();
+  renderGridB();
 }
 function cardHtml(i){
   // カード全体を<a>にすると検索リンク列（別の<a>）を内包できないため、
@@ -729,17 +1031,37 @@ function cardHtml(i){
       </div>
     </div>`;
 }
-function gridCards(){
-  // トレカ/フィギュア/くじの絞り込みはページ共通の.cattabs（catFilter）に統合済みのため
-  // currentData()が既にカテゴリ絞り込み済み。ここでは日付・予約種別の絞り込みのみ行う。
+function gridBList(){
+  // トレカ/フィギュア/くじの絞り込みはページ共通の.cattabs（catFilter）、
+  // 期間・キャラクター・キーワードはcurrentData()に統合済みのため、
+  // ここでは案B独自の日付・予約種別サブ絞り込みのみ行う。
   const base = currentData();
   let list = base;
   if(filterB === "soon") list = computeSoon(base);
   if(filterB === "yoyaku") list = base.filter(i => i.kind === "予約" || i.kind === "抽選");
   if(filterB === "rel") list = computeRel(base);
-  if(!list.length) return `<p style="color:var(--muted)">該当する商品はありません。</p>`;
-  if(groupB !== "date") return list.map(cardHtml).join("");
-  return dateSectionsHtml(list, cardHtml);
+  return list;
+}
+// #gridB（商品カード）と#jumpNavB（日付ジャンプ目次）を同じ集計から一括更新する。
+// setFilter/toggleGroupB/renderAll（extra filters変更時）のいずれからも呼ばれる。
+function renderGridB(){
+  const gridEl = document.getElementById("gridB");
+  const navEl = document.getElementById("jumpNavB");
+  if(!gridEl) return;
+  const list = gridBList();
+  if(!list.length){
+    gridEl.innerHTML = `<p style="color:var(--muted)">該当する商品はありません。</p>`;
+    if(navEl) navEl.innerHTML = "";
+    return;
+  }
+  if(groupB !== "date"){
+    gridEl.innerHTML = list.map(cardHtml).join("");
+    if(navEl) navEl.innerHTML = ""; // 一覧表示中は日付グループが無いため目次も出さない
+    return;
+  }
+  const g = groupItemsByDate(list);
+  gridEl.innerHTML = renderDateSectionsFromGroups(g, cardHtml, "secB");
+  if(navEl) navEl.innerHTML = renderJumpNavFromGroups(g, "secB");
 }
 function renderB(){
   const el = document.getElementById("vB");
@@ -752,8 +1074,10 @@ function renderB(){
       <button class="catbtn" onclick="setFilter('rel', this)">発売中</button>
       <button id="groupToggleB" class="grouptoggle${groupB === "date" ? " on" : ""}" onclick="toggleGroupB()">${groupB === "date" ? "日付ごと" : "一覧"}</button>
     </div>
-    <div class="grid" id="gridB">${gridCards()}</div>
+    <div id="jumpNavB"></div>
+    <div class="grid" id="gridB"></div>
     ${lotteryCompactHtml()}`;
+  renderGridB();
 }
 
 /* ── 案C ── */
@@ -781,6 +1105,7 @@ function renderC(){
   const featured = computeFeatured(list);
   const top = featured.filter(i => i.img).slice(0, 3);
   const rest = list.filter(i => !top.includes(i)).slice(0, 30);
+  const g = groupItemsByDate(rest);
   el.innerHTML = `
     <div class="mh"><div class="l1">MORNING EDITION</div><div class="l2">8月4日（火）の朝刊</div></div>
     <div class="sec"><span class="name">今日の注目</span><span class="rule"></span><span class="cnt num">${top.length}件</span></div>
@@ -795,8 +1120,9 @@ function renderC(){
         </div>
       </div>`).join("")}
     <div class="sec"><span class="name">新着・発売予定</span><span class="rule"></span><span class="cnt num">${rest.length}件</span></div>
+    <div id="jumpNavC">${renderJumpNavFromGroups(g, "secC")}</div>
     <div class="flist">
-      ${dateSectionsHtml(rest, flistItemHtml)}
+      ${renderDateSectionsFromGroups(g, flistItemHtml, "secC")}
     </div>
     ${lotteryCompactHtml()}`;
 }
@@ -923,7 +1249,9 @@ try{
   if(savedGroup === "date" || savedGroup === "flat") groupB = savedGroup;
 }catch(e){}
 
-renderA(); renderB(); renderC();
+loadExtraFilters();
+renderFilterBar();
+renderAll();
 let initialView = "A";
 try{
   const savedView = localStorage.getItem("rw_view");
