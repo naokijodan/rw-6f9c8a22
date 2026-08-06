@@ -335,7 +335,7 @@ img{max-width:100%}
 <header class="mast">
   <div class="mast-in">
     <div class="brand">新商品<b>ウォッチ</b></div>
-    <div class="today num">2026年8月6日（木） 10:00更新</div>
+    <div class="today num">2026年8月6日（木） 13:27更新</div>
     <a class="theme-toggle" href="https://docs.google.com/spreadsheets/d/1g8d_tYSgmwsxorlktBztrlCTUnI-iZyjKpcMLdGV1KU/edit" target="_blank" rel="noopener">📋 台帳</a>
     <div class="switch" role="tablist" aria-label="デザイン案の切り替え">
       <button id="bA" class="on" onclick="show('A')">ポータル</button>
@@ -562,10 +562,51 @@ function imgFallback(img){
 function thumb(it, cls){
   const label = esc((it.title || "").slice(0, 10)) + "…";
   if(it.img){
-    return `<div class="thumb ${cls||""}"><img src="${esc(it.img)}" alt="" loading="lazy" onerror="imgFallback(this)">`
+    // src ではなく data-src で出力し、observeLazyImages() 経由の自前
+    // IntersectionObserver で画面に近づいた時点で src を設定する（下記参照）。
+    // ネイティブ loading="lazy" は、祖先の .tlink が display:contents の場合に
+    // Chromeで初回スクロールまで読み込みが発火しない不具合が実機で確認された
+    // ため使わない。
+    return `<div class="thumb ${cls||""}"><img data-src="${esc(it.img)}" alt="" onerror="imgFallback(this)">`
       + `<div class="ph" style="display:none;position:absolute;inset:0;width:100%;height:100%">${label}</div></div>`;
   }
   return `<div class="ph thumb ${cls||""}">${label}</div>`;
+}
+// ── 遅延読み込み（自前IntersectionObserver） ──
+// 祖先の .tlink{display:contents} 配下ではChromeのネイティブ loading="lazy" が
+// 初回スクロールまで発火しない不具合が実機確認されたため、data-src属性＋
+// IntersectionObserverによる遅延読み込みに置き換える。renderA/renderGridB/
+// renderC/openModal など、thumb()の出力をDOMへ書き込む箇所は必ず末尾で
+// observeLazyImages()を呼ぶこと（新規に増えたimg[data-src]を監視対象に追加する）。
+let lazyImgObserver = null;
+function loadLazyImg(img){
+  const src = img.getAttribute("data-src");
+  if(!src) return;
+  img.src = src;
+  img.removeAttribute("data-src");
+}
+function observeLazyImages(){
+  const imgs = document.querySelectorAll("img[data-src]");
+  if(!("IntersectionObserver" in window)){
+    // 非対応環境では即時読み込みにフォールバック
+    imgs.forEach(loadLazyImg);
+    return;
+  }
+  if(lazyImgObserver) lazyImgObserver.disconnect();
+  if(!imgs.length) return;
+  if(!lazyImgObserver){
+    lazyImgObserver = new IntersectionObserver(function(entries, obs){
+      entries.forEach(function(entry){
+        if(!entry.isIntersecting) return;
+        loadLazyImg(entry.target);
+        obs.unobserve(entry.target);
+      });
+    }, { rootMargin: "600px" });
+  }
+  // innerHTML置き換えでDOMから外れた旧<img>が監視対象に滞留しないよう、上で
+  // 毎回いったん全解除し、現在DOM上にある未読込<img data-src>だけを張り直す
+  // （読み込み済みはdata-srcが外れておりセレクタに一致しない）。
+  imgs.forEach(function(img){ lazyImgObserver.observe(img); });
 }
 function att(it){ // 注目度 0-3
   const d = days(it); let n = 0;
@@ -988,6 +1029,7 @@ function renderA(){
       ${lotteryBoxHtml()}
     </div>
   </div>`;
+  observeLazyImages();
 }
 
 /* ── 日付グループ化（案B・案C 共通） ── */
@@ -1147,11 +1189,13 @@ function renderGridB(){
   if(groupB !== "date"){
     gridEl.innerHTML = list.map(cardHtml).join("");
     if(navEl) navEl.innerHTML = ""; // 一覧表示中は日付グループが無いため目次も出さない
+    observeLazyImages();
     return;
   }
   const g = groupItemsByDate(list);
   gridEl.innerHTML = renderDateSectionsFromGroups(g, cardHtml, "secB");
   if(navEl) navEl.innerHTML = renderJumpNavFromGroups(g, "secB");
+  observeLazyImages();
 }
 function renderB(){
   const el = document.getElementById("vB");
@@ -1218,6 +1262,7 @@ function renderC(){
       ${renderDateSectionsFromGroups(g, flistItemHtml, "secC")}
     </div>
     ${lotteryCompactHtml()}`;
+  observeLazyImages();
 }
 
 /* ── 商品詳細モーダル ── */
@@ -1273,6 +1318,7 @@ function openModal(item){
   const body = document.getElementById("modalBody");
   if(!overlay || !body) return;
   body.innerHTML = modalContentHtml(item);
+  observeLazyImages();
   overlay.hidden = false;
   document.body.style.overflow = "hidden"; // 開いている間は背景をスクロールさせない
   const closeBtn = document.getElementById("modalClose");
