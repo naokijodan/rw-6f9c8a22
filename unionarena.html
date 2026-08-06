@@ -151,6 +151,15 @@ img{max-width:100%}
 .lotlinks a.glink{color:var(--muted); font-weight:600}
 .lotlinks .sep{margin:0 4px; color:var(--line)}
 
+/* ── 手動登録の予約リンク（config/manual_links.json。毎朝の自動収集(state更新)
+   では上書きされないconfig側の手動データ。一致した商品にのみ表示） ── */
+.manuallinks{display:block; margin-top:4px; font-size:11px; color:var(--muted); white-space:normal}
+.manuallinks .lbl{font-weight:800; color:var(--ink); margin-right:4px}
+.manuallinks a{color:var(--purple); font-weight:700}
+.manuallinks a:hover{text-decoration:underline}
+.manuallinks .mnote{color:var(--muted); font-weight:400; margin-left:2px}
+.manuallinks .sep{margin:0 4px; color:var(--line)}
+
 /* ── 画像 ── */
 .ph{display:flex; align-items:center; justify-content:center; background:var(--tint);
   color:var(--muted); font-weight:700; text-align:center; padding:8px; font-size:12px}
@@ -315,7 +324,10 @@ img{max-width:100%}
 .modal-link:focus-visible{outline:2px solid var(--indigo); outline-offset:2px}
 .modal-link.primary{background:var(--indigo); color:#fff; border-color:var(--indigo)}
 .modal-link.accent{color:var(--accent); border-color:var(--accent)}
+.modal-link.manual{color:var(--purple); border-color:var(--purple)}
 .modal-link.muted{color:var(--muted)}
+.modal-link-wrap{display:inline-flex; align-items:center; gap:4px}
+.modal-link-note{font-size:11px; color:var(--muted)}
 </style>
 </head>
 <body>
@@ -323,7 +335,7 @@ img{max-width:100%}
 <header class="mast">
   <div class="mast-in">
     <div class="brand">新商品<b>ウォッチ</b></div>
-    <div class="today num">2026年8月6日（木） 07:51更新</div>
+    <div class="today num">2026年8月6日（木） 10:00更新</div>
     <a class="theme-toggle" href="https://docs.google.com/spreadsheets/d/1g8d_tYSgmwsxorlktBztrlCTUnI-iZyjKpcMLdGV1KU/edit" target="_blank" rel="noopener">📋 台帳</a>
     <div class="switch" role="tablist" aria-label="デザイン案の切り替え">
       <button id="bA" class="on" onclick="show('A')">ポータル</button>
@@ -358,7 +370,7 @@ img{max-width:100%}
 </div>
 
 <script>
-const DATA = [{"key": "gemini:https://unionarena-tcg.com/", "cat": "トレカ", "title": "UNION ARENA ブースターパック グレンラガン", "maker": "株式会社バンダイ", "date": "2026-08-28", "preorder_start": "", "lottery_deadline": "", "kind": "予約", "price": 7920, "url": "https://unionarena-tcg.com/", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/ogp.png?v0", "first_seen": "2026-08-01", "en_q": "UNION ARENA Gurren Lagann UA56BT booster pack", "lottery": [{"site": "ヨドバシ.com", "type": "予約", "url": "https://www.yodobashi.com/product/100000001009893931/", "verified": false}], "platform": [], "sport": "", "genres": [], "game": ""}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/boosters/ex_blc-3.php", "cat": "トレカ", "title": "ブースターパック BLEACH 千年血戦篇 Vol.3", "maker": "バンダイ", "date": "2026-09-11", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/ex_blc-3.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/ex_blc-3/img_thumbnail.png", "first_seen": "2026-08-01", "en_q": "BLEACH Thousand-Year Blood War Vol.3 booster pack", "lottery": [], "platform": [], "sport": "", "genres": [], "game": ""}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/boosters/ex_mmm.php", "cat": "トレカ", "title": "ブースターパック 魔法少女まどか☆マギカ Magia Exedra", "maker": "バンダイ", "date": "2026-09-25", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/ex_mmm.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/ex_mmm/img_thumbnail.png", "first_seen": "2026-08-01", "en_q": "Puella Magi Madoka Magica Magia Exedra booster pack", "lottery": [], "platform": [], "sport": "", "genres": [], "game": ""}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/boosters/imc-1.php", "cat": "トレカ", "title": "ブースターパック アイドルマスター シンデレラガールズ", "maker": "バンダイ", "date": "2026-07-31", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/imc-1.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/imc-1/img_thumbnail.png?v", "first_seen": "2026-08-01", "en_q": "Idolmaster Cinderella Girls booster pack", "lottery": [], "platform": [], "sport": "", "genres": [], "game": ""}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/boosters/ttg-1.php", "cat": "トレカ", "title": "ブースターパック 天元突破グレンラガン", "maker": "バンダイ", "date": "2026-08-28", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/ttg-1.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/ttg-1/img_thumbnail.png", "first_seen": "2026-08-01", "en_q": "Gurren Lagann booster pack", "lottery": [{"site": "ヨドバシ.com", "type": "予約", "url": "https://www.yodobashi.com/product/100000001009893962/", "verified": false}], "platform": [], "sport": "", "genres": [], "game": ""}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/decks/dc-blc.php", "cat": "トレカ", "title": "アドバンスドデッキ BLEACH 千年血戦篇", "maker": "バンダイ", "date": "2026-09-11", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 2640, "url": "https://www.unionarena-tcg.com/jp/products/decks/dc-blc.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/decks/dc-blc/img_thumbnail.png", "first_seen": "2026-08-01", "en_q": "BLEACH Thousand-Year Blood War Advanced Deck", "lottery": [], "platform": [], "sport": "", "genres": [], "game": ""}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/decks/imc-1.php", "cat": "トレカ", "title": "スタートデッキ アイドルマスター シンデレラガールズ", "maker": "バンダイ", "date": "2026-07-31", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 1650, "url": "https://www.unionarena-tcg.com/jp/products/decks/imc-1.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/decks/imc-1/img_thumbnail.png?v", "first_seen": "2026-08-01", "en_q": "Idolmaster Cinderella Girls Start Deck", "lottery": [], "platform": [], "sport": "", "genres": [], "game": ""}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/boosters/dgm-1.php", "cat": "トレカ", "title": "ブースターパック D.Gray-man", "maker": "バンダイ", "date": "2026-11-27", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/dgm-1.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/dgm-1/img_thumbnail.png", "first_seen": "2026-08-06", "en_q": "D Gray-man booster pack", "lottery": [], "platform": [], "sport": "", "genres": [], "game": ""}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/boosters/ex_mgs.php", "cat": "トレカ", "title": "ブースターパック 〈物語〉シリーズ Vol.2", "maker": "バンダイ", "date": "2026-11-27", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/ex_mgs.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/ex_mgs/img_thumbnail.png", "first_seen": "2026-08-06", "en_q": "Monogatari Series Vol 2 booster pack", "lottery": [], "platform": [], "sport": "", "genres": [], "game": ""}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/boosters/ex_rez.php", "cat": "トレカ", "title": "ブースターパック Re:ゼロから始める異世界生活 Vol.2", "maker": "バンダイ", "date": "2026-10-30", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/ex_rez.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/ex_rez/img_thumbnail.png", "first_seen": "2026-08-06", "en_q": "Re Zero Starting Life in Another World Vol 2 booster pack", "lottery": [], "platform": [], "sport": "", "genres": [], "game": ""}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/boosters/stg-1.php", "cat": "トレカ", "title": "ブースターパック シュタインズ・ゲート", "maker": "バンダイ", "date": "2026-10-16", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/stg-1.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/stg-1/img_thumbnail.png", "first_seen": "2026-08-06", "en_q": "Steins Gate booster pack", "lottery": [], "platform": [], "sport": "", "genres": [], "game": ""}];
+const DATA = [{"key": "gemini:https://unionarena-tcg.com/", "cat": "トレカ", "title": "UNION ARENA ブースターパック グレンラガン", "maker": "株式会社バンダイ", "date": "2026-08-28", "preorder_start": "", "lottery_deadline": "", "kind": "予約", "price": 7920, "url": "https://unionarena-tcg.com/", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/ogp.png?v0", "first_seen": "2026-08-01", "en_q": "UNION ARENA Gurren Lagann UA56BT booster pack", "lottery": [{"site": "ヨドバシ.com", "type": "予約", "url": "https://www.yodobashi.com/product/100000001009893931/", "verified": false}], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": ""}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/boosters/dgm-1.php", "cat": "トレカ", "title": "ブースターパック D.Gray-man", "maker": "バンダイ", "date": "2026-11-27", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/dgm-1.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/dgm-1/img_thumbnail.png", "first_seen": "2026-08-06", "en_q": "D Gray-man booster pack", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": ""}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/boosters/ex_blc-3.php", "cat": "トレカ", "title": "ブースターパック BLEACH 千年血戦篇 Vol.3", "maker": "バンダイ", "date": "2026-09-11", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/ex_blc-3.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/ex_blc-3/img_thumbnail.png", "first_seen": "2026-08-01", "en_q": "BLEACH Thousand-Year Blood War Vol.3 booster pack", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": ""}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/boosters/ex_mgs.php", "cat": "トレカ", "title": "ブースターパック 〈物語〉シリーズ Vol.2", "maker": "バンダイ", "date": "2026-11-27", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/ex_mgs.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/ex_mgs/img_thumbnail.png", "first_seen": "2026-08-06", "en_q": "Monogatari Series Vol 2 booster pack", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": ""}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/boosters/ex_mmm.php", "cat": "トレカ", "title": "ブースターパック 魔法少女まどか☆マギカ Magia Exedra", "maker": "バンダイ", "date": "2026-09-25", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/ex_mmm.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/ex_mmm/img_thumbnail.png", "first_seen": "2026-08-01", "en_q": "Puella Magi Madoka Magica Magia Exedra booster pack", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": ""}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/boosters/ex_rez.php", "cat": "トレカ", "title": "ブースターパック Re:ゼロから始める異世界生活 Vol.2", "maker": "バンダイ", "date": "2026-10-30", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/ex_rez.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/ex_rez/img_thumbnail.png", "first_seen": "2026-08-06", "en_q": "Re Zero Starting Life in Another World Vol 2 booster pack", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": ""}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/boosters/imc-1.php", "cat": "トレカ", "title": "ブースターパック アイドルマスター シンデレラガールズ", "maker": "バンダイ", "date": "2026-07-31", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/imc-1.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/imc-1/img_thumbnail.png?v", "first_seen": "2026-08-01", "en_q": "Idolmaster Cinderella Girls booster pack", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": ""}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/boosters/stg-1.php", "cat": "トレカ", "title": "ブースターパック シュタインズ・ゲート", "maker": "バンダイ", "date": "2026-10-16", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/stg-1.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/stg-1/img_thumbnail.png", "first_seen": "2026-08-06", "en_q": "Steins Gate booster pack", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": ""}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/boosters/ttg-1.php", "cat": "トレカ", "title": "ブースターパック 天元突破グレンラガン", "maker": "バンダイ", "date": "2026-08-28", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 385, "url": "https://www.unionarena-tcg.com/jp/products/boosters/ttg-1.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/boosters/ttg-1/img_thumbnail.png", "first_seen": "2026-08-01", "en_q": "Gurren Lagann booster pack", "lottery": [{"site": "ヨドバシ.com", "type": "予約", "url": "https://www.yodobashi.com/product/100000001009893962/", "verified": false}], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": ""}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/decks/dc-blc.php", "cat": "トレカ", "title": "アドバンスドデッキ BLEACH 千年血戦篇", "maker": "バンダイ", "date": "2026-09-11", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 2640, "url": "https://www.unionarena-tcg.com/jp/products/decks/dc-blc.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/decks/dc-blc/img_thumbnail.png", "first_seen": "2026-08-01", "en_q": "BLEACH Thousand-Year Blood War Advanced Deck", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": ""}, {"key": "unionarena:https://www.unionarena-tcg.com/jp/products/decks/imc-1.php", "cat": "トレカ", "title": "スタートデッキ アイドルマスター シンデレラガールズ", "maker": "バンダイ", "date": "2026-07-31", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 1650, "url": "https://www.unionarena-tcg.com/jp/products/decks/imc-1.php", "series": ["ユニオン"], "img": "https://www.unionarena-tcg.com/jp/images/products/decks/imc-1/img_thumbnail.png?v", "first_seen": "2026-08-01", "en_q": "Idolmaster Cinderella Girls Start Deck", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": ""}];
 const STATS = {"new": 1618, "changed": 31, "errors": 0};
 const LOTTERY_SITES = [{"name": "ポケモンセンターオンライン", "url": "https://www.pokemoncenter-online.com/"}, {"name": "楽天ブックス", "url": "https://books.rakuten.co.jp/"}, {"name": "あみあみ", "url": "https://www.amiami.jp/"}, {"name": "駿河屋", "url": "https://www.suruga-ya.jp/"}];
 const TODAY_ISO = "2026-08-06";
@@ -498,6 +510,22 @@ function lotteryLinksRow(item){
   // 🔍 Googleで探すリンクは全商品に常時表示（目立ちすぎないよう.glinkで弱めの色）
   parts.push(`<a href="${googleLotterySearchUrl(item)}" target="_blank" rel="noopener" class="glink">🔍 抽選・予約を探す</a>`);
   return `<span class="lotlinks"><span class="lbl">🎯 抽選・予約:</span>`
+    + parts.join(`<span class="sep">｜</span>`) + `</span>`;
+}
+function manualLinksRow(item){
+  // 手動登録の予約リンク（config/manual_links.json）。毎朝の自動収集で
+  // state/items.json が丸ごと再生成されても消えないよう、config側に置いた
+  // データを src/report.py の _to_report_item() がstateアイテムの
+  // key/id/urlのいずれかで突き合わせ、一致したアイテムにのみ
+  // item.manual_links として埋め込んでいる（一致しない商品では空配列）。
+  // noteがあればリンクの右横に小さく表示する。
+  const links = item.manual_links || [];
+  if(links.length === 0) return "";
+  const parts = links.map(l => {
+    const note = l.note ? `<span class="mnote">（${esc(l.note)}）</span>` : "";
+    return `<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>${note}`;
+  });
+  return `<span class="manuallinks"><span class="lbl">🔖 予約リンク:</span>`
     + parts.join(`<span class="sep">｜</span>`) + `</span>`;
 }
 function isNewItem(it){
@@ -919,6 +947,7 @@ function renderA(){
             <div class="meta"><span>${esc(hero.maker || "")}</span><span class="num">${esc(fmtDate(hero))}</span><b class="num">${fmtPrice(hero)}</b></div>
             ${searchLinks(hero)}
             ${lotteryLinksRow(hero)}
+            ${manualLinksRow(hero)}
           </div>
         </div>
         <ul class="headline">
@@ -934,7 +963,7 @@ function renderA(){
       <div class="box" style="margin-top:16px">
         <div class="box-h">新着ヘッドライン</div>
         <ul class="dense">
-          ${newestItems.map(i => `<li data-key="${esc(i.key)}" onclick="handleCardClick(event)">${thumb(i)}<div><div class="t"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a></div><div class="sub">${esc(i.cat)}｜${esc(i.maker||"メーカー不明")}｜<span class="num">${esc(fmtDate(i))}</span></div>${searchLinks(i)}${lotteryLinksRow(i)}</div></li>`).join("")}
+          ${newestItems.map(i => `<li data-key="${esc(i.key)}" onclick="handleCardClick(event)">${thumb(i)}<div><div class="t"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a></div><div class="sub">${esc(i.cat)}｜${esc(i.maker||"メーカー不明")}｜<span class="num">${esc(fmtDate(i))}</span></div>${searchLinks(i)}${lotteryLinksRow(i)}${manualLinksRow(i)}</div></li>`).join("")}
         </ul>
       </div>
     </div>
@@ -1085,6 +1114,7 @@ function cardHtml(i){
         <div class="foot"><span class="dt num">${esc(fmtDate(i))}</span><span class="pr num">${fmtPrice(i)}</span></div>
         ${searchLinks(i)}
         ${lotteryLinksRow(i)}
+        ${manualLinksRow(i)}
       </div>
     </div>`;
 }
@@ -1154,6 +1184,7 @@ function flistItemHtml(i){
     + `<div class="sub">${esc(i.cat)}｜<span class="num">${esc(fmtDate(i))}</span>｜${fmtPrice(i) || "価格未定"}</div>`
     + `${searchLinks(i)}`
     + `${lotteryLinksRow(i)}`
+    + `${manualLinksRow(i)}`
     + `</div></div>`;
 }
 function renderC(){
@@ -1175,6 +1206,7 @@ function renderC(){
           <div class="meta">${chips(i, true)}<b class="num">${fmtPrice(i)}</b>${attBar(i)}</div>
           ${searchLinks(i)}
           ${lotteryLinksRow(i)}
+          ${manualLinksRow(i)}
         </div>
       </div>`).join("")}
     <div class="sec"><span class="name">${PAGE_MODE === "lottery" ? "新着・締切予定" : "新着・発売予定"}</span><span class="rule"></span><span class="cnt num">${rest.length}件</span></div>
@@ -1192,7 +1224,9 @@ function modalDetailRow(label, value){
 }
 function modalLinksHtml(item){
   // リンク集: 商品ページを開く／メルカリ／Amazon／楽天／eBay／eBayリサーチ／
-  // 🎯verified抽選予約リンク（あれば）／🔍 Googleで探す
+  // 🔖手動登録の予約リンク（config/manual_links.json。あれば。noteがあれば
+  // リンク横に小さく表示）／🎯verified抽選予約リンク（あれば）／
+  // 🔍 Googleで探す
   const title = item.title;
   const q = encodeURIComponent((title || "").slice(0, 40));
   const eq = encodeURIComponent(item.en_q ? item.en_q : extractEbayQuery(title));
@@ -1204,6 +1238,10 @@ function modalLinksHtml(item){
   html += `<a class="modal-link" href="https://search.rakuten.co.jp/search/mall/${q}/" target="_blank" rel="noopener">楽天</a>`;
   html += `<a class="modal-link" href="https://www.ebay.com/sch/i.html?_nkw=${eq}" target="_blank" rel="noopener">eBay</a>`;
   html += `<a class="modal-link" href="${ebayResearchUrl(eq)}" target="_blank" rel="noopener">eBayリサーチ</a>`;
+  (item.manual_links || []).forEach(l => {
+    const note = l.note ? `<span class="modal-link-note">${esc(l.note)}</span>` : "";
+    html += `<span class="modal-link-wrap"><a class="modal-link manual" href="${esc(l.url)}" target="_blank" rel="noopener">🔖 ${esc(l.label)}</a>${note}</span>`;
+  });
   verifiedLottery.forEach(l => {
     html += `<a class="modal-link accent" href="${esc(l.url)}" target="_blank" rel="noopener">🎯 ${esc(l.site)}</a>`;
   });
