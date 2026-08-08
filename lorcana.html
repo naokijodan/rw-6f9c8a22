@@ -328,6 +328,23 @@ img{max-width:100%}
 .modal-link.muted{color:var(--muted)}
 .modal-link-wrap{display:inline-flex; align-items:center; gap:4px}
 .modal-link-note{font-size:11px; color:var(--muted)}
+
+/* ── トップへ戻るボタン（右下固定。1画面分下スクロールしたら表示、
+   最上部付近では非表示。全ページ・全レイアウト共通。
+   モーダル(z-index:1000)より低いz-indexにして、モーダル表示中は
+   オーバーレイの下に隠れる＝追加のJS制御なしで自然に共存する） ── */
+.back-to-top{position:fixed; right:16px;
+  bottom:calc(16px + env(safe-area-inset-bottom, 0px)); width:48px; height:48px;
+  border-radius:50%; border:1px solid var(--line); background:var(--surface); color:var(--ink);
+  font-size:20px; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  font-family:inherit; box-shadow:0 4px 14px rgba(0,0,0,.18); z-index:900;
+  opacity:0; visibility:hidden; transform:translateY(8px);
+  transition:opacity .18s ease, transform .18s ease, visibility .18s step-end}
+.back-to-top.show{opacity:1; visibility:visible; transform:translateY(0);
+  transition:opacity .18s ease, transform .18s ease, visibility .18s step-start}
+.back-to-top:hover{background:var(--tint)}
+.back-to-top:focus-visible{outline:2px solid var(--indigo); outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.back-to-top{transition:opacity .01s}}
 </style>
 </head>
 <body>
@@ -335,7 +352,7 @@ img{max-width:100%}
 <header class="mast">
   <div class="mast-in">
     <div class="brand">新商品<b>ウォッチ</b></div>
-    <div class="today num">2026年8月8日（土） 07:51更新</div>
+    <div class="today num">2026年8月8日（土） 14:06更新</div>
     <a class="theme-toggle" href="https://docs.google.com/spreadsheets/d/1g8d_tYSgmwsxorlktBztrlCTUnI-iZyjKpcMLdGV1KU/edit" target="_blank" rel="noopener">📋 台帳</a>
     <div class="switch" role="tablist" aria-label="デザイン案の切り替え">
       <button id="bA" class="on" onclick="show('A')">ポータル</button>
@@ -369,9 +386,11 @@ img{max-width:100%}
   </div>
 </div>
 
+<button id="backToTop" class="back-to-top" type="button" aria-label="トップへ戻る" onclick="scrollToTop()">↑</button>
+
 <script>
 const DATA = [{"key": "lorcana:https://www.takaratomy.co.jp/products/disneylorcana/product/attack-of-the-vine/booster-pack/", "cat": "トレカ", "title": "ＡＴＴＡＣＫ ＯＦ ＴＨＥ ＶＩＮＥ!　ヴァインズ・アタック！ ブースターパック", "maker": "タカラトミー", "date": "2026-07-17", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 5280, "url": "https://www.takaratomy.co.jp/products/disneylorcana/product/attack-of-the-vine/booster-pack/", "series": ["ロルカナ"], "maker_groups": ["タカラトミー"], "img": "https://www.takaratomy.co.jp/products/disneylorcana/img/product/attack-of-the-vine/booster-pack/pic_product01@2x.png?20260610", "first_seen": "2026-08-01", "en_q": "Attack of the Vine Booster Pack", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false}];
-const STATS = {"new": 98, "changed": 18, "errors": 0};
+const STATS = {"new": 0, "changed": 0, "errors": 0};
 const LOTTERY_SITES = [{"name": "ポケモンセンターオンライン", "url": "https://www.pokemoncenter-online.com/"}, {"name": "楽天ブックス", "url": "https://books.rakuten.co.jp/"}, {"name": "あみあみ", "url": "https://www.amiami.jp/"}, {"name": "駿河屋", "url": "https://www.suruga-ya.jp/"}];
 const TODAY_ISO = "2026-08-08";
 // "default"（トレカ/フィギュア/くじタブ）/ "comic"（出版社別タブ）/
@@ -1469,6 +1488,26 @@ function toggleTheme(){
     const btn = document.getElementById("themeToggle");
     if(btn) btn.textContent = prefersDark ? "☀ ライト" : "🌙 ダーク";
   }
+})();
+
+// ── トップへ戻るボタン ──
+// 1画面分（window.innerHeight、下限400px）を超えて下スクロールしたら表示する。
+// スムーズスクロールはprefers-reduced-motionを尊重してauto/smoothを切り替える。
+function scrollToTop(){
+  const reduceMotion = window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  window.scrollTo({top:0, left:0, behavior: reduceMotion ? "auto" : "smooth"});
+}
+(function initBackToTop(){
+  const btn = document.getElementById("backToTop");
+  if(!btn) return;
+  function threshold(){ return Math.max(window.innerHeight || 0, 400); }
+  function onScroll(){
+    btn.classList.toggle("show", (window.scrollY || window.pageYOffset || 0) > threshold());
+  }
+  window.addEventListener("scroll", onScroll, {passive:true});
+  window.addEventListener("resize", onScroll, {passive:true});
+  onScroll();
 })();
 
 try{
