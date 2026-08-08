@@ -375,7 +375,7 @@ img{max-width:100%}
 <header class="mast">
   <div class="mast-in">
     <div class="brand">新商品<b>ウォッチ</b></div>
-    <div class="today num">2026年8月8日（土） 22:19更新</div>
+    <div class="today num">2026年8月8日（土） 23:37更新</div>
     <a class="theme-toggle" href="https://docs.google.com/spreadsheets/d/1g8d_tYSgmwsxorlktBztrlCTUnI-iZyjKpcMLdGV1KU/edit" target="_blank" rel="noopener">📋 台帳</a>
     <div class="switch" role="tablist" aria-label="デザイン案の切り替え">
       <button id="bA" class="on" onclick="show('A')">ポータル</button>
@@ -413,7 +413,7 @@ img{max-width:100%}
 
 <script>
 const DATA = [{"key": "lorcana:https://www.takaratomy.co.jp/products/disneylorcana/product/attack-of-the-vine/booster-pack/", "cat": "トレカ", "title": "ＡＴＴＡＣＫ ＯＦ ＴＨＥ ＶＩＮＥ!　ヴァインズ・アタック！ ブースターパック", "maker": "タカラトミー", "date": "2026-07-17", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 5280, "url": "https://www.takaratomy.co.jp/products/disneylorcana/product/attack-of-the-vine/booster-pack/", "series": ["ロルカナ"], "maker_groups": ["タカラトミー"], "resale": false, "img": "https://www.takaratomy.co.jp/products/disneylorcana/img/product/attack-of-the-vine/booster-pack/pic_product01@2x.png?20260610", "first_seen": "2026-08-01", "en_q": "Attack of the Vine Booster Pack", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}];
-const STATS = {"new": 0, "changed": 0, "errors": 0};
+const STATS = {"new": 24, "changed": 0, "errors": 0};
 const LOTTERY_SITES = [{"name": "ポケモンセンターオンライン", "url": "https://www.pokemoncenter-online.com/"}, {"name": "楽天ブックス", "url": "https://books.rakuten.co.jp/"}, {"name": "あみあみ", "url": "https://www.amiami.jp/"}, {"name": "駿河屋", "url": "https://www.suruga-ya.jp/"}];
 const TODAY_ISO = "2026-08-08";
 // "default"（トレカ/フィギュア/くじタブ）/ "comic"（出版社別タブ）/
@@ -519,14 +519,67 @@ function ebayResearchUrl(eq){
     + `&dayRange=30&endDate=${endDate}&startDate=${startDate}&categoryId=0`
     + `&offset=0&limit=50&tabName=ACTIVE&tz=Asia%2FTokyo`;
 }
+function sobaLinkInfo(item){
+  // トレカ商品（カテゴリ「トレカ」または「抽選」＝cardchusenのトレカ抽選）に
+  // 相場グラフサイトへの検索リンクを付けるための判定（2026-08-08追加）。
+  // ポケモン→ポケカ総研(pokeca-soken.com)、それ以外のTCG→スニダン(snkrdunk.com)。
+  // どちらも無料・登録不要・検索URLに?q=/?keywords=でキーワードを渡すだけで
+  // 商品ページへ辿れることを実測済み（詳細はlogs/build-report-*-sobalink.md）。
+  // トレカ以外のカテゴリ（フィギュア/くじ等）には付けない。
+  const isToreca = item.cat === "トレカ";
+  // 抽選（cardchusen由来）は商品×店舗の行だが、商品名自体は公式パック名の
+  // ままなのでトレカ本カテゴリと同じ精度で検索できる（title="ONE PIECEカード
+  // ゲーム ブースターパック 世界最強の戦士【OP-17】"等。src/adapters/cardchusen.py
+  // docstring参照）。
+  const isChusen = item.cat === "抽選";
+  if(!isToreca && !isChusen) return null;
+  let isPokemon;
+  if(isToreca){
+    // source_idはJS側のitem dataに直接は含まれないが、item.keyが
+    // "{source_id}:{id}" 形式（src/watch.py参照）のため、キー先頭一致で
+    // 判定する。タイトルのキーワード判定（表記ゆれ・他ゲームとの誤爆リスクあり）
+    // より確実なため、source_id判定を採用する（ユーザー承認済みの方針）。
+    isPokemon = (item.key || "").startsWith("pokemon:");
+    // レビュー指摘対応（logs/review-report-20260808-sobalink.md 4節、2026-08-08）:
+    // gemini（AIリサーチ、config/sources.jsonのgemini_research）由来の商品は
+    // item.keyが"gemini:{url}"でsource_idがゲーム名を持たないため、上の
+    // "pokemon:"接頭辞判定では拾えずスニダンに誤振り分けされていた。
+    // geminiソースのトレカ商品に限り、タイトルに「ポケモン」「ポケカ」
+    // 「ポケモンカード」を含むかでフォールバック判定する（表記ゆれ＝全角/半角・
+    // 大文字/小文字を吸収するためNFKC正規化＋小文字化して比較）。
+    // pokemon:接頭辞判定・抽選（else節）のgame判定は変更しない。
+    if(!isPokemon && (item.key || "").startsWith("gemini:")){
+      const normTitle = (item.title || "").normalize("NFKC").toLowerCase();
+      const pokemonKeywords = ["ポケモン", "ポケカ", "ポケモンカード"];
+      isPokemon = pokemonKeywords.some(function(kw){
+        return normTitle.indexOf(kw.normalize("NFKC").toLowerCase()) !== -1;
+      });
+    }
+  } else {
+    // 抽選（cardchusen）はsource_idが常に"cardchusen"で使えないため、
+    // アダプタが確定済みのgame欄（"ポケモン"/"ワンピース"/"遊戯王"のいずれか。
+    // src/adapters/cardchusen.py参照）で判定する。
+    isPokemon = item.game === "ポケモン";
+  }
+  // 検索精度のため、メルカリ/Amazon/楽天と同じ流儀（タイトル先頭40文字の
+  // 日本語のまま）を使う（eBay用のen_q/英数字トークン抽出は使わない＝
+  // 対象が国内サイトのため）。
+  const q = encodeURIComponent((item.title || "").slice(0, 40));
+  return isPokemon
+    ? ["📈 相場(ポケカ総研)", `https://pokeca-soken.com/INDEX/search?q=${q}`]
+    : ["📈 相場(スニダン)", `https://snkrdunk.com/search?keywords=${q}`];
+}
 function searchLinks(item){
-  // 商品（item）で外部サイト（メルカリ／Amazon／楽天／eBay／eBayリサーチ）を
-  // 検索するリンク列。メルカリ・Amazon・楽天はタイトル全文（長すぎるため先頭
-  // 40文字程度に丸め）をそのまま検索語にする。eBayは item.en_q（src/translate.py が
+  // 商品（item）で外部サイト（メルカリ／Amazon／楽天／eBay／eBayリサーチ／
+  // トレカのみ相場グラフサイト）を検索するリンク列。メルカリ・Amazon・楽天は
+  // タイトル全文（長すぎるため先頭40文字程度に丸め）をそのまま検索語にする。
+  // eBayは item.en_q（src/translate.py が
   // Antigravity CLIで事前生成した英語検索クエリ）があればそれを使い、無ければ
   // 従来通り extractEbayQuery() で英数字トークンに絞ったものへフォールバックする。
   // eBayリサーチ（Seller Hub プロダクトリサーチ/Terapeak）は同じクエリを使い、
   // ebayResearchUrl()で日時パラメータのみ描画時点で計算して付与する。
+  // 相場グラフサイト（ポケカ総研/スニダン）はsobaLinkInfo()参照（トレカ/抽選
+  // カテゴリのみ、それ以外はnullで非表示）。
   // encodeURIComponent の出力はHTML的に安全な文字集合のみなので esc() は不要。
   // 本ツールがeBay等へアクセスすることは一切なく、リンクを生成するのみ。
   const title = item.title;
@@ -539,6 +592,8 @@ function searchLinks(item){
     ["eBay", `https://www.ebay.com/sch/i.html?_nkw=${eq}`],
     ["eBayリサーチ", ebayResearchUrl(eq)],
   ];
+  const soba = sobaLinkInfo(item);
+  if(soba) sites.push(soba);
   return `<span class="srch">` + sites.map(([label, href]) =>
     `<a href="${href}" target="_blank" rel="noopener">${label}</a>`
   ).join(`<span class="sep">｜</span>`) + `</span>`;
@@ -1527,6 +1582,7 @@ function modalDetailRow(label, value){
 }
 function modalLinksHtml(item){
   // リンク集: 商品ページを開く／メルカリ／Amazon／楽天／eBay／eBayリサーチ／
+  // （トレカ/抽選のみ）相場グラフサイト／
   // 🔖手動登録の予約リンク（config/manual_links.json。あれば。noteがあれば
   // リンク横に小さく表示）／🎯verified抽選予約リンク（あれば）／
   // 🔍 Googleで探す
@@ -1541,6 +1597,8 @@ function modalLinksHtml(item){
   html += `<a class="modal-link" href="https://search.rakuten.co.jp/search/mall/${q}/" target="_blank" rel="noopener">楽天</a>`;
   html += `<a class="modal-link" href="https://www.ebay.com/sch/i.html?_nkw=${eq}" target="_blank" rel="noopener">eBay</a>`;
   html += `<a class="modal-link" href="${ebayResearchUrl(eq)}" target="_blank" rel="noopener">eBayリサーチ</a>`;
+  const soba = sobaLinkInfo(item);
+  if(soba) html += `<a class="modal-link" href="${soba[1]}" target="_blank" rel="noopener">${soba[0]}</a>`;
   (item.manual_links || []).forEach(l => {
     const note = l.note ? `<span class="modal-link-note">${esc(l.note)}</span>` : "";
     html += `<span class="modal-link-wrap"><a class="modal-link manual" href="${esc(l.url)}" target="_blank" rel="noopener">🔖 ${esc(l.label)}</a>${note}</span>`;
