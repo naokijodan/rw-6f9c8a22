@@ -216,9 +216,12 @@ img{max-width:100%}
 
 /* ── 日付グループ見出し（案B・案C 共通。折りたたみ可能なボタン。
    2026-08-08追加: 開閉トグル。デフォルト状態は日付グループ・日付未定=展開／
-   月グループ(「◯年◯月発売予定」)=折りたたみ（JS側isSectionCollapsed()参照。
-   縦長化の主因のため）。タップ領域はモバイル390px幅でも44px以上を確保する
-   ためmin-height:44pxを明示する（見た目のpaddingだけに頼らない） ── */
+   月グループ(「◯年◯月発売予定」)は今月より前のみ折りたたみ・今月以降は展開
+   （2026-08-09変更。JS側isSectionCollapsed()/defaultCollapsedForKind()参照。
+   過去月の巨大まとめは畳んで縦長化を防ぎつつ、未来月しか無い予約商品が
+   開いた瞬間から見えるようにする）。タップ領域はモバイル390px幅でも44px
+   以上を確保するためmin-height:44pxを明示する（見た目のpaddingだけに
+   頼らない） ── */
 .dsec{appearance:none; font-family:inherit; font-size:inherit; border:0; background:none;
   padding:0; text-align:left; color:inherit; cursor:pointer; width:100%; min-height:44px;
   box-sizing:border-box; margin:22px 0 10px; display:flex; align-items:center; gap:10px}
@@ -375,7 +378,7 @@ img{max-width:100%}
 <header class="mast">
   <div class="mast-in">
     <div class="brand">新商品<b>ウォッチ</b></div>
-    <div class="today num">2026年8月8日（土） 23:38更新</div>
+    <div class="today num">2026年8月9日（日） 00:20更新</div>
     <a class="theme-toggle" href="https://docs.google.com/spreadsheets/d/1g8d_tYSgmwsxorlktBztrlCTUnI-iZyjKpcMLdGV1KU/edit" target="_blank" rel="noopener">📋 台帳</a>
     <div class="switch" role="tablist" aria-label="デザイン案の切り替え">
       <button id="bA" class="on" onclick="show('A')">ポータル</button>
@@ -415,7 +418,7 @@ img{max-width:100%}
 const DATA = [{"key": "gemini:https://ws-tcg.com/", "cat": "トレカ", "title": "ヴァイスシュヴァルツ ブースターパック 【推しの子】 Vol.3", "maker": "株式会社ブシロード", "date": "2026-08-07", "preorder_start": "2026-06-01", "lottery_deadline": "なし", "kind": "発売", "price": 5280, "url": "https://ws-tcg.com/", "series": ["ヴァイス"], "maker_groups": ["ブシロード"], "resale": false, "img": "", "first_seen": "2026-08-01", "en_q": "Weiss Schwarz Oshi no Ko Vol 3 booster pack", "lottery": [{"site": "あみあみ", "type": "予約", "url": "https://www.amiami.jp/top/detail/detail?gcode=CARD-00033657", "verified": false}], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "gemini:https://ws-tcg.com/products/", "cat": "トレカ", "title": "ヴァイスシュヴァルツ ブースターパック Re:ゼロから始める異世界生活 Vol.4", "maker": "ブシロード", "date": "2026-07-24", "preorder_start": "未定", "lottery_deadline": "未定", "kind": "発売", "price": "", "url": "https://ws-tcg.com/products/", "series": ["ヴァイス"], "maker_groups": ["ブシロード"], "resale": false, "img": "", "first_seen": "2026-08-07", "en_q": "Weiss Schwarz Oshi no Ko Vol 3 booster pack", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "weiss:https://ws-tcg.com/products/anm_bp/", "cat": "トレカ", "title": "anemoi", "maker": "ブシロード", "date": "2026-10-02", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://ws-tcg.com/products/anm_bp/", "series": ["ヴァイス"], "maker_groups": ["ブシロード"], "resale": false, "img": "https://ws-tcg.com/wordpress/wp-content/uploads/2026/06/19155620/BP_anemoi_box_400-1.png", "first_seen": "2026-08-03", "en_q": "anemoi", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "weiss:https://ws-tcg.com/products/bdy_bp/", "cat": "トレカ", "title": "BanG Dream! [夢限大みゅーたいぷ]", "maker": "ブシロード", "date": "2026-11-13", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://ws-tcg.com/products/bdy_bp/", "series": ["ヴァイス"], "maker_groups": ["ブシロード"], "resale": false, "img": "https://ws-tcg.com/wordpress/wp-content/uploads/2026/07/31183308/ws_bd_yc.jpg", "first_seen": "2026-08-06", "en_q": "BanG Dream Mugendai Mewtype", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "weiss:https://ws-tcg.com/products/bp_rzvol-4/", "cat": "トレカ", "title": "「Re:ゼロから始める異世界生活」Vol.4", "maker": "ブシロード", "date": "2026-07-24", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://ws-tcg.com/products/bp_rzvol-4/", "series": ["ヴァイス"], "maker_groups": ["ブシロード"], "resale": false, "img": "https://ws-tcg.com/wordpress/wp-content/uploads/2026/04/03165828/rz4_box_hp.png", "first_seen": "2026-08-01", "en_q": "Re ZERO Starting Life in Another World Vol.4 booster pack", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "weiss:https://ws-tcg.com/products/gup_bp/", "cat": "トレカ", "title": "ガールズ＆パンツァー", "maker": "ブシロード", "date": "2026-10-30", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://ws-tcg.com/products/gup_bp/", "series": ["ヴァイス"], "maker_groups": ["ブシロード"], "resale": false, "img": "https://ws-tcg.com/wordpress/wp-content/uploads/2026/07/31184356/bp_gup_box-1024x881.png", "first_seen": "2026-08-06", "en_q": "Girls und Panzer", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "weiss:https://ws-tcg.com/products/gup_td_m/", "cat": "トレカ", "title": "ガールズ＆パンツァー 無限軌道杯", "maker": "ブシロード", "date": "2026-10-30", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://ws-tcg.com/products/gup_td_m/", "series": ["ヴァイス"], "maker_groups": ["ブシロード"], "resale": false, "img": "https://ws-tcg.com/wordpress/wp-content/uploads/2026/07/31182832/td_m_gup_box-682x1024.png", "first_seen": "2026-08-06", "en_q": "Girls und Panzer Muken Kidohai", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "weiss:https://ws-tcg.com/products/gup_td_o/", "cat": "トレカ", "title": "ガールズ＆パンツァー 大洗女子学園", "maker": "ブシロード", "date": "2026-10-30", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://ws-tcg.com/products/gup_td_o/", "series": ["ヴァイス"], "maker_groups": ["ブシロード"], "resale": false, "img": "https://ws-tcg.com/wordpress/wp-content/uploads/2026/07/31182821/td_o_gup_box-682x1024.png", "first_seen": "2026-08-06", "en_q": "Girls und Panzer Oarai Girls High School", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "weiss:https://ws-tcg.com/products/nik_bp2/", "cat": "トレカ", "title": "勝利の女神：NIKKE Vol.2", "maker": "ブシロード", "date": "2026-09-19", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://ws-tcg.com/products/nik_bp2/", "series": ["ヴァイス"], "maker_groups": ["ブシロード"], "resale": false, "img": "https://ws-tcg.com/wordpress/wp-content/uploads/2026/05/20184941/NIK_vol2.png", "first_seen": "2026-08-01", "en_q": "Goddess of Victory NIKKE Vol.2 booster pack", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "weiss:https://ws-tcg.com/products/osk_bp3/", "cat": "トレカ", "title": "【推しの子】Vol.3", "maker": "ブシロード", "date": "2026-08-07", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://ws-tcg.com/products/osk_bp3/", "series": ["ヴァイス"], "maker_groups": ["ブシロード"], "resale": false, "img": "https://ws-tcg.com/wordpress/wp-content/uploads/2026/07/17102708/%E3%80%90%E6%8E%A8%E3%81%97%E3%81%AE%E5%AD%90%E3%80%91Vol3_%E3%83%9C%E3%83%83%E3%82%AF%E3%82%B9_%E7%B5%84%E3%81%BF%E7%AB%8B%E3%81%A6-1024x882.png", "first_seen": "2026-08-01", "en_q": "Oshi no Ko Vol.3 booster pack", "lottery": [{"site": "あみあみ", "type": "予約", "url": "https://www.amiami.jp/top/detail/detail?gcode=CARD-00033657", "verified": false}], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "weiss:https://ws-tcg.com/products/scs_imc/", "cat": "トレカ", "title": "アイドルマスター シンデレラガールズ シンデレラガール総選挙2026", "maker": "ブシロード", "date": "2026-07-18", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://ws-tcg.com/products/scs_imc/", "series": ["ヴァイス"], "maker_groups": ["ブシロード"], "resale": false, "img": "https://ws-tcg.com/wordpress/wp-content/uploads/2026/06/22133604/scs_imc_pkg_720.png", "first_seen": "2026-08-01", "en_q": "Idolmaster Cinderella Girls General Election 2026", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "weiss:https://ws-tcg.com/products/sfn_bp_vol2/", "cat": "トレカ", "title": "葬送のフリーレン Vol.2", "maker": "ブシロード", "date": "2026-08-28", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://ws-tcg.com/products/sfn_bp_vol2/", "series": ["ヴァイス"], "maker_groups": ["ブシロード"], "resale": false, "img": "https://ws-tcg.com/wordpress/wp-content/uploads/2026/06/24172343/sfn_vol.2_box-1.png", "first_seen": "2026-08-01", "en_q": "Frieren Beyond Journeys End Vol.2 booster pack", "lottery": [{"site": "あみあみ", "type": "予約", "url": "https://www.amiami.jp/top/detail/detail?gcode=CARD-00033994", "verified": false}], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "weiss:https://ws-tcg.com/products/sts_bp/", "cat": "トレカ", "title": "ステラソラ", "maker": "ブシロード", "date": "2026-10-16", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://ws-tcg.com/products/sts_bp/", "series": ["ヴァイス"], "maker_groups": ["ブシロード"], "resale": false, "img": "https://ws-tcg.com/wordpress/wp-content/uploads/2026/07/17164148/bp_sts_box.png", "first_seen": "2026-08-06", "en_q": "Stella Sora", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "weiss:https://ws-tcg.com/products/sts_td/", "cat": "トレカ", "title": "ステラソラ", "maker": "ブシロード", "date": "2026-10-16", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://ws-tcg.com/products/sts_td/", "series": ["ヴァイス"], "maker_groups": ["ブシロード"], "resale": false, "img": "https://ws-tcg.com/wordpress/wp-content/uploads/2026/07/17153612/td_sts_box.png", "first_seen": "2026-08-06", "en_q": "Stella Sora", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}];
 const STATS = {"new": 0, "changed": 0, "errors": 0};
 const LOTTERY_SITES = [{"name": "ポケモンセンターオンライン", "url": "https://www.pokemoncenter-online.com/"}, {"name": "楽天ブックス", "url": "https://books.rakuten.co.jp/"}, {"name": "あみあみ", "url": "https://www.amiami.jp/"}, {"name": "駿河屋", "url": "https://www.suruga-ya.jp/"}];
-const TODAY_ISO = "2026-08-08";
+const TODAY_ISO = "2026-08-09";
 // "default"（トレカ/フィギュア/くじタブ）/ "comic"（出版社別タブ）/
 // "game"（プラットフォーム別タブ）/ "sports"（競技別タブ）/ "jump"（ジャンル別タブ）/
 // "news"（媒体別タブ）。
@@ -1328,19 +1331,33 @@ function groupItemsByDate(list){
 // 同じグループには同じ開閉状態が再現され、破綻しない。
 let sectionCollapse = {}; // id -> boolean（明示トグル済みのものだけ持つ）
 let collapseAllMode = null; // null（種類別デフォルト）|"collapsed"|"expanded"
-function defaultCollapsedForKind(kind){
-  // 既定: 日付グループ・日付未定=展開、月グループ（月精度しか分からない
-  // フィギュア系商品の「◯年◯月発売予定」）=折りたたみ（縦長化の主因のため）。
-  return kind === "month";
+// 月グループの既定折りたたみ判定に使う「今月」は、ページ生成時刻
+// （TODAY/TODAY_ISO、Python側で朝1回だけ焼き込まれる値）ではなく、
+// この関数が呼ばれた時点＝閲覧時刻のブラウザ日時から都度計算する
+// （生成は朝1回でも閲覧は1日中続くため。ebayResearchUrl()がDate.now()を
+// 呼び出し時点で都度計算するのと同じ流儀。2026-08-09追加。
+// logs/build-report-20260808-collapse.md「追加修正(2026-08-09)」参照）。
+function currentYearMonth(){
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
 }
-function isSectionCollapsed(id, kind){
+function defaultCollapsedForKind(kind, key){
+  // 既定: 日付グループ・日付未定=展開。月グループ（月精度しか分からない
+  // フィギュア系商品の「◯年◯月発売予定」）は、今月より前の月のみ折りたたみ、
+  // 今月以降（今月を含む）は展開する（2026-08-09変更）。過去月の巨大な
+  // まとめ（例: 7月335件）は畳んで縦長化を防ぎつつ、未来月しか無い予約商品
+  // （ダイワ148件・がまかつ24件等）は開いた瞬間から見える状態にする。
+  if(kind !== "month") return false;
+  return key < currentYearMonth();
+}
+function isSectionCollapsed(id, kind, key){
   if(Object.prototype.hasOwnProperty.call(sectionCollapse, id)) return sectionCollapse[id];
   if(collapseAllMode === "collapsed") return true;
   if(collapseAllMode === "expanded") return false;
-  return defaultCollapsedForKind(kind);
+  return defaultCollapsedForKind(kind, key);
 }
-function sectionHeaderHtml(id, label, count, kind){
-  const collapsed = isSectionCollapsed(id, kind);
+function sectionHeaderHtml(id, label, count, kind, key){
+  const collapsed = isSectionCollapsed(id, kind, key);
   return `<button type="button" class="dsec" id="${esc(id)}" aria-expanded="${collapsed ? "false" : "true"}" aria-controls="${esc(id)}-items" onclick="toggleSection('${esc(id)}')">`
     + `<span class="dsec-toggle" aria-hidden="true">▸</span>`
     + `<span class="name num">${esc(label)}</span>`
@@ -1348,8 +1365,8 @@ function sectionHeaderHtml(id, label, count, kind){
     + `<span class="cnt num">${count}件</span>`
     + `</button>`;
 }
-function sectionItemsHtml(id, bucket, itemHtmlFn, kind){
-  const collapsed = isSectionCollapsed(id, kind);
+function sectionItemsHtml(id, bucket, itemHtmlFn, kind, key){
+  const collapsed = isSectionCollapsed(id, kind, key);
   return `<div class="dsec-items${collapsed ? " collapsed" : ""}" id="${esc(id)}-items">`
     + bucket.map(itemHtmlFn).join("")
     + `</div>`;
@@ -1393,8 +1410,8 @@ function renderDateSectionsFromGroups(g, itemHtmlFn, idPrefix){
     const bucket = o.kind === "date" ? groups[o.key] : monthGroups[o.key];
     const label = o.kind === "date" ? dateGroupLabel(o.key) : monthGroupLabel(o.key);
     const id = `${idPrefix}-${o.key}`;
-    html += sectionHeaderHtml(id, label, bucket.length, o.kind);
-    html += sectionItemsHtml(id, bucket, itemHtmlFn, o.kind);
+    html += sectionHeaderHtml(id, label, bucket.length, o.kind, o.key);
+    html += sectionItemsHtml(id, bucket, itemHtmlFn, o.kind, o.key);
   });
   if(undated.length){
     const id = `${idPrefix}-undated`;
@@ -1553,7 +1570,7 @@ function renderC(){
   const rest = list.filter(i => !top.includes(i)).slice(0, 30);
   const g = groupItemsByDate(rest);
   el.innerHTML = `
-    <div class="mh"><div class="l1">MORNING EDITION</div><div class="l2">8月8日（土）の朝刊</div></div>
+    <div class="mh"><div class="l1">MORNING EDITION</div><div class="l2">8月9日（日）の朝刊</div></div>
     <div class="sec"><span class="name">今日の注目</span><span class="rule"></span><span class="cnt num">${top.length}件</span></div>
     ${top.map(i => `
       <div class="fcard" data-key="${esc(i.key)}" onclick="handleCardClick(event)">
