@@ -273,25 +273,117 @@ img{max-width:100%}
 .card .dt{font-size:12px; color:var(--muted)}
 .card .pr{font-size:14px; font-weight:800}
 
-/* ════ 案C 朝刊フィード ════ */
+/* ════ 案C 朝刊 ════ 2026-08-10改修: 新聞紙面風に作り替え（asakan-*）。
+   見出し等の明朝フォントは新規CSS変数を増やさず直接指定（テーマ色トークン
+   var(--ink)/var(--accent)/var(--indigo)/var(--line)/var(--muted)/var(--surface)/
+   var(--tint)は既存のライト/ダーク定義をそのまま流用し、朝刊専用の新しい
+   色トークンは追加しない＝既存のテーマ切替と自動的に整合する）。
+   紙面一覧（.flist/.frow、下記）は従来のCSSをそのまま流用する。 */
 .pC{max-width:560px; margin:0 auto}
-.pC .mh{text-align:center; padding:6px 0 18px}
-.pC .mh .l1{font-size:12px; letter-spacing:.25em; color:var(--muted); font-weight:700}
-.pC .mh .l2{font-size:24px; font-weight:800; margin-top:2px}
-.pC .sec{margin:26px 0 10px; display:flex; align-items:center; gap:10px}
-.pC .sec .name{font-size:16px; font-weight:800; white-space:nowrap}
-.pC .sec .rule{height:1px; background:var(--line); flex:1}
-.pC .sec .cnt{font-size:12px; color:var(--muted); white-space:nowrap}
-.fcard{background:var(--surface); border:1px solid var(--line); border-radius:10px;
-  overflow:hidden; margin-bottom:14px; display:block; cursor:pointer}
-.fcard .thumb{aspect-ratio:16/9; width:100%}
-.fcard .body{padding:12px 14px 14px}
-.fcard .t{font-size:16px; font-weight:800; line-height:1.4; text-wrap:balance}
-.fcard .meta{display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-top:8px}
-.fcard .att{margin-left:auto; display:flex; gap:3px; align-items:center}
-.fcard .att i{width:8px; height:8px; border-radius:2px; background:var(--line)}
-.fcard .att i.f{background:var(--accent)}
-.fcard .att span{font-size:11px; color:var(--muted); margin-right:2px}
+.asakan-serif{font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif}
+
+/* ── 題字部: 縦書きタイトル＋朱印＋発行日＋二重罫線 ── */
+.asakan-masthead{padding:4px 0 16px}
+.asakan-masthead-row{display:flex; align-items:flex-start; justify-content:space-between; gap:12px}
+.asakan-title-block{display:flex; align-items:flex-start; gap:6px}
+.asakan-vtitle{writing-mode:vertical-rl; font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;
+  font-weight:900; font-size:26px; letter-spacing:.15em; height:8.6em; color:var(--ink)}
+/* 高さは「新商品ウォッチ」7文字 × (1 + letter-spacing 0.15em) ≈ 8.05em が
+   必要な最小値（不足すると2列に折り返る不具合が実機検証で判明したため、
+   余裕を持たせて8.6emにしている）。 */
+.asakan-hanko{writing-mode:vertical-rl; background:var(--accent); color:#fff;
+  font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif; font-weight:700;
+  font-size:13px; padding:.5em .3em; border-radius:2px; letter-spacing:.1em; align-self:flex-start}
+.asakan-issue-info{text-align:right; padding-top:4px}
+.asakan-issue-date{font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;
+  font-weight:700; font-size:15px; margin:0 0 4px}
+.asakan-issue-note{font-size:11.5px; color:var(--muted); margin:0}
+.asakan-rule-double{margin-top:10px; border-top:3px solid var(--ink)}
+.asakan-rule-double::after{content:""; display:block; border-top:1px solid var(--ink); margin-top:3px}
+
+/* ── サマリー行 ── */
+.asakan-summary{margin:12px 0 0; padding:8px 0; border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line); font-size:13px}
+.asakan-summary strong{color:var(--accent); font-size:1.15em}
+
+/* ── 本日のピックアップ商品（トップ1件＋準トップ4件） ──
+   画像は元解像度以上に引き伸ばさない: width:auto/height:auto＋max-widthで
+   自然サイズを尊重する（トップも表示幅は最大360px、準トップは160pxに抑え、
+   「一面らしさ」は見出しの文字サイズ・太さで出す）。読み込み前のレイアウト
+   崩れを抑えるためmin-heightのみ最小限のプレースホルダー高さを与える。 */
+.asakan-topblock{margin-top:18px}
+.asakan-badge-new{display:inline-block; background:var(--accent); color:#fff; font-size:11px;
+  font-weight:700; padding:.2em .6em; letter-spacing:.05em; margin-bottom:6px}
+.asakan-badge-new.small{font-size:10px; padding:.15em .5em; position:absolute; top:10px; left:0; z-index:1}
+.asakan-top{border-bottom:1px solid var(--line); padding-bottom:18px; margin-bottom:18px; cursor:pointer}
+.asakan-top .thumb.asakan-top-img{width:auto; max-width:360px; height:auto; max-height:280px; min-height:120px;
+  aspect-ratio:auto; background:none; margin:8px 0 10px}
+.asakan-top .thumb.asakan-top-img img{width:auto; height:auto; max-width:360px; max-height:280px; object-fit:contain}
+.asakan-top .ph.asakan-top-img{width:100%; max-width:360px; aspect-ratio:16/10; margin:8px 0 10px}
+.asakan-top-title{font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;
+  font-weight:900; font-size:21px; line-height:1.4; text-wrap:balance; margin:0 0 8px}
+.asakan-top-title a{color:var(--ink)}
+.asakan-lead{font-size:13.5px; color:var(--ink); margin:0 0 8px}
+.asakan-substories{display:grid; grid-template-columns:repeat(2,1fr); gap:16px}
+@media(min-width:640px){.asakan-substories{grid-template-columns:repeat(4,1fr)}}
+.asakan-sub{position:relative; border-top:1px solid var(--line); padding-top:10px; cursor:pointer}
+.asakan-sub .thumb.asakan-sub-img{width:auto; max-width:160px; height:auto; max-height:120px; min-height:60px;
+  aspect-ratio:auto; background:none; margin:0 0 8px}
+.asakan-sub .thumb.asakan-sub-img img{width:auto; height:auto; max-width:160px; max-height:120px; object-fit:contain}
+.asakan-sub .ph.asakan-sub-img{width:100%; max-width:160px; aspect-ratio:4/3; margin:0 0 8px}
+.asakan-sub-title{font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;
+  font-weight:700; font-size:13.5px; line-height:1.45; text-wrap:balance; margin:0 0 4px}
+.asakan-sub-title a{color:var(--ink)}
+.asakan-sub-meta{font-size:11px; color:var(--muted); margin:0}
+
+/* ── セクション見出し共通（本日のピックアップニュース／締切間近／カテゴリ面／紙面一覧） ── */
+.asakan-section-title{font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;
+  font-weight:700; font-size:16px; border-bottom:2px solid var(--ink); padding-bottom:6px;
+  margin:26px 0 10px; display:flex; align-items:baseline; gap:8px}
+.asakan-shimen-cnt{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+  font-weight:400; font-size:12px; color:var(--muted); margin-left:auto}
+
+/* ── 本日のピックアップニュース ── */
+.asakan-news-list{list-style:none; margin:0; padding:0}
+.asakan-news-item{display:flex; flex-wrap:wrap; align-items:baseline; gap:8px; padding:9px 0;
+  border-bottom:1px solid var(--line); font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif; font-size:14.5px}
+.asakan-news-tag{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+  font-size:10.5px; font-weight:700; color:var(--indigo); border:1px solid var(--indigo);
+  padding:.15em .5em; border-radius:2px; flex-shrink:0}
+.asakan-news-item a{color:var(--ink); flex:1 1 auto; min-width:0}
+.asakan-news-maker{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+  font-size:10.5px; color:var(--muted); width:100%}
+@media(min-width:640px){.asakan-news-maker{width:auto; margin-left:auto}}
+
+/* ── 締切間近 ── */
+.asakan-lottery{border:2px solid var(--accent); padding:14px 16px 16px; margin-top:24px}
+.asakan-lottery-title{color:var(--accent); border-bottom-color:var(--accent); margin-top:0}
+.asakan-lottery-list{list-style:none; margin:0; padding:0}
+.asakan-lottery-item{display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 10px; padding:8px 0;
+  border-bottom:1px dashed var(--line)}
+.asakan-lottery-item:last-child{border-bottom:none}
+.asakan-deadline{font-weight:900; color:var(--accent); font-size:12.5px; flex-shrink:0}
+.asakan-lottery-item a{color:var(--ink); font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif}
+.asakan-lottery-shop{font-size:11px; color:var(--muted); width:100%}
+@media(min-width:640px){.asakan-lottery-shop{width:auto; margin-left:auto}}
+
+/* ── カテゴリ面（そのページのcattabs軸のタブごとに3件程度＋誘導リンク） ── */
+.asakan-catfaces{display:grid; grid-template-columns:1fr; gap:20px 28px; margin-top:24px}
+@media(min-width:640px){.asakan-catfaces{grid-template-columns:repeat(2,1fr)}}
+.asakan-catface-title{font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;
+  font-weight:700; font-size:14.5px; border-bottom:1px solid var(--ink); padding-bottom:5px; margin:0 0 6px}
+.asakan-catface-list{list-style:none; margin:0 0 6px; padding:0}
+.asakan-catface-list li{padding:6px 0; border-bottom:1px solid var(--line); display:flex;
+  justify-content:space-between; gap:10px; font-size:12.5px}
+.asakan-catface-list a{color:var(--ink); min-width:0}
+.asakan-catface-meta{color:var(--muted); font-size:11px; flex-shrink:0; white-space:nowrap}
+.asakan-more{appearance:none; font-family:inherit; border:0; background:none; padding:0; cursor:pointer;
+  font-size:11.5px; font-weight:700; color:var(--indigo)}
+.asakan-more:hover{text-decoration:underline}
+.asakan-more:focus-visible{outline:2px solid var(--indigo); outline-offset:2px}
+
+/* ── 紙面一覧（従来の日付グループ一覧。.flist/.frow は既存CSSをそのまま流用） ── */
+.asakan-shimen-title{margin-top:26px}
 .flist{background:var(--surface); border:1px solid var(--line); border-radius:10px; overflow:hidden}
 .flist .frow{display:flex; gap:12px; padding:11px 14px; border-top:1px solid var(--line); align-items:center; cursor:pointer}
 .flist .frow:first-child{border-top:0}
@@ -378,7 +470,7 @@ img{max-width:100%}
 <header class="mast">
   <div class="mast-in">
     <div class="brand">新商品<b>ウォッチ</b></div>
-    <div class="today num">2026年8月9日（日） 08:08更新</div>
+    <div class="today num">2026年8月10日（月） 02:23更新</div>
     <a class="theme-toggle" href="https://docs.google.com/spreadsheets/d/1g8d_tYSgmwsxorlktBztrlCTUnI-iZyjKpcMLdGV1KU/edit" target="_blank" rel="noopener">📋 台帳</a>
     <div class="switch" role="tablist" aria-label="デザイン案の切り替え">
       <button id="bA" class="on" onclick="show('A')">ポータル</button>
@@ -415,10 +507,19 @@ img{max-width:100%}
 <button id="backToTop" class="back-to-top" type="button" aria-label="トップへ戻る" onclick="scrollToTop()">↑</button>
 
 <script>
-const DATA = [{"key": "bspprize:https://bsp-prize.jp/item/2754457/", "cat": "フィギュア", "title": "【プレミアムバンダイ】ドラゴンボールDAIMA ワールドコレクタブルフィギュアPREMIUM vol.3", "maker": "BANDAI SPIRITS", "date": "2026-07", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://bsp-prize.jp/item/2754457/", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://bsp-prize.jp/files_thumbnail/%E5%85%B1%E6%9C%89%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80/item/e-banpresto/2026.01/2754457.jpg/250w_250h.jpg", "first_seen": "2026-08-03", "en_q": "Dragon Ball Daima World Collectable Figure Premium vol.3", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bspprize:https://bsp-prize.jp/item/2789446/", "cat": "フィギュア", "title": "ドラゴンボールZ MATCH MAKERS 人造人間16号（VSセル）", "maker": "BANDAI SPIRITS", "date": "2026-07-07", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://bsp-prize.jp/item/2789446/", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://bsp-prize.jp/files_thumbnail/%E5%85%B1%E6%9C%89%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80/item/2026.07/2789446_a.jpg/250w_250h.jpg", "first_seen": "2026-08-03", "en_q": "Dragon Ball Z MATCH MAKERS Android 16 VS Cell figure", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bspprize:https://bsp-prize.jp/item/2789447/", "cat": "フィギュア", "title": "ドラゴンボールZ MATCH MAKERS セル（VS人造人間16号）", "maker": "BANDAI SPIRITS", "date": "2026-07-07", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://bsp-prize.jp/item/2789447/", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://bsp-prize.jp/files_thumbnail/%E5%85%B1%E6%9C%89%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80/item/2026.07/2789447_a.jpg/250w_250h.jpg", "first_seen": "2026-08-03", "en_q": "Dragon Ball Z MATCH MAKERS Cell VS Android 16 figure", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bspprize:https://bsp-prize.jp/item/2794208/", "cat": "フィギュア", "title": "ドラゴンボールZ BLOOD OF SAIYANS-超サイヤ人孫悟空-Ⅱ", "maker": "BANDAI SPIRITS", "date": "2026-08-04", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://bsp-prize.jp/item/2794208/", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://bsp-prize.jp/files_thumbnail/%E5%85%B1%E6%9C%89%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80/item/2026.08/2794208_a.jpg/250w_250h.jpg", "first_seen": "2026-08-03", "en_q": "Dragon Ball Z BLOOD OF SAIYANS Super Saiyan Goku II", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bspprize:https://bsp-prize.jp/item/2808740/", "cat": "フィギュア", "title": "ドラゴンボール超 めちゃもふぐっと ほっこりいやされぬいぐるみ～カリン～", "maker": "BANDAI SPIRITS", "date": "2026-07-09", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://bsp-prize.jp/item/2808740/", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://bsp-prize.jp/files_thumbnail/%E5%85%B1%E6%9C%89%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80/item/2026.07/2808740_a.jpg/250w_250h.jpg", "first_seen": "2026-08-03", "en_q": "Dragon Ball Super Korin Mechamofugutto plush", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bspprize:https://bsp-prize.jp/item/2870050/", "cat": "フィギュア", "title": "ドラゴンボール 超戦士シールウエハース 10TH ANNIVERSARY FIGURE", "maker": "BANDAI SPIRITS", "date": "2026-11", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://bsp-prize.jp/item/2870050/", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://bsp-prize.jp/files_thumbnail/%E5%85%B1%E6%9C%89%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80/item/2026.11/pre/2870050_1.jpg/250w_250h.jpg", "first_seen": "2026-08-06", "en_q": "Dragon Ball Super Warrior Seal Wafer 10th Anniversary Figure", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "dragonball:https://www.dbs-cardgame.com/fw/jp/products/01_401.html", "cat": "トレカ", "title": "STORY BOOSTER 01 [ST01]", "maker": "バンダイ", "date": "2026-08-08", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 330, "url": "https://www.dbs-cardgame.com/fw/jp/products/01_401.html", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://www.dbs-cardgame.com/fw/bccard/jp/news/2026/04/16/vPwteBkMiGXGn5Zz/ST01_jp.png", "first_seen": "2026-08-01", "en_q": "STORY BOOSTER 01 ST01 booster pack", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "dragonball:https://www.dbs-cardgame.com/fw/jp/products/01_422.html", "cat": "トレカ", "title": "ブースターパック BRIGHTNESS OF HOPE [FB11]", "maker": "バンダイ", "date": "2026-09-12", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 240, "url": "https://www.dbs-cardgame.com/fw/jp/products/01_422.html", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://www.dbs-cardgame.com/fw/bccard/jp/news/2026/07/13/4Oupen8o11wtcmPh/FB11_jp.png", "first_seen": "2026-08-01", "en_q": "Dragon Ball Fusion World BRIGHTNESS OF HOPE FB11 booster pack", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "dragonball:https://www.dbs-cardgame.com/fw/jp/products/01_477.html", "cat": "トレカ", "title": "ブースターパック REACH THE GOD [FB12]", "maker": "バンダイ", "date": "2026-12-12", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 240, "url": "https://www.dbs-cardgame.com/fw/jp/products/01_477.html", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://www.dbs-cardgame.com/fw/renewal01/images/pages/noimage.webp", "first_seen": "2026-08-06", "en_q": "Dragon Ball Super FB12 REACH THE GOD booster pack", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "dragonball:https://www.dbs-cardgame.com/fw/jp/products/01_478.html", "cat": "トレカ", "title": "スタートデッキ 地球育ちのサイヤ人[FS13]", "maker": "バンダイ", "date": "2026-12-12", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 1650, "url": "https://www.dbs-cardgame.com/fw/jp/products/01_478.html", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://www.dbs-cardgame.com/fw/renewal01/images/pages/noimage.webp", "first_seen": "2026-08-06", "en_q": "Dragon Ball Super FS13 Earth Bred Saiyan starter deck", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "dragonball:https://www.dbs-cardgame.com/fw/jp/products/01_479.html", "cat": "トレカ", "title": "スタートデッキ サイヤ人の王子[FS14]", "maker": "バンダイ", "date": "2026-12-12", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 1650, "url": "https://www.dbs-cardgame.com/fw/jp/products/01_479.html", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://www.dbs-cardgame.com/fw/renewal01/images/pages/noimage.webp", "first_seen": "2026-08-06", "en_q": "Dragon Ball Super FS14 Prince of Saiyans starter deck", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "gashapon:https://gashapon.jp/products/detail.php?jan_code=4570118196569000", "cat": "フィギュア", "title": "ドラゴンボール めじるしアクセサリー4", "maker": "BANDAI", "date": "2026-08", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 300, "url": "https://gashapon.jp/products/detail.php?jan_code=4570118196569000", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://bandai-a.akamaihd.net/bc/img/model/b/1000255261_1.jpg", "first_seen": "2026-08-03", "en_q": "Dragon Ball Mejirushi Accessory 4", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "gashapon:https://gashapon.jp/products/detail.php?jan_code=4570118208408000", "cat": "フィギュア", "title": "HGドラゴンボール06 GOKU EDITION2", "maker": "BANDAI", "date": "2026-08", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 500, "url": "https://gashapon.jp/products/detail.php?jan_code=4570118208408000", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://bandai-a.akamaihd.net/bc/img/model/b/1000255286_1.jpg", "first_seen": "2026-08-03", "en_q": "HG Dragon Ball 06 Goku Edition 2 figure", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "gashapon:https://gashapon.jp/products/detail.php?jan_code=4570118208422000", "cat": "フィギュア", "title": "ドラゴンボール DUAL BURST", "maker": "BANDAI", "date": "2026-07", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 500, "url": "https://gashapon.jp/products/detail.php?jan_code=4570118208422000", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://bandai-a.akamaihd.net/bc/img/model/b/1000253582_1.jpg", "first_seen": "2026-08-03", "en_q": "Dragon Ball DUAL BURST", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "gashapon:https://gashapon.jp/products/detail.php?jan_code=4582770027501000", "cat": "フィギュア", "title": "【フラットガシャポン】ドラゴンボール クリアラバーコースター2", "maker": "BANDAI", "date": "2026-07", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 400, "url": "https://gashapon.jp/products/detail.php?jan_code=4582770027501000", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://bandai-a.akamaihd.net/bc/img/model/b/1000253620_1.jpg", "first_seen": "2026-08-03", "en_q": "Dragon Ball Clear Rubber Coaster 2", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "ichibankuji:https://1kuji.com/products/db_fa3", "cat": "フィギュア", "title": "一番くじ ドラゴンボール Fantastic Adventure 3", "maker": "BANDAI SPIRITS", "date": "2026-11-28", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 800, "url": "https://1kuji.com/products/db_fa3", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://assets.1kuji.com/uploads/product/image/10791/17d21115-70f2-4620-8e5f-0d6eb6732e01.webp", "first_seen": "2026-08-06", "en_q": "Ichiban Kuji Dragon Ball Fantastic Adventure 3", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "ichibankuji:https://1kuji.com/products/db_gt", "cat": "フィギュア", "title": "一番くじ ドラゴンボールGT", "maker": "BANDAI SPIRITS", "date": "2026-08-22", "preorder_start": "2026-08-24 17:00", "lottery_deadline": "", "kind": "発売", "price": 790, "url": "https://1kuji.com/products/db_gt", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://assets.1kuji.com/uploads/product/image/10725/2461f8c7-c647-4111-b22e-5ad165614809.png", "first_seen": "2026-08-01", "en_q": "Ichiban Kuji Dragon Ball GT", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "ichibankuji:https://1kuji.com/products/db_sb", "cat": "フィギュア", "title": "一番くじ ドラゴンボール スペクタクルバトル", "maker": "BANDAI SPIRITS", "date": "2026-07-11", "preorder_start": "2026-07-14 13:00", "lottery_deadline": "", "kind": "発売", "price": 800, "url": "https://1kuji.com/products/db_sb", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://assets.1kuji.com/uploads/product/image/10693/8cd4838b-0a2e-42be-9f72-e8673f1eca50.png", "first_seen": "2026-08-01", "en_q": "Ichiban Kuji Dragon Ball Spectacle Battle", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "ichibankuji:https://1kuji.com/products/db_z8", "cat": "フィギュア", "title": "一番くじ ドラゴンボール SPIRIT OF THE SAIYAN", "maker": "BANDAI SPIRITS", "date": "2026-10-17", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 790, "url": "https://1kuji.com/products/db_z8", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://assets.1kuji.com/uploads/product/image/10727/89fd817d-9d86-4135-9eb8-7274bc397f7b.webp", "first_seen": "2026-08-06", "en_q": "Ichiban Kuji Dragon Ball SPIRIT OF THE SAIYAN", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "megahobby:https://p-bandai.jp/item/item-1000248652/", "cat": "フィギュア", "title": "デスクトップリアルマッコイ ドラゴンボールZ 05 孫悟空＆チチ -限定復刻仕様版-", "maker": "メガハウス", "date": "2026-10", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 14080, "url": "https://p-bandai.jp/item/item-1000248652/", "series": ["ドラゴンボール"], "maker_groups": ["メガハウス"], "resale": false, "img": "https://www.megahobby.jp/images/item/item_0000005725_Sx0gCNaXzlso_02.jpg", "first_seen": "2026-08-03", "en_q": "Desktop Real McCoy 05 Dragon Ball Z Goku Chichi", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "megahobby:https://p-bandai.jp/item/item-1000251628/", "cat": "フィギュア", "title": "るかっぷ ドラゴンボールDAIMA超サイヤ人 孫悟空(ミニ)＆超サイヤ人 ベジータ(ミニ) セット【限定座布団付き】", "maker": "メガハウス", "date": "2026-12", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 9350, "url": "https://p-bandai.jp/item/item-1000251628/", "series": ["ドラゴンボール"], "maker_groups": ["メガハウス"], "resale": false, "img": "https://www.megahobby.jp/images/item/item_0000005897_3j1yTFIhtOB5_02.jpg", "first_seen": "2026-08-06", "en_q": "LookUp Dragon Ball Daima Super Saiyan Goku Vegeta Mini figure", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "megahobby:https://p-bandai.jp/item/item-1000255183/", "cat": "フィギュア", "title": "デスクトップリアルマッコイ ドラゴンボール 06 孫悟空＆ブルマ -限定復刻仕様版-", "maker": "メガハウス", "date": "2027-02", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 12980, "url": "https://p-bandai.jp/item/item-1000255183/", "series": ["ドラゴンボール"], "maker_groups": ["メガハウス"], "resale": false, "img": "https://www.megahobby.jp/images/item/item_0000005988_tDgVfQBwVU6A_02.jpg", "first_seen": "2026-08-06", "en_q": "Desktop Real McCoy Dragon Ball 06 Son Goku Bulma figure", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "megahobby:https://www.megahobby.jp/products/item/5754/", "cat": "フィギュア", "title": "とびマス  ドラゴンボールvol.2", "maker": "メガハウス", "date": "2026-09", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 1045, "url": "https://www.megahobby.jp/products/item/5754/", "series": ["ドラゴンボール"], "maker_groups": ["メガハウス"], "resale": false, "img": "https://www.megahobby.jp/images/item/item_0000005754_EfQH7GJ4SkL9_02.jpg", "first_seen": "2026-08-03", "en_q": "Tobimas Dragon Ball Vol 2 figure", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "megahobby:https://www.megahobby.jp/products/item/5766/", "cat": "フィギュア", "title": "デスクトップリアルマッコイ ドラゴンボールZ 05 孫悟空＆チチ -限定復刻仕様版-", "maker": "メガハウス", "date": "2026-10", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 14080, "url": "https://www.megahobby.jp/products/item/5766/", "series": ["ドラゴンボール"], "maker_groups": ["メガハウス"], "resale": false, "img": "https://www.megahobby.jp/images/item/item_0000005766_UvhpQ7lwSnPH_02.jpg", "first_seen": "2026-08-03", "en_q": "Desktop Real McCoy 05 Dragon Ball Z Goku Chichi", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "megahobby:https://www.megahobby.jp/products/item/5869/", "cat": "フィギュア", "title": "るかっぷ ドラゴンボールDAIMA 超サイヤ人 ベジータ(ミニ)", "maker": "メガハウス", "date": "2026-12", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 4620, "url": "https://www.megahobby.jp/products/item/5869/", "series": ["ドラゴンボール"], "maker_groups": ["メガハウス"], "resale": false, "img": "https://www.megahobby.jp/images/item/item_0000005869_68msV7wklCRA_02.jpg", "first_seen": "2026-08-06", "en_q": "LookUp Dragon Ball Daima Super Saiyan Vegeta Mini figure", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "megahobby:https://www.megahobby.jp/products/item/5870/", "cat": "フィギュア", "title": "るかっぷ ドラゴンボールDAIMA 超サイヤ人 孫悟空(ミニ)", "maker": "メガハウス", "date": "2026-12", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 4620, "url": "https://www.megahobby.jp/products/item/5870/", "series": ["ドラゴンボール"], "maker_groups": ["メガハウス"], "resale": false, "img": "https://www.megahobby.jp/images/item/item_0000005870_dJc6FkjKmMWm_02.jpg", "first_seen": "2026-08-06", "en_q": "LookUp Dragon Ball Daima Super Saiyan Goku Mini figure", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "megahobby:https://www.megahobby.jp/products/item/6016/", "cat": "フィギュア", "title": "とびマス  ドラゴンボールvol.3", "maker": "メガハウス", "date": "2027-01", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 1045, "url": "https://www.megahobby.jp/products/item/6016/", "series": ["ドラゴンボール"], "maker_groups": ["メガハウス"], "resale": false, "img": "https://www.megahobby.jp/images/item/item_0000006016_KmEvqxiLZ3LY_02.jpg", "first_seen": "2026-08-06", "en_q": "Tobimasu Dragon Ball figure", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "megahobby:https://www.megahobby.jp/products/item/6039/", "cat": "フィギュア", "title": "デスクトップリアルマッコイ ドラゴンボール 06 孫悟空＆ブルマ -限定復刻仕様版-", "maker": "メガハウス", "date": "2027-02", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 12980, "url": "https://www.megahobby.jp/products/item/6039/", "series": ["ドラゴンボール"], "maker_groups": ["メガハウス"], "resale": false, "img": "https://www.megahobby.jp/images/item/item_0000006039_KaRN5bpOVPRm_02.jpg", "first_seen": "2026-08-06", "en_q": "Desktop Real McCoy Dragon Ball Goku Bulma figure", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "pbandai:https://p-bandai.jp/item/item-1000255471/", "cat": "フィギュア", "title": "ドラゴンボールZ 魔人ブウのベル...", "maker": "", "date": "2026-10", "preorder_start": "2026-07-28 10:00", "lottery_deadline": "", "kind": "予約", "price": 16500, "url": "https://p-bandai.jp/item/item-1000255471/", "series": ["ドラゴンボール"], "maker_groups": [], "resale": false, "img": "https://bandai-a.akamaihd.net/bc/img/model/m/1000255471_1.jpg", "first_seen": "2026-08-03", "en_q": "Dragon Ball Z Majin Buu Belt", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "pbandai:https://p-bandai.jp/item/item-1000255473/", "cat": "フィギュア", "title": "ドラゴンボールZ ミスター・サタ...", "maker": "", "date": "2026-10", "preorder_start": "2026-07-28 10:00", "lottery_deadline": "", "kind": "予約", "price": 19800, "url": "https://p-bandai.jp/item/item-1000255473/", "series": ["ドラゴンボール"], "maker_groups": [], "resale": false, "img": "https://bandai-a.akamaihd.net/bc/img/model/m/1000255473_1.jpg", "first_seen": "2026-08-03", "en_q": "Dragon Ball Z Mister Satan Belt", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "pbandai:https://p-bandai.jp/item/item-1000255474/", "cat": "フィギュア", "title": "ドラゴンボールDAIMA　ポタラの...", "maker": "", "date": "2026-10", "preorder_start": "2026-07-28 10:00", "lottery_deadline": "", "kind": "予約", "price": 12100, "url": "https://p-bandai.jp/item/item-1000255474/", "series": ["ドラゴンボール"], "maker_groups": [], "resale": false, "img": "https://bandai-a.akamaihd.net/bc/img/model/m/1000255474_1.jpg", "first_seen": "2026-08-03", "en_q": "Dragon Ball DAIMA Potara Earrings", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "taitoprize:https://www.taito.co.jp/prize/0479824110", "cat": "フィギュア", "title": "ドラゴンボールZ History Box 魔人ブウ", "maker": "（株）ＢＡＮＤＡＩ　ＳＰＩＲＩＴＳ", "date": "2026-07-28", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.taito.co.jp/prize/0479824110", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://www.taito.co.jp/Content/images/zone/prize/479824110.jpg", "first_seen": "2026-08-03", "en_q": "Dragon Ball Z History Box Majin Buu figure", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "taitoprize:https://www.taito.co.jp/prize/0479946210", "cat": "フィギュア", "title": "ドラゴンボールZ BLOOD OF SAIYANS-超サイヤ人孫悟空-Ⅱ", "maker": "（株）ＢＡＮＤＡＩ　ＳＰＩＲＩＴＳ", "date": "2026-08-03", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.taito.co.jp/prize/0479946210", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://www.taito.co.jp/Content/images/zone/prize/479946210.jpg", "first_seen": "2026-08-03", "en_q": "Dragon Ball Z Blood of Saiyans Super Saiyan Goku II", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "taitoprize:https://www.taito.co.jp/prize/0479950210", "cat": "フィギュア", "title": "ドラゴンボール超 G×materia GOGETA", "maker": "（株）ＢＡＮＤＡＩ　ＳＰＩＲＩＴＳ", "date": "2026-08-17", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.taito.co.jp/prize/0479950210", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://www.taito.co.jp/Content/images/zone/prize/479950210.jpg", "first_seen": "2026-08-03", "en_q": "Dragon Ball Super G x Materia Gogeta figure", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "tamashii:https://tamashiiweb.com/item/15734/", "cat": "フィギュア", "title": "【DRAGON BALL S.H.Figuarts Collection「孫悟空〈冒険の彼方へ〉」セット】孫悟空〈冒険の彼方へ〉", "maker": "S.H.Figuarts", "date": "2026-10", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 13200, "url": "https://tamashiiweb.com/item/15734/", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://tamashiiweb.com/storage/images/products/thumbnail/MiCV9c9gFbZQzWjqxjEUuUmeqqzervEMDnNUA7Pe.jpg", "first_seen": "2026-08-03", "en_q": "Dragon Ball S.H.Figuarts Son Goku Beyond Adventure", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}];
+const DATA = [{"key": "bspprize:https://bsp-prize.jp/item/2754457/", "cat": "フィギュア", "title": "【プレミアムバンダイ】ドラゴンボールDAIMA ワールドコレクタブルフィギュアPREMIUM vol.3", "maker": "BANDAI SPIRITS", "date": "2026-07", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://bsp-prize.jp/item/2754457/", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://bsp-prize.jp/files_thumbnail/%E5%85%B1%E6%9C%89%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80/item/e-banpresto/2026.01/2754457.jpg/250w_250h.jpg", "first_seen": "2026-08-03", "en_q": "Dragon Ball Daima World Collectable Figure Premium vol.3", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bspprize:https://bsp-prize.jp/item/2789446/", "cat": "フィギュア", "title": "ドラゴンボールZ MATCH MAKERS 人造人間16号（VSセル）", "maker": "BANDAI SPIRITS", "date": "2026-07-07", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://bsp-prize.jp/item/2789446/", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://bsp-prize.jp/files_thumbnail/%E5%85%B1%E6%9C%89%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80/item/2026.07/2789446_a.jpg/250w_250h.jpg", "first_seen": "2026-08-03", "en_q": "Dragon Ball Z MATCH MAKERS Android 16 VS Cell figure", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bspprize:https://bsp-prize.jp/item/2789447/", "cat": "フィギュア", "title": "ドラゴンボールZ MATCH MAKERS セル（VS人造人間16号）", "maker": "BANDAI SPIRITS", "date": "2026-07-07", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://bsp-prize.jp/item/2789447/", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://bsp-prize.jp/files_thumbnail/%E5%85%B1%E6%9C%89%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80/item/2026.07/2789447_a.jpg/250w_250h.jpg", "first_seen": "2026-08-03", "en_q": "Dragon Ball Z MATCH MAKERS Cell VS Android 16 figure", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bspprize:https://bsp-prize.jp/item/2794208/", "cat": "フィギュア", "title": "ドラゴンボールZ BLOOD OF SAIYANS-超サイヤ人孫悟空-Ⅱ", "maker": "BANDAI SPIRITS", "date": "2026-08-04", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://bsp-prize.jp/item/2794208/", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://bsp-prize.jp/files_thumbnail/%E5%85%B1%E6%9C%89%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80/item/2026.08/2794208_a.jpg/250w_250h.jpg", "first_seen": "2026-08-03", "en_q": "Dragon Ball Z BLOOD OF SAIYANS Super Saiyan Goku II", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": "", "picked": "sub"}, {"key": "bspprize:https://bsp-prize.jp/item/2808740/", "cat": "フィギュア", "title": "ドラゴンボール超 めちゃもふぐっと ほっこりいやされぬいぐるみ～カリン～", "maker": "BANDAI SPIRITS", "date": "2026-07-09", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://bsp-prize.jp/item/2808740/", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://bsp-prize.jp/files_thumbnail/%E5%85%B1%E6%9C%89%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80/item/2026.07/2808740_a.jpg/250w_250h.jpg", "first_seen": "2026-08-03", "en_q": "Dragon Ball Super Korin Mechamofugutto plush", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bspprize:https://bsp-prize.jp/item/2870050/", "cat": "フィギュア", "title": "ドラゴンボール 超戦士シールウエハース 10TH ANNIVERSARY FIGURE", "maker": "BANDAI SPIRITS", "date": "2026-11", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://bsp-prize.jp/item/2870050/", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://bsp-prize.jp/files_thumbnail/%E5%85%B1%E6%9C%89%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80/item/2026.11/pre/2870050_1.jpg/250w_250h.jpg", "first_seen": "2026-08-06", "en_q": "Dragon Ball Super Warrior Seal Wafer 10th Anniversary Figure", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "dragonball:https://www.dbs-cardgame.com/fw/jp/products/01_401.html", "cat": "トレカ", "title": "STORY BOOSTER 01 [ST01]", "maker": "バンダイ", "date": "2026-08-08", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 330, "url": "https://www.dbs-cardgame.com/fw/jp/products/01_401.html", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://www.dbs-cardgame.com/fw/bccard/jp/news/2026/04/16/vPwteBkMiGXGn5Zz/ST01_jp.png", "first_seen": "2026-08-01", "en_q": "STORY BOOSTER 01 ST01 booster pack", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": "", "picked": "top"}, {"key": "dragonball:https://www.dbs-cardgame.com/fw/jp/products/01_422.html", "cat": "トレカ", "title": "ブースターパック BRIGHTNESS OF HOPE [FB11]", "maker": "バンダイ", "date": "2026-09-12", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 240, "url": "https://www.dbs-cardgame.com/fw/jp/products/01_422.html", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://www.dbs-cardgame.com/fw/bccard/jp/news/2026/07/13/4Oupen8o11wtcmPh/FB11_jp.png", "first_seen": "2026-08-01", "en_q": "Dragon Ball Fusion World BRIGHTNESS OF HOPE FB11 booster pack", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "dragonball:https://www.dbs-cardgame.com/fw/jp/products/01_477.html", "cat": "トレカ", "title": "ブースターパック REACH THE GOD [FB12]", "maker": "バンダイ", "date": "2026-12-12", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 240, "url": "https://www.dbs-cardgame.com/fw/jp/products/01_477.html", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://www.dbs-cardgame.com/fw/renewal01/images/pages/noimage.webp", "first_seen": "2026-08-06", "en_q": "Dragon Ball Super FB12 REACH THE GOD booster pack", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "dragonball:https://www.dbs-cardgame.com/fw/jp/products/01_478.html", "cat": "トレカ", "title": "スタートデッキ 地球育ちのサイヤ人[FS13]", "maker": "バンダイ", "date": "2026-12-12", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 1650, "url": "https://www.dbs-cardgame.com/fw/jp/products/01_478.html", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://www.dbs-cardgame.com/fw/renewal01/images/pages/noimage.webp", "first_seen": "2026-08-06", "en_q": "Dragon Ball Super FS13 Earth Bred Saiyan starter deck", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "dragonball:https://www.dbs-cardgame.com/fw/jp/products/01_479.html", "cat": "トレカ", "title": "スタートデッキ サイヤ人の王子[FS14]", "maker": "バンダイ", "date": "2026-12-12", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 1650, "url": "https://www.dbs-cardgame.com/fw/jp/products/01_479.html", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://www.dbs-cardgame.com/fw/renewal01/images/pages/noimage.webp", "first_seen": "2026-08-06", "en_q": "Dragon Ball Super FS14 Prince of Saiyans starter deck", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "gashapon:https://gashapon.jp/products/detail.php?jan_code=4570118196569000", "cat": "フィギュア", "title": "ドラゴンボール めじるしアクセサリー4", "maker": "BANDAI", "date": "2026-08", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 300, "url": "https://gashapon.jp/products/detail.php?jan_code=4570118196569000", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://bandai-a.akamaihd.net/bc/img/model/b/1000255261_1.jpg", "first_seen": "2026-08-03", "en_q": "Dragon Ball Mejirushi Accessory 4", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "gashapon:https://gashapon.jp/products/detail.php?jan_code=4570118208408000", "cat": "フィギュア", "title": "HGドラゴンボール06 GOKU EDITION2", "maker": "BANDAI", "date": "2026-08", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 500, "url": "https://gashapon.jp/products/detail.php?jan_code=4570118208408000", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://bandai-a.akamaihd.net/bc/img/model/b/1000255286_1.jpg", "first_seen": "2026-08-03", "en_q": "HG Dragon Ball 06 Goku Edition 2 figure", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "gashapon:https://gashapon.jp/products/detail.php?jan_code=4570118208422000", "cat": "フィギュア", "title": "ドラゴンボール DUAL BURST", "maker": "BANDAI", "date": "2026-07", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 500, "url": "https://gashapon.jp/products/detail.php?jan_code=4570118208422000", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://bandai-a.akamaihd.net/bc/img/model/b/1000253582_1.jpg", "first_seen": "2026-08-03", "en_q": "Dragon Ball DUAL BURST", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "gashapon:https://gashapon.jp/products/detail.php?jan_code=4582770027501000", "cat": "フィギュア", "title": "【フラットガシャポン】ドラゴンボール クリアラバーコースター2", "maker": "BANDAI", "date": "2026-07", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 400, "url": "https://gashapon.jp/products/detail.php?jan_code=4582770027501000", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://bandai-a.akamaihd.net/bc/img/model/b/1000253620_1.jpg", "first_seen": "2026-08-03", "en_q": "Dragon Ball Clear Rubber Coaster 2", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "ichibankuji:https://1kuji.com/products/db_fa3", "cat": "フィギュア", "title": "一番くじ ドラゴンボール Fantastic Adventure 3", "maker": "BANDAI SPIRITS", "date": "2026-11-28", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 800, "url": "https://1kuji.com/products/db_fa3", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://assets.1kuji.com/uploads/product/image/10791/17d21115-70f2-4620-8e5f-0d6eb6732e01.webp", "first_seen": "2026-08-06", "en_q": "Ichiban Kuji Dragon Ball Fantastic Adventure 3", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "ichibankuji:https://1kuji.com/products/db_gt", "cat": "フィギュア", "title": "一番くじ ドラゴンボールGT", "maker": "BANDAI SPIRITS", "date": "2026-08-22", "preorder_start": "2026-08-24 17:00", "lottery_deadline": "", "kind": "発売", "price": 790, "url": "https://1kuji.com/products/db_gt", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://assets.1kuji.com/uploads/product/image/10725/2461f8c7-c647-4111-b22e-5ad165614809.png", "first_seen": "2026-08-01", "en_q": "Ichiban Kuji Dragon Ball GT", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": "", "picked": "sub"}, {"key": "ichibankuji:https://1kuji.com/products/db_sb", "cat": "フィギュア", "title": "一番くじ ドラゴンボール スペクタクルバトル", "maker": "BANDAI SPIRITS", "date": "2026-07-11", "preorder_start": "2026-07-14 13:00", "lottery_deadline": "", "kind": "発売", "price": 800, "url": "https://1kuji.com/products/db_sb", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://assets.1kuji.com/uploads/product/image/10693/8cd4838b-0a2e-42be-9f72-e8673f1eca50.png", "first_seen": "2026-08-01", "en_q": "Ichiban Kuji Dragon Ball Spectacle Battle", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "ichibankuji:https://1kuji.com/products/db_z8", "cat": "フィギュア", "title": "一番くじ ドラゴンボール SPIRIT OF THE SAIYAN", "maker": "BANDAI SPIRITS", "date": "2026-10-17", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 790, "url": "https://1kuji.com/products/db_z8", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://assets.1kuji.com/uploads/product/image/10727/89fd817d-9d86-4135-9eb8-7274bc397f7b.webp", "first_seen": "2026-08-06", "en_q": "Ichiban Kuji Dragon Ball SPIRIT OF THE SAIYAN", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "megahobby:https://p-bandai.jp/item/item-1000248652/", "cat": "フィギュア", "title": "デスクトップリアルマッコイ ドラゴンボールZ 05 孫悟空＆チチ -限定復刻仕様版-", "maker": "メガハウス", "date": "2026-10", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 14080, "url": "https://p-bandai.jp/item/item-1000248652/", "series": ["ドラゴンボール"], "maker_groups": ["メガハウス"], "resale": false, "img": "https://www.megahobby.jp/images/item/item_0000005725_Sx0gCNaXzlso_02.jpg", "first_seen": "2026-08-03", "en_q": "Desktop Real McCoy 05 Dragon Ball Z Goku Chichi", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "megahobby:https://p-bandai.jp/item/item-1000251628/", "cat": "フィギュア", "title": "るかっぷ ドラゴンボールDAIMA超サイヤ人 孫悟空(ミニ)＆超サイヤ人 ベジータ(ミニ) セット【限定座布団付き】", "maker": "メガハウス", "date": "2026-12", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 9350, "url": "https://p-bandai.jp/item/item-1000251628/", "series": ["ドラゴンボール"], "maker_groups": ["メガハウス"], "resale": false, "img": "https://www.megahobby.jp/images/item/item_0000005897_3j1yTFIhtOB5_02.jpg", "first_seen": "2026-08-06", "en_q": "LookUp Dragon Ball Daima Super Saiyan Goku Vegeta Mini figure", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "megahobby:https://p-bandai.jp/item/item-1000255183/", "cat": "フィギュア", "title": "デスクトップリアルマッコイ ドラゴンボール 06 孫悟空＆ブルマ -限定復刻仕様版-", "maker": "メガハウス", "date": "2027-02", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 12980, "url": "https://p-bandai.jp/item/item-1000255183/", "series": ["ドラゴンボール"], "maker_groups": ["メガハウス"], "resale": false, "img": "https://www.megahobby.jp/images/item/item_0000005988_tDgVfQBwVU6A_02.jpg", "first_seen": "2026-08-06", "en_q": "Desktop Real McCoy Dragon Ball 06 Son Goku Bulma figure", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "megahobby:https://www.megahobby.jp/products/item/5754/", "cat": "フィギュア", "title": "とびマス  ドラゴンボールvol.2", "maker": "メガハウス", "date": "2026-09", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 1045, "url": "https://www.megahobby.jp/products/item/5754/", "series": ["ドラゴンボール"], "maker_groups": ["メガハウス"], "resale": false, "img": "https://www.megahobby.jp/images/item/item_0000005754_EfQH7GJ4SkL9_02.jpg", "first_seen": "2026-08-03", "en_q": "Tobimas Dragon Ball Vol 2 figure", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "megahobby:https://www.megahobby.jp/products/item/5766/", "cat": "フィギュア", "title": "デスクトップリアルマッコイ ドラゴンボールZ 05 孫悟空＆チチ -限定復刻仕様版-", "maker": "メガハウス", "date": "2026-10", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 14080, "url": "https://www.megahobby.jp/products/item/5766/", "series": ["ドラゴンボール"], "maker_groups": ["メガハウス"], "resale": false, "img": "https://www.megahobby.jp/images/item/item_0000005766_UvhpQ7lwSnPH_02.jpg", "first_seen": "2026-08-03", "en_q": "Desktop Real McCoy 05 Dragon Ball Z Goku Chichi", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "megahobby:https://www.megahobby.jp/products/item/5869/", "cat": "フィギュア", "title": "るかっぷ ドラゴンボールDAIMA 超サイヤ人 ベジータ(ミニ)", "maker": "メガハウス", "date": "2026-12", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 4620, "url": "https://www.megahobby.jp/products/item/5869/", "series": ["ドラゴンボール"], "maker_groups": ["メガハウス"], "resale": false, "img": "https://www.megahobby.jp/images/item/item_0000005869_68msV7wklCRA_02.jpg", "first_seen": "2026-08-06", "en_q": "LookUp Dragon Ball Daima Super Saiyan Vegeta Mini figure", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "megahobby:https://www.megahobby.jp/products/item/5870/", "cat": "フィギュア", "title": "るかっぷ ドラゴンボールDAIMA 超サイヤ人 孫悟空(ミニ)", "maker": "メガハウス", "date": "2026-12", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 4620, "url": "https://www.megahobby.jp/products/item/5870/", "series": ["ドラゴンボール"], "maker_groups": ["メガハウス"], "resale": false, "img": "https://www.megahobby.jp/images/item/item_0000005870_dJc6FkjKmMWm_02.jpg", "first_seen": "2026-08-06", "en_q": "LookUp Dragon Ball Daima Super Saiyan Goku Mini figure", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "megahobby:https://www.megahobby.jp/products/item/6016/", "cat": "フィギュア", "title": "とびマス  ドラゴンボールvol.3", "maker": "メガハウス", "date": "2027-01", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 1045, "url": "https://www.megahobby.jp/products/item/6016/", "series": ["ドラゴンボール"], "maker_groups": ["メガハウス"], "resale": false, "img": "https://www.megahobby.jp/images/item/item_0000006016_KmEvqxiLZ3LY_02.jpg", "first_seen": "2026-08-06", "en_q": "Tobimasu Dragon Ball figure", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "megahobby:https://www.megahobby.jp/products/item/6039/", "cat": "フィギュア", "title": "デスクトップリアルマッコイ ドラゴンボール 06 孫悟空＆ブルマ -限定復刻仕様版-", "maker": "メガハウス", "date": "2027-02", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 12980, "url": "https://www.megahobby.jp/products/item/6039/", "series": ["ドラゴンボール"], "maker_groups": ["メガハウス"], "resale": false, "img": "https://www.megahobby.jp/images/item/item_0000006039_KaRN5bpOVPRm_02.jpg", "first_seen": "2026-08-06", "en_q": "Desktop Real McCoy Dragon Ball Goku Bulma figure", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "pbandai:https://p-bandai.jp/item/item-1000255471/", "cat": "フィギュア", "title": "ドラゴンボールZ 魔人ブウのベル...", "maker": "", "date": "2026-10", "preorder_start": "2026-07-28 10:00", "lottery_deadline": "", "kind": "予約", "price": 16500, "url": "https://p-bandai.jp/item/item-1000255471/", "series": ["ドラゴンボール"], "maker_groups": [], "resale": false, "img": "https://bandai-a.akamaihd.net/bc/img/model/m/1000255471_1.jpg", "first_seen": "2026-08-03", "en_q": "Dragon Ball Z Majin Buu Belt", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "pbandai:https://p-bandai.jp/item/item-1000255473/", "cat": "フィギュア", "title": "ドラゴンボールZ ミスター・サタ...", "maker": "", "date": "2026-10", "preorder_start": "2026-07-28 10:00", "lottery_deadline": "", "kind": "予約", "price": 19800, "url": "https://p-bandai.jp/item/item-1000255473/", "series": ["ドラゴンボール"], "maker_groups": [], "resale": false, "img": "https://bandai-a.akamaihd.net/bc/img/model/m/1000255473_1.jpg", "first_seen": "2026-08-03", "en_q": "Dragon Ball Z Mister Satan Belt", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "pbandai:https://p-bandai.jp/item/item-1000255474/", "cat": "フィギュア", "title": "ドラゴンボールDAIMA　ポタラの...", "maker": "", "date": "2026-10", "preorder_start": "2026-07-28 10:00", "lottery_deadline": "", "kind": "予約", "price": 12100, "url": "https://p-bandai.jp/item/item-1000255474/", "series": ["ドラゴンボール"], "maker_groups": [], "resale": false, "img": "https://bandai-a.akamaihd.net/bc/img/model/m/1000255474_1.jpg", "first_seen": "2026-08-03", "en_q": "Dragon Ball DAIMA Potara Earrings", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "taitoprize:https://www.taito.co.jp/prize/0479824110", "cat": "フィギュア", "title": "ドラゴンボールZ History Box 魔人ブウ", "maker": "（株）ＢＡＮＤＡＩ　ＳＰＩＲＩＴＳ", "date": "2026-07-28", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.taito.co.jp/prize/0479824110", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://www.taito.co.jp/Content/images/zone/prize/479824110.jpg", "first_seen": "2026-08-03", "en_q": "Dragon Ball Z History Box Majin Buu figure", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "taitoprize:https://www.taito.co.jp/prize/0479946210", "cat": "フィギュア", "title": "ドラゴンボールZ BLOOD OF SAIYANS-超サイヤ人孫悟空-Ⅱ", "maker": "（株）ＢＡＮＤＡＩ　ＳＰＩＲＩＴＳ", "date": "2026-08-03", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.taito.co.jp/prize/0479946210", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://www.taito.co.jp/Content/images/zone/prize/479946210.jpg", "first_seen": "2026-08-03", "en_q": "Dragon Ball Z Blood of Saiyans Super Saiyan Goku II", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": "", "picked": "sub"}, {"key": "taitoprize:https://www.taito.co.jp/prize/0479950210", "cat": "フィギュア", "title": "ドラゴンボール超 G×materia GOGETA", "maker": "（株）ＢＡＮＤＡＩ　ＳＰＩＲＩＴＳ", "date": "2026-08-17", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.taito.co.jp/prize/0479950210", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://www.taito.co.jp/Content/images/zone/prize/479950210.jpg", "first_seen": "2026-08-03", "en_q": "Dragon Ball Super G x Materia Gogeta figure", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": "", "picked": "sub"}, {"key": "tamashii:https://tamashiiweb.com/item/15734/", "cat": "フィギュア", "title": "【DRAGON BALL S.H.Figuarts Collection「孫悟空〈冒険の彼方へ〉」セット】孫悟空〈冒険の彼方へ〉", "maker": "S.H.Figuarts", "date": "2026-10", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 13200, "url": "https://tamashiiweb.com/item/15734/", "series": ["ドラゴンボール"], "maker_groups": ["バンダイ"], "resale": false, "img": "https://tamashiiweb.com/storage/images/products/thumbnail/MiCV9c9gFbZQzWjqxjEUuUmeqqzervEMDnNUA7Pe.jpg", "first_seen": "2026-08-03", "en_q": "Dragon Ball S.H.Figuarts Son Goku Beyond Adventure", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": ""}];
 const STATS = {"new": 212, "changed": 17, "errors": 2};
 const LOTTERY_SITES = [{"name": "ポケモンセンターオンライン", "url": "https://www.pokemoncenter-online.com/"}, {"name": "楽天ブックス", "url": "https://books.rakuten.co.jp/"}, {"name": "あみあみ", "url": "https://www.amiami.jp/"}, {"name": "駿河屋", "url": "https://www.suruga-ya.jp/"}];
-const TODAY_ISO = "2026-08-09";
+// 朝刊ビュー（案C）専用の共通データ（2026-08-10追加）。全ページ共通の内容
+// （src/report.py _build_news_common/_build_lottery_common が生成日1回だけ
+// 計算し、18ページ全てに同じものを埋め込む。DATAの複製ではなく最大5件のみ）。
+// NEWS_COMMON: ニュース直近5件（{key,title,url,maker}の配列）。
+// LOTTERY_COMMON: 締切間近{items:[{title,url,maker,lottery_deadline}の配列、
+// 最大5件], total:該当総数}。サマリー行の「締切間近◯件」は表示上限5件では
+// なくtotalを使う（捏造禁止＝表示件数と集計件数を混同しない）。
+const NEWS_COMMON = [{"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2126530.html", "title": "ガチャ「肩ズンFig.呪術廻戦-参-」8月下旬発売！　「虎杖」・「伏黒」に加え「乙骨」・「脹相」がラインナップ", "url": "https://hobby.watch.impress.co.jp/docs/news/2126530.html", "maker": "タカラトミーアーツ"}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2131370.html", "title": "ハセガワ、プラモデル「VF-1S ストライク バトロイド バルキリー」再販分を本日発売！", "url": "https://hobby.watch.impress.co.jp/docs/news/2131370.html", "maker": "ハセガワ"}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/special/2131643.html", "title": "「ENTRY GRADE」シリーズのガンダム3機が浮世絵の飾りをまとった限定パッケージで8月29日に発売！　お土産にもピッタリ!?【ガンダムベース撮り下ろし】", "url": "https://hobby.watch.impress.co.jp/docs/special/2131643.html", "maker": ""}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/special/2131672.html", "title": "「RE/100 1/100 デナン・ゾン」のサンプルがガンダムベースに展示中。クロスボーン・バンガードの制式量産機が間もなく発送【ガンダムベース撮り下ろし】", "url": "https://hobby.watch.impress.co.jp/docs/special/2131672.html", "maker": ""}, {"key": "prtimes:https://prtimes.jp/main/html/rd/p/000000006.000164816.html", "title": "VTuberグループ「ンニマニティ」所属の『押水結夏』誕生日記念グッズが販売開始！", "url": "https://prtimes.jp/main/html/rd/p/000000006.000164816.html", "maker": "ンニマニティ合同会社"}];
+const LOTTERY_COMMON = {"items": [{"title": "ONE PIECEカードゲーム ブースターパック 世界最強の戦士【OP-17】", "url": "https://cardchusen.com/onepiece/op17-saikyo-no-senshi#card-op17-saikyo-no-senshi-joshin-app", "maker": "Joshin（上新電機）アプリ", "lottery_deadline": "2026-08-10T23:59:00+09:00"}, {"title": "ONE PIECEカードゲーム ブースターパック 世界最強の戦士【OP-17】", "url": "https://cardchusen.com/onepiece/op17-saikyo-no-senshi#card-op17-saikyo-no-senshi-usagiya-tsutaya-tochigi-jonai", "maker": "うさぎやTSUTAYA栃木城内店", "lottery_deadline": "2026-08-10T21:00:00+09:00"}, {"title": "ONE PIECEカードゲーム ブースターパック 世界最強の戦士【OP-17】", "url": "https://cardchusen.com/onepiece/op17-saikyo-no-senshi#card-op17-saikyo-no-senshi-wondergoo-newseido", "maker": "WonderGOO・Ganryu・新星堂 各店", "lottery_deadline": "2026-08-10T20:59:00+09:00"}, {"title": "ONE PIECEカードゲーム ブースターパック 世界最強の戦士【OP-17】", "url": "https://cardchusen.com/onepiece/op17-saikyo-no-senshi#card-op17-saikyo-no-senshi-yamatoya-nakazato", "maker": "ヤマト屋書店TSUTAYA中里店", "lottery_deadline": "2026-08-10T21:00:00+09:00"}, {"title": "ポケモンカードゲーム MEGA 拡張パック 30th CELEBRATION", "url": "https://cardchusen.com/pokeka/30th-celebration#card-30th-celebration-cardbox-ikebukuro", "maker": "カードボックス池袋店", "lottery_deadline": "2026-08-10T23:59:00+09:00"}], "total": 99};
+const TODAY_ISO = "2026-08-10";
 // "default"（トレカ/フィギュア/くじタブ）/ "comic"（出版社別タブ）/
 // "game"（プラットフォーム別タブ）/ "sports"（競技別タブ）/ "jump"（ジャンル別タブ）/
 // "news"（媒体別タブ）。
@@ -1543,10 +1644,6 @@ function renderB(){
 }
 
 /* ── 案C ── */
-function attBar(it){
-  const n = att(it);
-  return `<span class="att"><span>注目度</span>${[0,1,2].map(k => `<i class="${k < n ? "f" : ""}"></i>`).join("")}</span>`;
-}
 function flistItemHtml(i){
   // 行全体を<a>にすると検索リンク列を内包できないため、ラッパーはdiv(.frow)にし、
   // 画像とタイトルをそれぞれ商品ページへのリンクにする。行のクリック
@@ -1561,33 +1658,197 @@ function flistItemHtml(i){
     + `${manualLinksRow(i)}`
     + `</div></div>`;
 }
+// ── 朝刊（案C）専用ヘルパー（2026-08-10追加） ──
+// 「本日のピックアップニュース」の媒体タグ。NEWS_COMMONの各要素はkeyのみを
+// 持つ簡易オブジェクトのため、newsSourceGroup()と同じキー接頭辞判定を
+// 軽量に再実装する（newsSourceGroup()の既定"その他"は流用せず、朝刊の
+// 見出し向けに"ニュース"を既定にする）。
+function newsCommonTag(key){
+  const k = key || "";
+  if(k.indexOf("hobbywatch:") === 0) return "Hobby Watch";
+  if(k.indexOf("prtimes:") === 0) return "PR TIMES";
+  if(k.indexOf("gamewatch:") === 0) return "GAME Watch";
+  return "ニュース";
+}
+// 締切間近リストの表示用フォーマット。lottery_deadlineはISO8601日時
+// （例 "2026-08-05T23:59:00+09:00"）のため、日付・時刻部分のみを取り出して
+// 「8月5日（水）23:59締切」を組み立てる（表示専用の簡易整形。締切が
+// 今日以降かどうかの判定自体はPython側_build_lottery_commonで既に済んでいる）。
+function fmtLotteryDeadlineJa(iso){
+  const m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(iso || "");
+  if(!m) return esc(iso || "締切未定");
+  const d = new Date(+m[1], +m[2]-1, +m[3]);
+  return `${+m[2]}月${+m[3]}日（${WD_JA[d.getDay()]}）${m[4]}:${m[5]}締切`;
+}
+// 朝刊トップ記事のリード文で使う動詞（it.kind／PAGE_MODEに応じて出し分け。
+// 実データのkind/PAGE_MODEをそのまま使うため捏造ではない）。
+function pickupVerb(it){
+  if(PAGE_MODE === "lottery") return "受け付ける";
+  if(it.kind === "予約") return "予約受付を開始する";
+  if(it.kind === "抽選") return "抽選受付を行う";
+  return "発売する";
+}
+// カテゴリ面: 現在ページのcattabsボタン（テンプレート側のCATTABSプレース
+// ホルダーが展開済みのHTML）をDOMから読み取る。Python側_CATTABS_DEFSを
+// JS側に再定義せず、既に描画済みの
+// ボタン（data-cat/表示ラベル）をそのまま使い回すことで二重管理を避ける。
+function catTabsList(){
+  return Array.from(document.querySelectorAll(".cattabs button"))
+    .map(b => ({ label: b.textContent, value: b.getAttribute("data-cat") }))
+    .filter(t => t.value && t.value !== "all");
+}
+// カテゴリ面の各タブに属するかの判定。baseData()の各PAGE_MODE分岐と同じ
+// グルーピング関数を再利用する（catFilterという単一のグローバル状態ではなく、
+// 任意のtab値を引数に取れるようパラメータ化しただけで判定ロジック自体は
+// 複製しない）。
+function catTabPredicate(value){
+  if(PAGE_MODE === "comic") return it => comicPublisherGroup(it.maker) === value;
+  if(PAGE_MODE === "game") return it => gameHasPlatform(it, value);
+  if(PAGE_MODE === "sports") return it => sportGroup(it.sport) === value;
+  if(PAGE_MODE === "jump") return it => jumpGenreGroup(it) === value;
+  if(PAGE_MODE === "news") return it => newsSourceGroup(it) === value;
+  if(PAGE_MODE === "lottery") return it => it.game === value;
+  if(PAGE_MODE === "stationery") return it => stationerySourceGroup(it) === value;
+  if(PAGE_MODE === "rail") return it => railMakerGroup(it) === value;
+  if(PAGE_MODE === "doll") return it => dollMakerGroup(it) === value;
+  if(PAGE_MODE === "fishing") return it => fishingGearGroup(it) === value;
+  if(value === "くじ") return isLotteryItem;
+  return it => it.cat === value;
+}
+// カテゴリ面「◯◯面をすべて見る」の誘導リンク。既存のcattabsボタンを探して
+// setCat()を呼ぶ（既存タブ絞り込みをそのまま起動）。1画面で結果を見せるため
+// 案B（ストア、日付グループ表示）へ切り替える。
+function goToCategoryTab(value){
+  const btn = Array.from(document.querySelectorAll(".cattabs button")).find(b => b.getAttribute("data-cat") === value);
+  if(btn) setCat(value, btn);
+  show("B");
+  window.scrollTo({top:0, left:0, behavior:"auto"});
+}
+// カテゴリ面本体。pool（本日のピックアップ商品を除いた「紙面一覧」相当の
+// プール）を各タブでフィルタし、上位3件（computeFeatured基準）を「◯◯面」
+// として表示する。該当0件のタブは出さない（空枠を出さない方針を統一適用）。
+// タブが1つも無いページ（cattabsが実質存在しないケース。現状は全ページで
+// 最低1つ以上あるが将来の保険）は何も出さない。
+function categoryFacetsHtml(pool, excludeKeys){
+  const tabs = catTabsList();
+  if(!tabs.length) return "";
+  let html = "";
+  tabs.forEach(t => {
+    const pred = catTabPredicate(t.value);
+    const items = computeFeatured(pool.filter(i => pred(i) && !excludeKeys.has(i.key))).slice(0, 3);
+    if(!items.length) return;
+    html += `<div class="asakan-catface">
+      <h3 class="asakan-catface-title">${esc(t.label)}面</h3>
+      <ul class="asakan-catface-list">
+        ${items.map(i => `<li><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a><span class="asakan-catface-meta num">${esc(fmtDate(i))}${fmtPrice(i) ? "｜" + fmtPrice(i) : ""}</span></li>`).join("")}
+      </ul>
+      <button type="button" class="asakan-more" onclick="goToCategoryTab('${esc(t.value)}')">${esc(t.label)}面をすべて見る &rarr;</button>
+    </div>`;
+  });
+  return html ? `<div class="asakan-catfaces">${html}</div>` : "";
+}
 function renderC(){
   const el = document.getElementById("vC");
   const list = currentData();
   if(!list.length){ el.innerHTML = `<p style="color:var(--muted)">データがありません。</p>`; return; }
-  const featured = computeFeatured(list);
-  const top = featured.filter(i => i.img).slice(0, 3);
-  const rest = list.filter(i => !top.includes(i)).slice(0, 30);
-  const g = groupItemsByDate(rest);
-  el.innerHTML = `
-    <div class="mh"><div class="l1">MORNING EDITION</div><div class="l2">8月9日（日）の朝刊</div></div>
-    <div class="sec"><span class="name">今日の注目</span><span class="rule"></span><span class="cnt num">${top.length}件</span></div>
-    ${top.map(i => `
-      <div class="fcard" data-key="${esc(i.key)}" onclick="handleCardClick(event)">
-        <a class="tlink" href="${esc(i.url)}" target="_blank" rel="noopener">${thumb(i)}</a>
-        <div class="body">
-          <div class="t"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a></div>
-          <div class="meta">${chips(i, true)}<b class="num">${fmtPrice(i)}</b>${attBar(i)}</div>
-          ${searchLinks(i)}
-          ${lotteryLinksRow(i)}
-          ${manualLinksRow(i)}
-        </div>
-      </div>`).join("")}
-    <div class="sec"><span class="name">${PAGE_MODE === "lottery" ? "新着・締切予定" : "新着・発売予定"}</span><span class="rule"></span><span class="cnt num">${rest.length}件</span></div>
+
+  // 本日のピックアップ商品（トップ1件＋準トップ4件）。選定自体はビルド時
+  // （src/report.py _select_pickup）に完了済みで、it.picked==="top"/"sub"の
+  // フラグから拾うだけ（JS側では選定ロジックを持たない）。絞り込みで
+  // ピック対象がlistから外れている場合はトップ記事なしになる（仕様どおり
+  // currentData()基準で表示する）。
+  const pickedTop = list.find(i => i.picked === "top") || null;
+  const pickedSubs = list.filter(i => i.picked === "sub").slice(0, 4);
+  const pickedKeys = new Set();
+  if(pickedTop) pickedKeys.add(pickedTop.key);
+  pickedSubs.forEach(i => pickedKeys.add(i.key));
+
+  // サマリー行: 「本日の新着」はこのページのDATA（currentData()適用後）、
+  // 「締切間近」は共通データ（LOTTERY_COMMON.total、表示上限5件ではなく
+  // 実数）から機械集計する（捏造禁止）。
+  const newCount = list.filter(i => i.first_seen === TODAY_ISO).length;
+  const deadlineCount = LOTTERY_COMMON.total;
+
+  const topHtml = pickedTop ? `
+    <article class="asakan-top" data-key="${esc(pickedTop.key)}" onclick="handleCardClick(event)">
+      ${isNewItem(pickedTop) ? `<span class="asakan-badge-new">NEW</span>` : ""}
+      <a class="tlink" href="${esc(pickedTop.url)}" target="_blank" rel="noopener">${thumb(pickedTop, "asakan-top-img")}</a>
+      <div class="asakan-top-body">
+        <h2 class="asakan-top-title"><a href="${esc(pickedTop.url)}" target="_blank" rel="noopener">${esc(pickedTop.title)}</a></h2>
+        <p class="asakan-lead">${esc(pickedTop.maker || "")}${pickedTop.maker ? "は" : ""}「${esc(pickedTop.title)}」を${esc(fmtDate(pickedTop))}に${pickupVerb(pickedTop)}。${fmtPrice(pickedTop) ? `価格は${fmtPrice(pickedTop)}。` : ""}</p>
+        ${searchLinks(pickedTop)}
+        ${lotteryLinksRow(pickedTop)}
+        ${manualLinksRow(pickedTop)}
+      </div>
+    </article>` : "";
+  const subHtml = pickedSubs.length ? `
+    <div class="asakan-substories">
+      ${pickedSubs.map(i => `
+        <article class="asakan-sub" data-key="${esc(i.key)}" onclick="handleCardClick(event)">
+          ${isNewItem(i) ? `<span class="asakan-badge-new small">NEW</span>` : ""}
+          <a class="tlink" href="${esc(i.url)}" target="_blank" rel="noopener">${thumb(i, "asakan-sub-img")}</a>
+          <h3 class="asakan-sub-title"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a></h3>
+          <p class="asakan-sub-meta num">${esc(i.maker || "")}${i.maker ? "｜" : ""}${esc(fmtDate(i))}${fmtPrice(i) ? "｜" + fmtPrice(i) : ""}</p>
+        </article>`).join("")}
+    </div>` : "";
+
+  const newsHtml = NEWS_COMMON.length ? `
+    <section class="asakan-news">
+      <h2 class="asakan-section-title">本日のピックアップニュース</h2>
+      <ul class="asakan-news-list">
+        ${NEWS_COMMON.map(n => `
+          <li class="asakan-news-item">
+            <span class="asakan-news-tag">${esc(newsCommonTag(n.key))}</span>
+            <a href="${esc(n.url)}" target="_blank" rel="noopener">${esc(n.title)}</a>
+            ${n.maker ? `<span class="asakan-news-maker">${esc(n.maker)}</span>` : ""}
+          </li>`).join("")}
+      </ul>
+    </section>` : "";
+
+  const lotteryHtml = LOTTERY_COMMON.items.length ? `
+    <section class="asakan-lottery">
+      <h2 class="asakan-section-title asakan-lottery-title">締切間近</h2>
+      <ul class="asakan-lottery-list">
+        ${LOTTERY_COMMON.items.map(n => `
+          <li class="asakan-lottery-item">
+            <span class="asakan-deadline num">${fmtLotteryDeadlineJa(n.lottery_deadline)}</span>
+            <a href="${esc(n.url)}" target="_blank" rel="noopener">${esc(n.title)}</a>
+            ${n.maker ? `<span class="asakan-lottery-shop">${esc(n.maker)}</span>` : ""}
+          </li>`).join("")}
+      </ul>
+    </section>` : "";
+
+  const facetsHtml = categoryFacetsHtml(list, pickedKeys);
+
+  // 紙面一覧: 従来の朝刊の日付グループ一覧（既存の折りたたみ・日付ジャンプ
+  // 機能をそのまま流用）。本日のピックアップ商品として既に出た分は除外する。
+  const restList = list.filter(i => !pickedKeys.has(i.key));
+  const g = groupItemsByDate(restList);
+  const shimenHtml = restList.length ? `
+    <div class="asakan-section-title asakan-shimen-title">紙面一覧<span class="asakan-shimen-cnt num">${restList.length}件</span></div>
     <div id="jumpNavC">${renderJumpNavFromGroups(g, "secC")}</div>
-    <div class="flist">
-      ${renderDateSectionsFromGroups(g, flistItemHtml, "secC")}
-    </div>
+    <div class="flist">${renderDateSectionsFromGroups(g, flistItemHtml, "secC")}</div>` : "";
+
+  el.innerHTML = `
+    <header class="asakan-masthead">
+      <div class="asakan-masthead-row">
+        <div class="asakan-title-block">
+          <div class="asakan-vtitle">新商品ウォッチ</div>
+          <div class="asakan-hanko">朝刊</div>
+        </div>
+        <div class="asakan-issue-info">
+          <p class="asakan-issue-date num">2026年8月10日（月）</p>
+          <p class="asakan-issue-note">毎朝7時更新</p>
+        </div>
+      </div>
+      <div class="asakan-rule-double"></div>
+    </header>
+    <div class="asakan-summary num">本日の新着 <strong>${newCount}</strong>件｜締切間近 <strong>${deadlineCount}</strong>件</div>
+    ${(topHtml || subHtml) ? `<div class="asakan-topblock">${topHtml}${subHtml}</div>` : ""}
+    ${newsHtml}
+    ${lotteryHtml}
+    ${facetsHtml}
+    ${shimenHtml}
     ${lotteryCompactHtml()}`;
   observeLazyImages();
 }

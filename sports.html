@@ -273,25 +273,117 @@ img{max-width:100%}
 .card .dt{font-size:12px; color:var(--muted)}
 .card .pr{font-size:14px; font-weight:800}
 
-/* ════ 案C 朝刊フィード ════ */
+/* ════ 案C 朝刊 ════ 2026-08-10改修: 新聞紙面風に作り替え（asakan-*）。
+   見出し等の明朝フォントは新規CSS変数を増やさず直接指定（テーマ色トークン
+   var(--ink)/var(--accent)/var(--indigo)/var(--line)/var(--muted)/var(--surface)/
+   var(--tint)は既存のライト/ダーク定義をそのまま流用し、朝刊専用の新しい
+   色トークンは追加しない＝既存のテーマ切替と自動的に整合する）。
+   紙面一覧（.flist/.frow、下記）は従来のCSSをそのまま流用する。 */
 .pC{max-width:560px; margin:0 auto}
-.pC .mh{text-align:center; padding:6px 0 18px}
-.pC .mh .l1{font-size:12px; letter-spacing:.25em; color:var(--muted); font-weight:700}
-.pC .mh .l2{font-size:24px; font-weight:800; margin-top:2px}
-.pC .sec{margin:26px 0 10px; display:flex; align-items:center; gap:10px}
-.pC .sec .name{font-size:16px; font-weight:800; white-space:nowrap}
-.pC .sec .rule{height:1px; background:var(--line); flex:1}
-.pC .sec .cnt{font-size:12px; color:var(--muted); white-space:nowrap}
-.fcard{background:var(--surface); border:1px solid var(--line); border-radius:10px;
-  overflow:hidden; margin-bottom:14px; display:block; cursor:pointer}
-.fcard .thumb{aspect-ratio:16/9; width:100%}
-.fcard .body{padding:12px 14px 14px}
-.fcard .t{font-size:16px; font-weight:800; line-height:1.4; text-wrap:balance}
-.fcard .meta{display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-top:8px}
-.fcard .att{margin-left:auto; display:flex; gap:3px; align-items:center}
-.fcard .att i{width:8px; height:8px; border-radius:2px; background:var(--line)}
-.fcard .att i.f{background:var(--accent)}
-.fcard .att span{font-size:11px; color:var(--muted); margin-right:2px}
+.asakan-serif{font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif}
+
+/* ── 題字部: 縦書きタイトル＋朱印＋発行日＋二重罫線 ── */
+.asakan-masthead{padding:4px 0 16px}
+.asakan-masthead-row{display:flex; align-items:flex-start; justify-content:space-between; gap:12px}
+.asakan-title-block{display:flex; align-items:flex-start; gap:6px}
+.asakan-vtitle{writing-mode:vertical-rl; font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;
+  font-weight:900; font-size:26px; letter-spacing:.15em; height:8.6em; color:var(--ink)}
+/* 高さは「新商品ウォッチ」7文字 × (1 + letter-spacing 0.15em) ≈ 8.05em が
+   必要な最小値（不足すると2列に折り返る不具合が実機検証で判明したため、
+   余裕を持たせて8.6emにしている）。 */
+.asakan-hanko{writing-mode:vertical-rl; background:var(--accent); color:#fff;
+  font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif; font-weight:700;
+  font-size:13px; padding:.5em .3em; border-radius:2px; letter-spacing:.1em; align-self:flex-start}
+.asakan-issue-info{text-align:right; padding-top:4px}
+.asakan-issue-date{font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;
+  font-weight:700; font-size:15px; margin:0 0 4px}
+.asakan-issue-note{font-size:11.5px; color:var(--muted); margin:0}
+.asakan-rule-double{margin-top:10px; border-top:3px solid var(--ink)}
+.asakan-rule-double::after{content:""; display:block; border-top:1px solid var(--ink); margin-top:3px}
+
+/* ── サマリー行 ── */
+.asakan-summary{margin:12px 0 0; padding:8px 0; border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line); font-size:13px}
+.asakan-summary strong{color:var(--accent); font-size:1.15em}
+
+/* ── 本日のピックアップ商品（トップ1件＋準トップ4件） ──
+   画像は元解像度以上に引き伸ばさない: width:auto/height:auto＋max-widthで
+   自然サイズを尊重する（トップも表示幅は最大360px、準トップは160pxに抑え、
+   「一面らしさ」は見出しの文字サイズ・太さで出す）。読み込み前のレイアウト
+   崩れを抑えるためmin-heightのみ最小限のプレースホルダー高さを与える。 */
+.asakan-topblock{margin-top:18px}
+.asakan-badge-new{display:inline-block; background:var(--accent); color:#fff; font-size:11px;
+  font-weight:700; padding:.2em .6em; letter-spacing:.05em; margin-bottom:6px}
+.asakan-badge-new.small{font-size:10px; padding:.15em .5em; position:absolute; top:10px; left:0; z-index:1}
+.asakan-top{border-bottom:1px solid var(--line); padding-bottom:18px; margin-bottom:18px; cursor:pointer}
+.asakan-top .thumb.asakan-top-img{width:auto; max-width:360px; height:auto; max-height:280px; min-height:120px;
+  aspect-ratio:auto; background:none; margin:8px 0 10px}
+.asakan-top .thumb.asakan-top-img img{width:auto; height:auto; max-width:360px; max-height:280px; object-fit:contain}
+.asakan-top .ph.asakan-top-img{width:100%; max-width:360px; aspect-ratio:16/10; margin:8px 0 10px}
+.asakan-top-title{font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;
+  font-weight:900; font-size:21px; line-height:1.4; text-wrap:balance; margin:0 0 8px}
+.asakan-top-title a{color:var(--ink)}
+.asakan-lead{font-size:13.5px; color:var(--ink); margin:0 0 8px}
+.asakan-substories{display:grid; grid-template-columns:repeat(2,1fr); gap:16px}
+@media(min-width:640px){.asakan-substories{grid-template-columns:repeat(4,1fr)}}
+.asakan-sub{position:relative; border-top:1px solid var(--line); padding-top:10px; cursor:pointer}
+.asakan-sub .thumb.asakan-sub-img{width:auto; max-width:160px; height:auto; max-height:120px; min-height:60px;
+  aspect-ratio:auto; background:none; margin:0 0 8px}
+.asakan-sub .thumb.asakan-sub-img img{width:auto; height:auto; max-width:160px; max-height:120px; object-fit:contain}
+.asakan-sub .ph.asakan-sub-img{width:100%; max-width:160px; aspect-ratio:4/3; margin:0 0 8px}
+.asakan-sub-title{font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;
+  font-weight:700; font-size:13.5px; line-height:1.45; text-wrap:balance; margin:0 0 4px}
+.asakan-sub-title a{color:var(--ink)}
+.asakan-sub-meta{font-size:11px; color:var(--muted); margin:0}
+
+/* ── セクション見出し共通（本日のピックアップニュース／締切間近／カテゴリ面／紙面一覧） ── */
+.asakan-section-title{font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;
+  font-weight:700; font-size:16px; border-bottom:2px solid var(--ink); padding-bottom:6px;
+  margin:26px 0 10px; display:flex; align-items:baseline; gap:8px}
+.asakan-shimen-cnt{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+  font-weight:400; font-size:12px; color:var(--muted); margin-left:auto}
+
+/* ── 本日のピックアップニュース ── */
+.asakan-news-list{list-style:none; margin:0; padding:0}
+.asakan-news-item{display:flex; flex-wrap:wrap; align-items:baseline; gap:8px; padding:9px 0;
+  border-bottom:1px solid var(--line); font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif; font-size:14.5px}
+.asakan-news-tag{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+  font-size:10.5px; font-weight:700; color:var(--indigo); border:1px solid var(--indigo);
+  padding:.15em .5em; border-radius:2px; flex-shrink:0}
+.asakan-news-item a{color:var(--ink); flex:1 1 auto; min-width:0}
+.asakan-news-maker{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+  font-size:10.5px; color:var(--muted); width:100%}
+@media(min-width:640px){.asakan-news-maker{width:auto; margin-left:auto}}
+
+/* ── 締切間近 ── */
+.asakan-lottery{border:2px solid var(--accent); padding:14px 16px 16px; margin-top:24px}
+.asakan-lottery-title{color:var(--accent); border-bottom-color:var(--accent); margin-top:0}
+.asakan-lottery-list{list-style:none; margin:0; padding:0}
+.asakan-lottery-item{display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 10px; padding:8px 0;
+  border-bottom:1px dashed var(--line)}
+.asakan-lottery-item:last-child{border-bottom:none}
+.asakan-deadline{font-weight:900; color:var(--accent); font-size:12.5px; flex-shrink:0}
+.asakan-lottery-item a{color:var(--ink); font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif}
+.asakan-lottery-shop{font-size:11px; color:var(--muted); width:100%}
+@media(min-width:640px){.asakan-lottery-shop{width:auto; margin-left:auto}}
+
+/* ── カテゴリ面（そのページのcattabs軸のタブごとに3件程度＋誘導リンク） ── */
+.asakan-catfaces{display:grid; grid-template-columns:1fr; gap:20px 28px; margin-top:24px}
+@media(min-width:640px){.asakan-catfaces{grid-template-columns:repeat(2,1fr)}}
+.asakan-catface-title{font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;
+  font-weight:700; font-size:14.5px; border-bottom:1px solid var(--ink); padding-bottom:5px; margin:0 0 6px}
+.asakan-catface-list{list-style:none; margin:0 0 6px; padding:0}
+.asakan-catface-list li{padding:6px 0; border-bottom:1px solid var(--line); display:flex;
+  justify-content:space-between; gap:10px; font-size:12.5px}
+.asakan-catface-list a{color:var(--ink); min-width:0}
+.asakan-catface-meta{color:var(--muted); font-size:11px; flex-shrink:0; white-space:nowrap}
+.asakan-more{appearance:none; font-family:inherit; border:0; background:none; padding:0; cursor:pointer;
+  font-size:11.5px; font-weight:700; color:var(--indigo)}
+.asakan-more:hover{text-decoration:underline}
+.asakan-more:focus-visible{outline:2px solid var(--indigo); outline-offset:2px}
+
+/* ── 紙面一覧（従来の日付グループ一覧。.flist/.frow は既存CSSをそのまま流用） ── */
+.asakan-shimen-title{margin-top:26px}
 .flist{background:var(--surface); border:1px solid var(--line); border-radius:10px; overflow:hidden}
 .flist .frow{display:flex; gap:12px; padding:11px 14px; border-top:1px solid var(--line); align-items:center; cursor:pointer}
 .flist .frow:first-child{border-top:0}
@@ -378,7 +470,7 @@ img{max-width:100%}
 <header class="mast">
   <div class="mast-in">
     <div class="brand">新商品<b>ウォッチ</b></div>
-    <div class="today num">2026年8月9日（日） 08:08更新</div>
+    <div class="today num">2026年8月10日（月） 02:23更新</div>
     <a class="theme-toggle" href="https://docs.google.com/spreadsheets/d/1g8d_tYSgmwsxorlktBztrlCTUnI-iZyjKpcMLdGV1KU/edit" target="_blank" rel="noopener">📋 台帳</a>
     <div class="switch" role="tablist" aria-label="デザイン案の切り替え">
       <button id="bA" class="on" onclick="show('A')">ポータル</button>
@@ -418,10 +510,19 @@ img{max-width:100%}
 <button id="backToTop" class="back-to-top" type="button" aria-label="トップへ戻る" onclick="scrollToTop()">↑</button>
 
 <script>
-const DATA = [{"key": "bbm:https://www.bbm-japan.com/article/detail/56539", "cat": "スポーツカード", "title": "BBM2025大相撲カード", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.bbm-japan.com/article/detail/56539", "series": [], "maker_groups": [], "resale": false, "img": "", "first_seen": "2026-08-02", "en_q": "BBM 2025 Grand Sumo trading cards", "lottery": [], "manual_links": [], "platform": [], "sport": "大相撲", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/57947", "cat": "スポーツカード", "title": "【新作情報】「BBM2025大相撲カード」1パックから必ず1枚“キラカード”が出...", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.bbm-japan.com/article/detail/57947", "series": [], "maker_groups": [], "resale": false, "img": "", "first_seen": "2026-08-02", "en_q": "BBM 2025 Grand Sumo trading cards", "lottery": [], "manual_links": [], "platform": [], "sport": "大相撲", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/58554", "cat": "スポーツカード", "title": "ジャパンラグビー リーグワン BBMカード2025/D1ver.", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 9900, "url": "https://www.bbm-japan.com/article/detail/58554", "series": [], "maker_groups": [], "resale": false, "img": "https://images.bbm-japan.com/media/article/58554/images/main_8304027b255822d4c983879e9da59fca.jpg", "first_seen": "2026-08-02", "en_q": "BBM 2025 Japan Rugby League One D1 cards", "lottery": [], "manual_links": [], "platform": [], "sport": "ラグビー", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/58555", "cat": "スポーツカード", "title": "BBM女子プロレスカード2025", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.bbm-japan.com/article/detail/58555", "series": [], "maker_groups": [], "resale": false, "img": "https://images.bbm-japan.com/media/article/58555/images/main_7b23c6605f88ab6d7c3459c5f9d03785.jpg", "first_seen": "2026-08-02", "en_q": "BBM 2025 Womens Pro Wrestling trading cards", "lottery": [], "manual_links": [], "platform": [], "sport": "プロレス", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/59265", "cat": "スポーツカード", "title": "BBM2025大相撲カード 「和」-NAGOMI-", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.bbm-japan.com/article/detail/59265", "series": [], "maker_groups": [], "resale": false, "img": "https://images.bbm-japan.com/media/article/59265/images/main_4ecc826c58711141535fa00381a0460b.jpg", "first_seen": "2026-08-02", "en_q": "BBM 2025 Grand Sumo Nagomi cards", "lottery": [], "manual_links": [], "platform": [], "sport": "大相撲", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/65778", "cat": "スポーツカード", "title": "BBM2026大相撲カード", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.bbm-japan.com/article/detail/65778", "series": [], "maker_groups": [], "resale": false, "img": "https://images.bbm-japan.com/media/article/65778/images/main_a41d59938dc10aa911704b720d469727.jpg", "first_seen": "2026-08-02", "en_q": "BBM 2026 Grand Sumo trading cards", "lottery": [], "manual_links": [], "platform": [], "sport": "大相撲", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/67687", "cat": "スポーツカード", "title": "ジャパンラグビー リーグワン BBMカード2026/D1ver.", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 9900, "url": "https://www.bbm-japan.com/article/detail/67687", "series": [], "maker_groups": [], "resale": false, "img": "https://images.bbm-japan.com/media/article/67687/images/main_a7fc94cd2615fb9c0a70995602e48925.png", "first_seen": "2026-08-02", "en_q": "BBM 2026 Japan Rugby League One D1 cards", "lottery": [], "manual_links": [], "platform": [], "sport": "ラグビー", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/68324", "cat": "スポーツカード", "title": "BBM女子プロレスカード2026", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.bbm-japan.com/article/detail/68324", "series": [], "maker_groups": [], "resale": false, "img": "https://images.bbm-japan.com/media/article/68324/images/main_58bf48cb2c85bd797a0b525eb0d5c262.jpg", "first_seen": "2026-08-02", "en_q": "BBM 2026 Womens Pro Wrestling trading cards", "lottery": [], "manual_links": [], "platform": [], "sport": "プロレス", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/68325", "cat": "スポーツカード", "title": "BBM2026大相撲カード「郷」-SATO-", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.bbm-japan.com/article/detail/68325", "series": [], "maker_groups": [], "resale": false, "img": "https://images.bbm-japan.com/media/article/68325/images/main_99854640d99838d6b443bef30952da3a.jpg", "first_seen": "2026-08-02", "en_q": "BBM 2026 Grand Sumo Sato cards", "lottery": [], "manual_links": [], "platform": [], "sport": "大相撲", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/70041", "cat": "スポーツカード", "title": "【新作情報】「BBM広島東洋カープベースボールカード2026」新戦力が続々台頭", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.bbm-japan.com/article/detail/70041", "series": [], "maker_groups": [], "resale": false, "img": "", "first_seen": "2026-08-02", "en_q": "BBM 2026 Hiroshima Toyo Carp baseball cards", "lottery": [], "manual_links": [], "platform": [], "sport": "野球", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/70343", "cat": "スポーツカード", "title": "【新作情報】「BBM福岡ソフトバンクホークスベースボールカード2026」福岡移転...", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.bbm-japan.com/article/detail/70343", "series": [], "maker_groups": [], "resale": false, "img": "", "first_seen": "2026-08-02", "en_q": "BBM 2026 Fukuoka SoftBank Hawks baseball cards", "lottery": [], "manual_links": [], "platform": [], "sport": "野球", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/70934", "cat": "スポーツカード", "title": "【新作情報】「BBM読売ジャイアンツベースボールカード2026」ルーキーや若手選...", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.bbm-japan.com/article/detail/70934", "series": [], "maker_groups": [], "resale": false, "img": "", "first_seen": "2026-08-02", "en_q": "BBM 2026 Yomiuri Giants baseball cards", "lottery": [], "manual_links": [], "platform": [], "sport": "野球", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/71023", "cat": "スポーツカード", "title": "【新作情報】「BBM北海道日本ハムファイターズベースボールカード2026」多士済...", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.bbm-japan.com/article/detail/71023", "series": [], "maker_groups": [], "resale": false, "img": "", "first_seen": "2026-08-02", "en_q": "BBM 2026 Hokkaido Nippon-Ham Fighters baseball cards", "lottery": [], "manual_links": [], "platform": [], "sport": "野球", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/71025", "cat": "スポーツカード", "title": "【新作情報】「BBM横浜DeNAベイスターズベースボールカード2026」相川亮二...", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.bbm-japan.com/article/detail/71025", "series": [], "maker_groups": [], "resale": false, "img": "", "first_seen": "2026-08-02", "en_q": "BBM 2026 Yokohama DeNA BayStars baseball cards", "lottery": [], "manual_links": [], "platform": [], "sport": "野球", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/71230", "cat": "スポーツカード", "title": "BBM BASEBALL CARDS PREMIUM 2026「GENESIS/ジェネシス」", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.bbm-japan.com/article/detail/71230", "series": [], "maker_groups": [], "resale": false, "img": "https://images.bbm-japan.com/media/article/71230/images/main_8ac2f510ff71d21eb6d0079965ffea0d.jpg", "first_seen": "2026-08-02", "en_q": "BBM 2026 Genesis Baseball Cards Premium", "lottery": [], "manual_links": [], "platform": [], "sport": "野球", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/71849", "cat": "スポーツカード", "title": "【新作情報】「BBMオリックス・バファローズベースボールカード2026」ナインの個性が垣間見える企画カードが満載！", "maker": "BBM", "date": "2026-07-13", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 9000, "url": "https://www.bbm-japan.com/article/detail/71849", "series": [], "maker_groups": [], "resale": false, "img": "https://images.bbm-japan.com/media/article/71849/images/main_5a502c5863d962e2969c25b442b1c3e3.jpg", "first_seen": "2026-08-02", "en_q": "BBM 2026 ORIX Buffaloes baseball cards", "lottery": [], "manual_links": [], "platform": [], "sport": "野球", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/72003", "cat": "スポーツカード", "title": "BBMプロ野球 チアリーダーカード2026 DANCING HEROINE", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.bbm-japan.com/article/detail/72003", "series": [], "maker_groups": [], "resale": false, "img": "https://images.bbm-japan.com/media/article/72003/images/main_6831705b49e79a987dcfb79c2c5caf53.jpg", "first_seen": "2026-08-02", "en_q": "BBM 2026 Dancing Heroine Cheerleader cards", "lottery": [], "manual_links": [], "platform": [], "sport": "野球", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/72096", "cat": "スポーツカード", "title": "【新作情報】「BBM千葉ロッテマリーンズベースボールカード2026」サブロー新監督の下、若きリーダーがけん引する新生マリーンズのチームパックが遂に登場！", "maker": "BBM", "date": "2026-07-21", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 9000, "url": "https://www.bbm-japan.com/article/detail/72096", "series": [], "maker_groups": [], "resale": false, "img": "https://images.bbm-japan.com/media/article/72096/images/main_e2f88d6031b6b818795d05bb70a8567f.jpg", "first_seen": "2026-08-02", "en_q": "BBM 2026 Chiba Lotte Marines baseball cards", "lottery": [], "manual_links": [], "platform": [], "sport": "野球", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/72097", "cat": "スポーツカード", "title": "【新作情報】「BBM中日ドラゴンズベースボールカード2026」ドラゴンズの歴史を未来へつなげよう！", "maker": "BBM", "date": "2026-07-27", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 9000, "url": "https://www.bbm-japan.com/article/detail/72097", "series": [], "maker_groups": [], "resale": false, "img": "https://images.bbm-japan.com/media/article/72097/images/main_a8ab121750bba8648eea2fead903fd0c.jpg", "first_seen": "2026-08-02", "en_q": "BBM 2026 Chunichi Dragons baseball cards", "lottery": [], "manual_links": [], "platform": [], "sport": "野球", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "tcj:https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-agoro-the-lord-of-the-rings-frodos-journey-collectible-foil/", "cat": "スポーツカード", "title": "【製品情報】2026 AGORO THE LORD OF THE RINGS  – FRODO’S JOURNEY COLLECTIBLE FOIL", "maker": "AGORO", "date": "2026-09-25", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-agoro-the-lord-of-the-rings-frodos-journey-collectible-foil/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/07/LordoftheRings-FrodosJourney_FoilPackaging_Closed_Left.png", "first_seen": "2026-08-02", "en_q": "2026 Agoro Lord of the Rings Frodo Journey Foil", "lottery": [], "manual_links": [], "platform": [], "sport": "その他", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "tcj:https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-agoro-the-lord-of-the-rings-guardians-of-the-fellowship-blind-box/", "cat": "スポーツカード", "title": "【製品情報】2026 AGORO THE LORD OF THE RINGS: GUARDIANS OF THE FELLOWSHIP BLIND BOX", "maker": "AGORO", "date": "2026-08-20", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-agoro-the-lord-of-the-rings-guardians-of-the-fellowship-blind-box/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/07/BlindBox-LOTRSilverTierbanners_LOTRChaserBlindBox-ProductPage-Hero-e1785473198447.png", "first_seen": "2026-08-02", "en_q": "2026 Agoro Lord of the Rings Guardians Fellowship Blind Box", "lottery": [], "manual_links": [], "platform": [], "sport": "その他", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "tcj:https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-super-break-michael-jackson-album-collection-spotlight-series-hobby/", "cat": "スポーツカード", "title": "【製品情報】2026 SUPER BREAK MICHAEL JACKSON ALBUM COLLECTION SPOTLIGHT SERIES HOBBY", "maker": "SUPER BREAK", "date": "2026-09-09", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-super-break-michael-jackson-album-collection-spotlight-series-hobby/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/07/Sellsheet-Michael-Jackson-Album-Collection-Spotlight-Series_page-0001-1.jpg", "first_seen": "2026-08-02", "en_q": "2026 Super Break Michael Jackson Album Collection Hobby", "lottery": [], "manual_links": [], "platform": [], "sport": "その他", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "tcj:https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-topps-mint-marvel-hobby/", "cat": "スポーツカード", "title": "【製品情報】2026 TOPPS MINT MARVEL HOBBY", "maker": "TOPPS", "date": "2026-08-20", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-topps-mint-marvel-hobby/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/07/3e79bb1a-0e4a-4e4c-a893-0de948512a40-e1785471840289.png", "first_seen": "2026-08-02", "en_q": "2026 Topps Mint Marvel Hobby Box", "lottery": [], "manual_links": [], "platform": [], "sport": "その他", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "tcj:https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-topps-stadium-club-ufc-hobby/", "cat": "スポーツカード", "title": "【製品情報】2026 TOPPS STADIUM CLUB UFC HOBBY", "maker": "TOPPS", "date": "2026-08-15", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-topps-stadium-club-ufc-hobby/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/07/63b0c8a60faaaa85b698113ab4598e38bed7ce3d_ECOM_26SUFC_FGC7305_HOBBY_BOX.png", "first_seen": "2026-08-02", "en_q": "2026 Topps Stadium Club UFC Hobby Box", "lottery": [], "manual_links": [], "platform": [], "sport": "格闘技", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "tcj:https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-topps-stadium-club-ufc-mega-box/", "cat": "スポーツカード", "title": "【製品情報】2026 TOPPS STADIUM CLUB UFC MEGA BOX", "maker": "TOPPS", "date": "2026-08-15", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-topps-stadium-club-ufc-mega-box/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/07/8130b2a43adc99dcbd32bbdee0bc75831fa5b432_Slice_1_1.png", "first_seen": "2026-08-02", "en_q": "2026 Topps Stadium Club UFC Mega Box", "lottery": [], "manual_links": [], "platform": [], "sport": "格闘技", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "tcj:https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-topps-stadium-club-ufc-value-box/", "cat": "スポーツカード", "title": "【製品情報】2026 TOPPS STADIUM CLUB UFC VALUE BOX", "maker": "TOPPS", "date": "2026-08-15", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-topps-stadium-club-ufc-value-box/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/07/c0b766fe1903fbf4c3286c8997c47e3c653c4984_Slice_1_1.png", "first_seen": "2026-08-02", "en_q": "2026 Topps Stadium Club UFC Value Box", "lottery": [], "manual_links": [], "platform": [], "sport": "格闘技", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "tcj:https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%91nhl-2025-26-upper-deck-splendor-hockey-hobby/", "cat": "スポーツカード", "title": "【製品情報】NHL 2025-26 UPPER DECK SPLENDOR HOCKEY HOBBY", "maker": "UPPER DECK", "date": "2026-08-20", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%91nhl-2025-26-upper-deck-splendor-hockey-hobby/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/07/Sellsheet-UD-2526-Splendor-Hockey_page-0001.jpg", "first_seen": "2026-08-02", "en_q": "2025-26 Upper Deck Splendor Hockey Hobby Box", "lottery": [], "manual_links": [], "platform": [], "sport": "ホッケー", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "tcj:https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%91%e2%9a%bd-2026-panini-fifa-world-cup-winner-sticker-poster/", "cat": "スポーツカード", "title": "【製品情報】⚽ 2026 PANINI FIFA WORLD CUP WINNER  STICKER POSTER", "maker": "PANINI", "date": "2026-09-14", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%91%e2%9a%bd-2026-panini-fifa-world-cup-winner-sticker-poster/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/08/1.png", "first_seen": "2026-08-06", "en_q": "2026 Panini FIFA World Cup Winner Sticker Poster", "lottery": [], "manual_links": [], "platform": [], "sport": "サッカー", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "tcj:https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%91%e2%9a%be-bbm-%e3%83%99%e3%83%bc%e3%82%b9%e3%83%9c%e3%83%bc%e3%83%ab%e3%82%ab%e3%83%bc%e3%83%89%e3%82%bb%e3%83%83%e3%83%88-%e3%83%ab%e3%83%bc-2/", "cat": "スポーツカード", "title": "【製品情報】⚾ BBM ベースボールカードセット ルーキーエディションプレミアム 2026", "maker": "ベースボール・マガジン社", "date": "2026-09-14", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%91%e2%9a%be-bbm-%e3%83%99%e3%83%bc%e3%82%b9%e3%83%9c%e3%83%bc%e3%83%ab%e3%82%ab%e3%83%bc%e3%83%89%e3%82%bb%e3%83%83%e3%83%88-%e3%83%ab%e3%83%bc-2/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/08/219c1a4112c0bdb1c4f582f374b34650-724x1024.jpg", "first_seen": "2026-08-07", "en_q": "BBM Baseball Card Rookie Edition Premium 2026", "lottery": [], "manual_links": [], "platform": [], "sport": "その他", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "tcj:https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%91%e2%9a%be-epoch-2026-%e7%a6%8f%e5%b2%a1%e3%82%bd%e3%83%95%e3%83%88%e3%83%90%e3%83%b3%e3%82%af%e3%83%9b%e3%83%bc%e3%82%af%e3%82%b9-starslegends/", "cat": "スポーツカード", "title": "【製品情報】⚾ EPOCH 2026 福岡ソフトバンクホークス STARS&LEGENDS ベースボールカード", "maker": "エポック社", "date": "2026-10-10", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 18700, "url": "https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%91%e2%9a%be-epoch-2026-%e7%a6%8f%e5%b2%a1%e3%82%bd%e3%83%95%e3%83%88%e3%83%90%e3%83%b3%e3%82%af%e3%83%9b%e3%83%bc%e3%82%af%e3%82%b9-starslegends/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/08/c7ff772963ef411acc512718026c7135.jpg", "first_seen": "2026-08-06", "en_q": "2026 Epoch Fukuoka Softbank Hawks Stars Legends Trading Card", "lottery": [], "manual_links": [], "platform": [], "sport": "その他", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "tcj:https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%91%e2%9a%be-mlb-2026-topps-chrome-baseball-logofractor/", "cat": "スポーツカード", "title": "【製品情報】⚾ MLB 2026 TOPPS CHROME BASEBALL LOGOFRACTOR", "maker": "TOPPS", "date": "2026-08-20", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%91%e2%9a%be-mlb-2026-topps-chrome-baseball-logofractor/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/08/2026-Topps-Chrome-Logofractor.jpg", "first_seen": "2026-08-04", "en_q": "MLB 2026 Topps Chrome Baseball Logofractor", "lottery": [], "manual_links": [], "platform": [], "sport": "野球", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "tcj:https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912025-26-futera-formula-e-hobby/", "cat": "スポーツカード", "title": "【製品情報】2025-26 FUTERA FORMULA E HOBBY", "maker": "FUTERA", "date": "2026-09-25", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912025-26-futera-formula-e-hobby/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/08/FE-FX26-Salesheet_page-0001.jpg", "first_seen": "2026-08-04", "en_q": "2025-26 Futera Formula E Hobby", "lottery": [], "manual_links": [], "platform": [], "sport": "その他", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "tcj:https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-agoro-game-of-thrones-house-stark-blind-box/", "cat": "スポーツカード", "title": "【製品情報】2026 AGORO GAME OF THRONES HOUSE STARK BLIND BOX", "maker": "AGORO", "date": "2026-09-14", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-agoro-game-of-thrones-house-stark-blind-box/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/08/5e4896966c9944fcf00890f4502605bf.png", "first_seen": "2026-08-06", "en_q": "2026 AGORO Game of Thrones House Stark Blind Box", "lottery": [], "manual_links": [], "platform": [], "sport": "その他", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "tcj:https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-break-company-inc-ateez-teleca-collection-card/", "cat": "スポーツカード", "title": "【製品情報】2026 BREAK & COMPANY INC. ATEEZ TELECA COLLECTION CARD", "maker": "BREAK &amp; COMPANY INC.", "date": "2026-09-14", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-break-company-inc-ateez-teleca-collection-card/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/08/ATEEZ-TELECA.png", "first_seen": "2026-08-07", "en_q": "2026 Break Company ATEEZ trading card", "lottery": [], "manual_links": [], "platform": [], "sport": "その他", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "tcj:https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-kakawow-gem-harry-potter-25th-anniversary-trading-cards-hobby/", "cat": "スポーツカード", "title": "【製品情報】2026 KAKAWOW GEM HARRY POTTER 25TH ANNIVERSARY TRADING CARDS HOBBY", "maker": "KAKAWOW", "date": "2026-09-14", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-kakawow-gem-harry-potter-25th-anniversary-trading-cards-hobby/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/08/2026-KAKAWOW-GEM-Harry-Potter-25th-Anniversary-Trading-Cards-Slides_page-0001.jpg", "first_seen": "2026-08-07", "en_q": "2026 KAKAWOW GEM Harry Potter 25th Anniversary trading card", "lottery": [], "manual_links": [], "platform": [], "sport": "その他", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "tcj:https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-leaf-metal-women-of-sport-hobby/", "cat": "スポーツカード", "title": "【製品情報】2026 LEAF METAL WOMEN OF SPORT HOBBY", "maker": "LEAF", "date": "2026-09-25", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-leaf-metal-women-of-sport-hobby/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/08/26L_WoS_SS_page-0001-1024x768.jpg", "first_seen": "2026-08-05", "en_q": "2026 Leaf Metal Women of Sport Hobby", "lottery": [], "manual_links": [], "platform": [], "sport": "その他", "genres": [], "game": "", "ozensa": false, "gear": ""}];
+const DATA = [{"key": "bbm:https://www.bbm-japan.com/article/detail/56539", "cat": "スポーツカード", "title": "BBM2025大相撲カード", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.bbm-japan.com/article/detail/56539", "series": [], "maker_groups": [], "resale": false, "img": "", "first_seen": "2026-08-02", "en_q": "BBM 2025 Grand Sumo trading cards", "lottery": [], "manual_links": [], "platform": [], "sport": "大相撲", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/57947", "cat": "スポーツカード", "title": "【新作情報】「BBM2025大相撲カード」1パックから必ず1枚“キラカード”が出...", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.bbm-japan.com/article/detail/57947", "series": [], "maker_groups": [], "resale": false, "img": "", "first_seen": "2026-08-02", "en_q": "BBM 2025 Grand Sumo trading cards", "lottery": [], "manual_links": [], "platform": [], "sport": "大相撲", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/58554", "cat": "スポーツカード", "title": "ジャパンラグビー リーグワン BBMカード2025/D1ver.", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 9900, "url": "https://www.bbm-japan.com/article/detail/58554", "series": [], "maker_groups": [], "resale": false, "img": "https://images.bbm-japan.com/media/article/58554/images/main_8304027b255822d4c983879e9da59fca.jpg", "first_seen": "2026-08-02", "en_q": "BBM 2025 Japan Rugby League One D1 cards", "lottery": [], "manual_links": [], "platform": [], "sport": "ラグビー", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/58555", "cat": "スポーツカード", "title": "BBM女子プロレスカード2025", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.bbm-japan.com/article/detail/58555", "series": [], "maker_groups": [], "resale": false, "img": "https://images.bbm-japan.com/media/article/58555/images/main_7b23c6605f88ab6d7c3459c5f9d03785.jpg", "first_seen": "2026-08-02", "en_q": "BBM 2025 Womens Pro Wrestling trading cards", "lottery": [], "manual_links": [], "platform": [], "sport": "プロレス", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/59265", "cat": "スポーツカード", "title": "BBM2025大相撲カード 「和」-NAGOMI-", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.bbm-japan.com/article/detail/59265", "series": [], "maker_groups": [], "resale": false, "img": "https://images.bbm-japan.com/media/article/59265/images/main_4ecc826c58711141535fa00381a0460b.jpg", "first_seen": "2026-08-02", "en_q": "BBM 2025 Grand Sumo Nagomi cards", "lottery": [], "manual_links": [], "platform": [], "sport": "大相撲", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/65778", "cat": "スポーツカード", "title": "BBM2026大相撲カード", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.bbm-japan.com/article/detail/65778", "series": [], "maker_groups": [], "resale": false, "img": "https://images.bbm-japan.com/media/article/65778/images/main_a41d59938dc10aa911704b720d469727.jpg", "first_seen": "2026-08-02", "en_q": "BBM 2026 Grand Sumo trading cards", "lottery": [], "manual_links": [], "platform": [], "sport": "大相撲", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/67687", "cat": "スポーツカード", "title": "ジャパンラグビー リーグワン BBMカード2026/D1ver.", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 9900, "url": "https://www.bbm-japan.com/article/detail/67687", "series": [], "maker_groups": [], "resale": false, "img": "https://images.bbm-japan.com/media/article/67687/images/main_a7fc94cd2615fb9c0a70995602e48925.png", "first_seen": "2026-08-02", "en_q": "BBM 2026 Japan Rugby League One D1 cards", "lottery": [], "manual_links": [], "platform": [], "sport": "ラグビー", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/68324", "cat": "スポーツカード", "title": "BBM女子プロレスカード2026", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.bbm-japan.com/article/detail/68324", "series": [], "maker_groups": [], "resale": false, "img": "https://images.bbm-japan.com/media/article/68324/images/main_58bf48cb2c85bd797a0b525eb0d5c262.jpg", "first_seen": "2026-08-02", "en_q": "BBM 2026 Womens Pro Wrestling trading cards", "lottery": [], "manual_links": [], "platform": [], "sport": "プロレス", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/68325", "cat": "スポーツカード", "title": "BBM2026大相撲カード「郷」-SATO-", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.bbm-japan.com/article/detail/68325", "series": [], "maker_groups": [], "resale": false, "img": "https://images.bbm-japan.com/media/article/68325/images/main_99854640d99838d6b443bef30952da3a.jpg", "first_seen": "2026-08-02", "en_q": "BBM 2026 Grand Sumo Sato cards", "lottery": [], "manual_links": [], "platform": [], "sport": "大相撲", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/70041", "cat": "スポーツカード", "title": "【新作情報】「BBM広島東洋カープベースボールカード2026」新戦力が続々台頭", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.bbm-japan.com/article/detail/70041", "series": [], "maker_groups": [], "resale": false, "img": "", "first_seen": "2026-08-02", "en_q": "BBM 2026 Hiroshima Toyo Carp baseball cards", "lottery": [], "manual_links": [], "platform": [], "sport": "野球", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/70343", "cat": "スポーツカード", "title": "【新作情報】「BBM福岡ソフトバンクホークスベースボールカード2026」福岡移転...", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.bbm-japan.com/article/detail/70343", "series": [], "maker_groups": [], "resale": false, "img": "", "first_seen": "2026-08-02", "en_q": "BBM 2026 Fukuoka SoftBank Hawks baseball cards", "lottery": [], "manual_links": [], "platform": [], "sport": "野球", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/70934", "cat": "スポーツカード", "title": "【新作情報】「BBM読売ジャイアンツベースボールカード2026」ルーキーや若手選...", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.bbm-japan.com/article/detail/70934", "series": [], "maker_groups": [], "resale": false, "img": "", "first_seen": "2026-08-02", "en_q": "BBM 2026 Yomiuri Giants baseball cards", "lottery": [], "manual_links": [], "platform": [], "sport": "野球", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/71023", "cat": "スポーツカード", "title": "【新作情報】「BBM北海道日本ハムファイターズベースボールカード2026」多士済...", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.bbm-japan.com/article/detail/71023", "series": [], "maker_groups": [], "resale": false, "img": "", "first_seen": "2026-08-02", "en_q": "BBM 2026 Hokkaido Nippon-Ham Fighters baseball cards", "lottery": [], "manual_links": [], "platform": [], "sport": "野球", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/71025", "cat": "スポーツカード", "title": "【新作情報】「BBM横浜DeNAベイスターズベースボールカード2026」相川亮二...", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.bbm-japan.com/article/detail/71025", "series": [], "maker_groups": [], "resale": false, "img": "", "first_seen": "2026-08-02", "en_q": "BBM 2026 Yokohama DeNA BayStars baseball cards", "lottery": [], "manual_links": [], "platform": [], "sport": "野球", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/71230", "cat": "スポーツカード", "title": "BBM BASEBALL CARDS PREMIUM 2026「GENESIS/ジェネシス」", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.bbm-japan.com/article/detail/71230", "series": [], "maker_groups": [], "resale": false, "img": "https://images.bbm-japan.com/media/article/71230/images/main_8ac2f510ff71d21eb6d0079965ffea0d.jpg", "first_seen": "2026-08-02", "en_q": "BBM 2026 Genesis Baseball Cards Premium", "lottery": [], "manual_links": [], "platform": [], "sport": "野球", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/71849", "cat": "スポーツカード", "title": "【新作情報】「BBMオリックス・バファローズベースボールカード2026」ナインの個性が垣間見える企画カードが満載！", "maker": "BBM", "date": "2026-07-13", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 9000, "url": "https://www.bbm-japan.com/article/detail/71849", "series": [], "maker_groups": [], "resale": false, "img": "https://images.bbm-japan.com/media/article/71849/images/main_5a502c5863d962e2969c25b442b1c3e3.jpg", "first_seen": "2026-08-02", "en_q": "BBM 2026 ORIX Buffaloes baseball cards", "lottery": [], "manual_links": [], "platform": [], "sport": "野球", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/72003", "cat": "スポーツカード", "title": "BBMプロ野球 チアリーダーカード2026 DANCING HEROINE", "maker": "BBM", "date": "未定", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.bbm-japan.com/article/detail/72003", "series": [], "maker_groups": [], "resale": false, "img": "https://images.bbm-japan.com/media/article/72003/images/main_6831705b49e79a987dcfb79c2c5caf53.jpg", "first_seen": "2026-08-02", "en_q": "BBM 2026 Dancing Heroine Cheerleader cards", "lottery": [], "manual_links": [], "platform": [], "sport": "野球", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/72096", "cat": "スポーツカード", "title": "【新作情報】「BBM千葉ロッテマリーンズベースボールカード2026」サブロー新監督の下、若きリーダーがけん引する新生マリーンズのチームパックが遂に登場！", "maker": "BBM", "date": "2026-07-21", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 9000, "url": "https://www.bbm-japan.com/article/detail/72096", "series": [], "maker_groups": [], "resale": false, "img": "https://images.bbm-japan.com/media/article/72096/images/main_e2f88d6031b6b818795d05bb70a8567f.jpg", "first_seen": "2026-08-02", "en_q": "BBM 2026 Chiba Lotte Marines baseball cards", "lottery": [], "manual_links": [], "platform": [], "sport": "野球", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "bbm:https://www.bbm-japan.com/article/detail/72097", "cat": "スポーツカード", "title": "【新作情報】「BBM中日ドラゴンズベースボールカード2026」ドラゴンズの歴史を未来へつなげよう！", "maker": "BBM", "date": "2026-07-27", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 9000, "url": "https://www.bbm-japan.com/article/detail/72097", "series": [], "maker_groups": [], "resale": false, "img": "https://images.bbm-japan.com/media/article/72097/images/main_a8ab121750bba8648eea2fead903fd0c.jpg", "first_seen": "2026-08-02", "en_q": "BBM 2026 Chunichi Dragons baseball cards", "lottery": [], "manual_links": [], "platform": [], "sport": "野球", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "tcj:https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-agoro-the-lord-of-the-rings-frodos-journey-collectible-foil/", "cat": "スポーツカード", "title": "【製品情報】2026 AGORO THE LORD OF THE RINGS  – FRODO’S JOURNEY COLLECTIBLE FOIL", "maker": "AGORO", "date": "2026-09-25", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-agoro-the-lord-of-the-rings-frodos-journey-collectible-foil/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/07/LordoftheRings-FrodosJourney_FoilPackaging_Closed_Left.png", "first_seen": "2026-08-02", "en_q": "2026 Agoro Lord of the Rings Frodo Journey Foil", "lottery": [], "manual_links": [], "platform": [], "sport": "その他", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "tcj:https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-agoro-the-lord-of-the-rings-guardians-of-the-fellowship-blind-box/", "cat": "スポーツカード", "title": "【製品情報】2026 AGORO THE LORD OF THE RINGS: GUARDIANS OF THE FELLOWSHIP BLIND BOX", "maker": "AGORO", "date": "2026-08-20", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-agoro-the-lord-of-the-rings-guardians-of-the-fellowship-blind-box/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/07/BlindBox-LOTRSilverTierbanners_LOTRChaserBlindBox-ProductPage-Hero-e1785473198447.png", "first_seen": "2026-08-02", "en_q": "2026 Agoro Lord of the Rings Guardians Fellowship Blind Box", "lottery": [], "manual_links": [], "platform": [], "sport": "その他", "genres": [], "game": "", "ozensa": false, "gear": "", "picked": "sub"}, {"key": "tcj:https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-super-break-michael-jackson-album-collection-spotlight-series-hobby/", "cat": "スポーツカード", "title": "【製品情報】2026 SUPER BREAK MICHAEL JACKSON ALBUM COLLECTION SPOTLIGHT SERIES HOBBY", "maker": "SUPER BREAK", "date": "2026-09-09", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-super-break-michael-jackson-album-collection-spotlight-series-hobby/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/07/Sellsheet-Michael-Jackson-Album-Collection-Spotlight-Series_page-0001-1.jpg", "first_seen": "2026-08-02", "en_q": "2026 Super Break Michael Jackson Album Collection Hobby", "lottery": [], "manual_links": [], "platform": [], "sport": "その他", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "tcj:https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-topps-mint-marvel-hobby/", "cat": "スポーツカード", "title": "【製品情報】2026 TOPPS MINT MARVEL HOBBY", "maker": "TOPPS", "date": "2026-08-20", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-topps-mint-marvel-hobby/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/07/3e79bb1a-0e4a-4e4c-a893-0de948512a40-e1785471840289.png", "first_seen": "2026-08-02", "en_q": "2026 Topps Mint Marvel Hobby Box", "lottery": [], "manual_links": [], "platform": [], "sport": "その他", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "tcj:https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-topps-stadium-club-ufc-hobby/", "cat": "スポーツカード", "title": "【製品情報】2026 TOPPS STADIUM CLUB UFC HOBBY", "maker": "TOPPS", "date": "2026-08-15", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-topps-stadium-club-ufc-hobby/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/07/63b0c8a60faaaa85b698113ab4598e38bed7ce3d_ECOM_26SUFC_FGC7305_HOBBY_BOX.png", "first_seen": "2026-08-02", "en_q": "2026 Topps Stadium Club UFC Hobby Box", "lottery": [], "manual_links": [], "platform": [], "sport": "格闘技", "genres": [], "game": "", "ozensa": false, "gear": "", "picked": "top"}, {"key": "tcj:https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-topps-stadium-club-ufc-mega-box/", "cat": "スポーツカード", "title": "【製品情報】2026 TOPPS STADIUM CLUB UFC MEGA BOX", "maker": "TOPPS", "date": "2026-08-15", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-topps-stadium-club-ufc-mega-box/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/07/8130b2a43adc99dcbd32bbdee0bc75831fa5b432_Slice_1_1.png", "first_seen": "2026-08-02", "en_q": "2026 Topps Stadium Club UFC Mega Box", "lottery": [], "manual_links": [], "platform": [], "sport": "格闘技", "genres": [], "game": "", "ozensa": false, "gear": "", "picked": "sub"}, {"key": "tcj:https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-topps-stadium-club-ufc-value-box/", "cat": "スポーツカード", "title": "【製品情報】2026 TOPPS STADIUM CLUB UFC VALUE BOX", "maker": "TOPPS", "date": "2026-08-15", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-topps-stadium-club-ufc-value-box/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/07/c0b766fe1903fbf4c3286c8997c47e3c653c4984_Slice_1_1.png", "first_seen": "2026-08-02", "en_q": "2026 Topps Stadium Club UFC Value Box", "lottery": [], "manual_links": [], "platform": [], "sport": "格闘技", "genres": [], "game": "", "ozensa": false, "gear": "", "picked": "sub"}, {"key": "tcj:https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%91nhl-2025-26-upper-deck-splendor-hockey-hobby/", "cat": "スポーツカード", "title": "【製品情報】NHL 2025-26 UPPER DECK SPLENDOR HOCKEY HOBBY", "maker": "UPPER DECK", "date": "2026-08-20", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/07/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%91nhl-2025-26-upper-deck-splendor-hockey-hobby/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/07/Sellsheet-UD-2526-Splendor-Hockey_page-0001.jpg", "first_seen": "2026-08-02", "en_q": "2025-26 Upper Deck Splendor Hockey Hobby Box", "lottery": [], "manual_links": [], "platform": [], "sport": "ホッケー", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "tcj:https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%91%e2%9a%bd-2026-panini-fifa-world-cup-winner-sticker-poster/", "cat": "スポーツカード", "title": "【製品情報】⚽ 2026 PANINI FIFA WORLD CUP WINNER  STICKER POSTER", "maker": "PANINI", "date": "2026-09-14", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%91%e2%9a%bd-2026-panini-fifa-world-cup-winner-sticker-poster/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/08/1.png", "first_seen": "2026-08-06", "en_q": "2026 Panini FIFA World Cup Winner Sticker Poster", "lottery": [], "manual_links": [], "platform": [], "sport": "サッカー", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "tcj:https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%91%e2%9a%be-bbm-%e3%83%99%e3%83%bc%e3%82%b9%e3%83%9c%e3%83%bc%e3%83%ab%e3%82%ab%e3%83%bc%e3%83%89%e3%82%bb%e3%83%83%e3%83%88-%e3%83%ab%e3%83%bc-2/", "cat": "スポーツカード", "title": "【製品情報】⚾ BBM ベースボールカードセット ルーキーエディションプレミアム 2026", "maker": "ベースボール・マガジン社", "date": "2026-09-14", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%91%e2%9a%be-bbm-%e3%83%99%e3%83%bc%e3%82%b9%e3%83%9c%e3%83%bc%e3%83%ab%e3%82%ab%e3%83%bc%e3%83%89%e3%82%bb%e3%83%83%e3%83%88-%e3%83%ab%e3%83%bc-2/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/08/219c1a4112c0bdb1c4f582f374b34650-724x1024.jpg", "first_seen": "2026-08-07", "en_q": "BBM Baseball Card Rookie Edition Premium 2026", "lottery": [], "manual_links": [], "platform": [], "sport": "その他", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "tcj:https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%91%e2%9a%be-epoch-2026-%e7%a6%8f%e5%b2%a1%e3%82%bd%e3%83%95%e3%83%88%e3%83%90%e3%83%b3%e3%82%af%e3%83%9b%e3%83%bc%e3%82%af%e3%82%b9-starslegends/", "cat": "スポーツカード", "title": "【製品情報】⚾ EPOCH 2026 福岡ソフトバンクホークス STARS&LEGENDS ベースボールカード", "maker": "エポック社", "date": "2026-10-10", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 18700, "url": "https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%91%e2%9a%be-epoch-2026-%e7%a6%8f%e5%b2%a1%e3%82%bd%e3%83%95%e3%83%88%e3%83%90%e3%83%b3%e3%82%af%e3%83%9b%e3%83%bc%e3%82%af%e3%82%b9-starslegends/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/08/c7ff772963ef411acc512718026c7135.jpg", "first_seen": "2026-08-06", "en_q": "2026 Epoch Fukuoka Softbank Hawks Stars Legends Trading Card", "lottery": [], "manual_links": [], "platform": [], "sport": "その他", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "tcj:https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%91%e2%9a%be-mlb-2026-topps-chrome-baseball-logofractor/", "cat": "スポーツカード", "title": "【製品情報】⚾ MLB 2026 TOPPS CHROME BASEBALL LOGOFRACTOR", "maker": "TOPPS", "date": "2026-08-20", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%91%e2%9a%be-mlb-2026-topps-chrome-baseball-logofractor/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/08/2026-Topps-Chrome-Logofractor.jpg", "first_seen": "2026-08-04", "en_q": "MLB 2026 Topps Chrome Baseball Logofractor", "lottery": [], "manual_links": [], "platform": [], "sport": "野球", "genres": [], "game": "", "ozensa": false, "gear": "", "picked": "sub"}, {"key": "tcj:https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912025-26-futera-formula-e-hobby/", "cat": "スポーツカード", "title": "【製品情報】2025-26 FUTERA FORMULA E HOBBY", "maker": "FUTERA", "date": "2026-09-25", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912025-26-futera-formula-e-hobby/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/08/FE-FX26-Salesheet_page-0001.jpg", "first_seen": "2026-08-04", "en_q": "2025-26 Futera Formula E Hobby", "lottery": [], "manual_links": [], "platform": [], "sport": "その他", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "tcj:https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-agoro-game-of-thrones-house-stark-blind-box/", "cat": "スポーツカード", "title": "【製品情報】2026 AGORO GAME OF THRONES HOUSE STARK BLIND BOX", "maker": "AGORO", "date": "2026-09-14", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-agoro-game-of-thrones-house-stark-blind-box/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/08/5e4896966c9944fcf00890f4502605bf.png", "first_seen": "2026-08-06", "en_q": "2026 AGORO Game of Thrones House Stark Blind Box", "lottery": [], "manual_links": [], "platform": [], "sport": "その他", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "tcj:https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-break-company-inc-ateez-teleca-collection-card/", "cat": "スポーツカード", "title": "【製品情報】2026 BREAK & COMPANY INC. ATEEZ TELECA COLLECTION CARD", "maker": "BREAK &amp; COMPANY INC.", "date": "2026-09-14", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-break-company-inc-ateez-teleca-collection-card/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/08/ATEEZ-TELECA.png", "first_seen": "2026-08-07", "en_q": "2026 Break Company ATEEZ trading card", "lottery": [], "manual_links": [], "platform": [], "sport": "その他", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "tcj:https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-kakawow-gem-harry-potter-25th-anniversary-trading-cards-hobby/", "cat": "スポーツカード", "title": "【製品情報】2026 KAKAWOW GEM HARRY POTTER 25TH ANNIVERSARY TRADING CARDS HOBBY", "maker": "KAKAWOW", "date": "2026-09-14", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-kakawow-gem-harry-potter-25th-anniversary-trading-cards-hobby/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/08/2026-KAKAWOW-GEM-Harry-Potter-25th-Anniversary-Trading-Cards-Slides_page-0001.jpg", "first_seen": "2026-08-07", "en_q": "2026 KAKAWOW GEM Harry Potter 25th Anniversary trading card", "lottery": [], "manual_links": [], "platform": [], "sport": "その他", "genres": [], "game": "", "ozensa": false, "gear": ""}, {"key": "tcj:https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-leaf-metal-women-of-sport-hobby/", "cat": "スポーツカード", "title": "【製品情報】2026 LEAF METAL WOMEN OF SPORT HOBBY", "maker": "LEAF", "date": "2026-09-25", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": "", "url": "https://www.tradingcardjournal.com/2026/08/%e3%80%90%e8%a3%bd%e5%93%81%e6%83%85%e5%a0%b1%e3%80%912026-leaf-metal-women-of-sport-hobby/", "series": [], "maker_groups": [], "resale": false, "img": "https://www.tradingcardjournal.com/wp-content/uploads/2026/08/26L_WoS_SS_page-0001-1024x768.jpg", "first_seen": "2026-08-05", "en_q": "2026 Leaf Metal Women of Sport Hobby", "lottery": [], "manual_links": [], "platform": [], "sport": "その他", "genres": [], "game": "", "ozensa": false, "gear": ""}];
 const STATS = {"new": 212, "changed": 17, "errors": 2};
 const LOTTERY_SITES = [{"name": "ポケモンセンターオンライン", "url": "https://www.pokemoncenter-online.com/"}, {"name": "楽天ブックス", "url": "https://books.rakuten.co.jp/"}, {"name": "あみあみ", "url": "https://www.amiami.jp/"}, {"name": "駿河屋", "url": "https://www.suruga-ya.jp/"}];
-const TODAY_ISO = "2026-08-09";
+// 朝刊ビュー（案C）専用の共通データ（2026-08-10追加）。全ページ共通の内容
+// （src/report.py _build_news_common/_build_lottery_common が生成日1回だけ
+// 計算し、18ページ全てに同じものを埋め込む。DATAの複製ではなく最大5件のみ）。
+// NEWS_COMMON: ニュース直近5件（{key,title,url,maker}の配列）。
+// LOTTERY_COMMON: 締切間近{items:[{title,url,maker,lottery_deadline}の配列、
+// 最大5件], total:該当総数}。サマリー行の「締切間近◯件」は表示上限5件では
+// なくtotalを使う（捏造禁止＝表示件数と集計件数を混同しない）。
+const NEWS_COMMON = [{"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2126530.html", "title": "ガチャ「肩ズンFig.呪術廻戦-参-」8月下旬発売！　「虎杖」・「伏黒」に加え「乙骨」・「脹相」がラインナップ", "url": "https://hobby.watch.impress.co.jp/docs/news/2126530.html", "maker": "タカラトミーアーツ"}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2131370.html", "title": "ハセガワ、プラモデル「VF-1S ストライク バトロイド バルキリー」再販分を本日発売！", "url": "https://hobby.watch.impress.co.jp/docs/news/2131370.html", "maker": "ハセガワ"}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/special/2131643.html", "title": "「ENTRY GRADE」シリーズのガンダム3機が浮世絵の飾りをまとった限定パッケージで8月29日に発売！　お土産にもピッタリ!?【ガンダムベース撮り下ろし】", "url": "https://hobby.watch.impress.co.jp/docs/special/2131643.html", "maker": ""}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/special/2131672.html", "title": "「RE/100 1/100 デナン・ゾン」のサンプルがガンダムベースに展示中。クロスボーン・バンガードの制式量産機が間もなく発送【ガンダムベース撮り下ろし】", "url": "https://hobby.watch.impress.co.jp/docs/special/2131672.html", "maker": ""}, {"key": "prtimes:https://prtimes.jp/main/html/rd/p/000000006.000164816.html", "title": "VTuberグループ「ンニマニティ」所属の『押水結夏』誕生日記念グッズが販売開始！", "url": "https://prtimes.jp/main/html/rd/p/000000006.000164816.html", "maker": "ンニマニティ合同会社"}];
+const LOTTERY_COMMON = {"items": [{"title": "ONE PIECEカードゲーム ブースターパック 世界最強の戦士【OP-17】", "url": "https://cardchusen.com/onepiece/op17-saikyo-no-senshi#card-op17-saikyo-no-senshi-joshin-app", "maker": "Joshin（上新電機）アプリ", "lottery_deadline": "2026-08-10T23:59:00+09:00"}, {"title": "ONE PIECEカードゲーム ブースターパック 世界最強の戦士【OP-17】", "url": "https://cardchusen.com/onepiece/op17-saikyo-no-senshi#card-op17-saikyo-no-senshi-usagiya-tsutaya-tochigi-jonai", "maker": "うさぎやTSUTAYA栃木城内店", "lottery_deadline": "2026-08-10T21:00:00+09:00"}, {"title": "ONE PIECEカードゲーム ブースターパック 世界最強の戦士【OP-17】", "url": "https://cardchusen.com/onepiece/op17-saikyo-no-senshi#card-op17-saikyo-no-senshi-wondergoo-newseido", "maker": "WonderGOO・Ganryu・新星堂 各店", "lottery_deadline": "2026-08-10T20:59:00+09:00"}, {"title": "ONE PIECEカードゲーム ブースターパック 世界最強の戦士【OP-17】", "url": "https://cardchusen.com/onepiece/op17-saikyo-no-senshi#card-op17-saikyo-no-senshi-yamatoya-nakazato", "maker": "ヤマト屋書店TSUTAYA中里店", "lottery_deadline": "2026-08-10T21:00:00+09:00"}, {"title": "ポケモンカードゲーム MEGA 拡張パック 30th CELEBRATION", "url": "https://cardchusen.com/pokeka/30th-celebration#card-30th-celebration-cardbox-ikebukuro", "maker": "カードボックス池袋店", "lottery_deadline": "2026-08-10T23:59:00+09:00"}], "total": 99};
+const TODAY_ISO = "2026-08-10";
 // "default"（トレカ/フィギュア/くじタブ）/ "comic"（出版社別タブ）/
 // "game"（プラットフォーム別タブ）/ "sports"（競技別タブ）/ "jump"（ジャンル別タブ）/
 // "news"（媒体別タブ）。
@@ -1546,10 +1647,6 @@ function renderB(){
 }
 
 /* ── 案C ── */
-function attBar(it){
-  const n = att(it);
-  return `<span class="att"><span>注目度</span>${[0,1,2].map(k => `<i class="${k < n ? "f" : ""}"></i>`).join("")}</span>`;
-}
 function flistItemHtml(i){
   // 行全体を<a>にすると検索リンク列を内包できないため、ラッパーはdiv(.frow)にし、
   // 画像とタイトルをそれぞれ商品ページへのリンクにする。行のクリック
@@ -1564,33 +1661,197 @@ function flistItemHtml(i){
     + `${manualLinksRow(i)}`
     + `</div></div>`;
 }
+// ── 朝刊（案C）専用ヘルパー（2026-08-10追加） ──
+// 「本日のピックアップニュース」の媒体タグ。NEWS_COMMONの各要素はkeyのみを
+// 持つ簡易オブジェクトのため、newsSourceGroup()と同じキー接頭辞判定を
+// 軽量に再実装する（newsSourceGroup()の既定"その他"は流用せず、朝刊の
+// 見出し向けに"ニュース"を既定にする）。
+function newsCommonTag(key){
+  const k = key || "";
+  if(k.indexOf("hobbywatch:") === 0) return "Hobby Watch";
+  if(k.indexOf("prtimes:") === 0) return "PR TIMES";
+  if(k.indexOf("gamewatch:") === 0) return "GAME Watch";
+  return "ニュース";
+}
+// 締切間近リストの表示用フォーマット。lottery_deadlineはISO8601日時
+// （例 "2026-08-05T23:59:00+09:00"）のため、日付・時刻部分のみを取り出して
+// 「8月5日（水）23:59締切」を組み立てる（表示専用の簡易整形。締切が
+// 今日以降かどうかの判定自体はPython側_build_lottery_commonで既に済んでいる）。
+function fmtLotteryDeadlineJa(iso){
+  const m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(iso || "");
+  if(!m) return esc(iso || "締切未定");
+  const d = new Date(+m[1], +m[2]-1, +m[3]);
+  return `${+m[2]}月${+m[3]}日（${WD_JA[d.getDay()]}）${m[4]}:${m[5]}締切`;
+}
+// 朝刊トップ記事のリード文で使う動詞（it.kind／PAGE_MODEに応じて出し分け。
+// 実データのkind/PAGE_MODEをそのまま使うため捏造ではない）。
+function pickupVerb(it){
+  if(PAGE_MODE === "lottery") return "受け付ける";
+  if(it.kind === "予約") return "予約受付を開始する";
+  if(it.kind === "抽選") return "抽選受付を行う";
+  return "発売する";
+}
+// カテゴリ面: 現在ページのcattabsボタン（テンプレート側のCATTABSプレース
+// ホルダーが展開済みのHTML）をDOMから読み取る。Python側_CATTABS_DEFSを
+// JS側に再定義せず、既に描画済みの
+// ボタン（data-cat/表示ラベル）をそのまま使い回すことで二重管理を避ける。
+function catTabsList(){
+  return Array.from(document.querySelectorAll(".cattabs button"))
+    .map(b => ({ label: b.textContent, value: b.getAttribute("data-cat") }))
+    .filter(t => t.value && t.value !== "all");
+}
+// カテゴリ面の各タブに属するかの判定。baseData()の各PAGE_MODE分岐と同じ
+// グルーピング関数を再利用する（catFilterという単一のグローバル状態ではなく、
+// 任意のtab値を引数に取れるようパラメータ化しただけで判定ロジック自体は
+// 複製しない）。
+function catTabPredicate(value){
+  if(PAGE_MODE === "comic") return it => comicPublisherGroup(it.maker) === value;
+  if(PAGE_MODE === "game") return it => gameHasPlatform(it, value);
+  if(PAGE_MODE === "sports") return it => sportGroup(it.sport) === value;
+  if(PAGE_MODE === "jump") return it => jumpGenreGroup(it) === value;
+  if(PAGE_MODE === "news") return it => newsSourceGroup(it) === value;
+  if(PAGE_MODE === "lottery") return it => it.game === value;
+  if(PAGE_MODE === "stationery") return it => stationerySourceGroup(it) === value;
+  if(PAGE_MODE === "rail") return it => railMakerGroup(it) === value;
+  if(PAGE_MODE === "doll") return it => dollMakerGroup(it) === value;
+  if(PAGE_MODE === "fishing") return it => fishingGearGroup(it) === value;
+  if(value === "くじ") return isLotteryItem;
+  return it => it.cat === value;
+}
+// カテゴリ面「◯◯面をすべて見る」の誘導リンク。既存のcattabsボタンを探して
+// setCat()を呼ぶ（既存タブ絞り込みをそのまま起動）。1画面で結果を見せるため
+// 案B（ストア、日付グループ表示）へ切り替える。
+function goToCategoryTab(value){
+  const btn = Array.from(document.querySelectorAll(".cattabs button")).find(b => b.getAttribute("data-cat") === value);
+  if(btn) setCat(value, btn);
+  show("B");
+  window.scrollTo({top:0, left:0, behavior:"auto"});
+}
+// カテゴリ面本体。pool（本日のピックアップ商品を除いた「紙面一覧」相当の
+// プール）を各タブでフィルタし、上位3件（computeFeatured基準）を「◯◯面」
+// として表示する。該当0件のタブは出さない（空枠を出さない方針を統一適用）。
+// タブが1つも無いページ（cattabsが実質存在しないケース。現状は全ページで
+// 最低1つ以上あるが将来の保険）は何も出さない。
+function categoryFacetsHtml(pool, excludeKeys){
+  const tabs = catTabsList();
+  if(!tabs.length) return "";
+  let html = "";
+  tabs.forEach(t => {
+    const pred = catTabPredicate(t.value);
+    const items = computeFeatured(pool.filter(i => pred(i) && !excludeKeys.has(i.key))).slice(0, 3);
+    if(!items.length) return;
+    html += `<div class="asakan-catface">
+      <h3 class="asakan-catface-title">${esc(t.label)}面</h3>
+      <ul class="asakan-catface-list">
+        ${items.map(i => `<li><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a><span class="asakan-catface-meta num">${esc(fmtDate(i))}${fmtPrice(i) ? "｜" + fmtPrice(i) : ""}</span></li>`).join("")}
+      </ul>
+      <button type="button" class="asakan-more" onclick="goToCategoryTab('${esc(t.value)}')">${esc(t.label)}面をすべて見る &rarr;</button>
+    </div>`;
+  });
+  return html ? `<div class="asakan-catfaces">${html}</div>` : "";
+}
 function renderC(){
   const el = document.getElementById("vC");
   const list = currentData();
   if(!list.length){ el.innerHTML = `<p style="color:var(--muted)">データがありません。</p>`; return; }
-  const featured = computeFeatured(list);
-  const top = featured.filter(i => i.img).slice(0, 3);
-  const rest = list.filter(i => !top.includes(i)).slice(0, 30);
-  const g = groupItemsByDate(rest);
-  el.innerHTML = `
-    <div class="mh"><div class="l1">MORNING EDITION</div><div class="l2">8月9日（日）の朝刊</div></div>
-    <div class="sec"><span class="name">今日の注目</span><span class="rule"></span><span class="cnt num">${top.length}件</span></div>
-    ${top.map(i => `
-      <div class="fcard" data-key="${esc(i.key)}" onclick="handleCardClick(event)">
-        <a class="tlink" href="${esc(i.url)}" target="_blank" rel="noopener">${thumb(i)}</a>
-        <div class="body">
-          <div class="t"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a></div>
-          <div class="meta">${chips(i, true)}<b class="num">${fmtPrice(i)}</b>${attBar(i)}</div>
-          ${searchLinks(i)}
-          ${lotteryLinksRow(i)}
-          ${manualLinksRow(i)}
-        </div>
-      </div>`).join("")}
-    <div class="sec"><span class="name">${PAGE_MODE === "lottery" ? "新着・締切予定" : "新着・発売予定"}</span><span class="rule"></span><span class="cnt num">${rest.length}件</span></div>
+
+  // 本日のピックアップ商品（トップ1件＋準トップ4件）。選定自体はビルド時
+  // （src/report.py _select_pickup）に完了済みで、it.picked==="top"/"sub"の
+  // フラグから拾うだけ（JS側では選定ロジックを持たない）。絞り込みで
+  // ピック対象がlistから外れている場合はトップ記事なしになる（仕様どおり
+  // currentData()基準で表示する）。
+  const pickedTop = list.find(i => i.picked === "top") || null;
+  const pickedSubs = list.filter(i => i.picked === "sub").slice(0, 4);
+  const pickedKeys = new Set();
+  if(pickedTop) pickedKeys.add(pickedTop.key);
+  pickedSubs.forEach(i => pickedKeys.add(i.key));
+
+  // サマリー行: 「本日の新着」はこのページのDATA（currentData()適用後）、
+  // 「締切間近」は共通データ（LOTTERY_COMMON.total、表示上限5件ではなく
+  // 実数）から機械集計する（捏造禁止）。
+  const newCount = list.filter(i => i.first_seen === TODAY_ISO).length;
+  const deadlineCount = LOTTERY_COMMON.total;
+
+  const topHtml = pickedTop ? `
+    <article class="asakan-top" data-key="${esc(pickedTop.key)}" onclick="handleCardClick(event)">
+      ${isNewItem(pickedTop) ? `<span class="asakan-badge-new">NEW</span>` : ""}
+      <a class="tlink" href="${esc(pickedTop.url)}" target="_blank" rel="noopener">${thumb(pickedTop, "asakan-top-img")}</a>
+      <div class="asakan-top-body">
+        <h2 class="asakan-top-title"><a href="${esc(pickedTop.url)}" target="_blank" rel="noopener">${esc(pickedTop.title)}</a></h2>
+        <p class="asakan-lead">${esc(pickedTop.maker || "")}${pickedTop.maker ? "は" : ""}「${esc(pickedTop.title)}」を${esc(fmtDate(pickedTop))}に${pickupVerb(pickedTop)}。${fmtPrice(pickedTop) ? `価格は${fmtPrice(pickedTop)}。` : ""}</p>
+        ${searchLinks(pickedTop)}
+        ${lotteryLinksRow(pickedTop)}
+        ${manualLinksRow(pickedTop)}
+      </div>
+    </article>` : "";
+  const subHtml = pickedSubs.length ? `
+    <div class="asakan-substories">
+      ${pickedSubs.map(i => `
+        <article class="asakan-sub" data-key="${esc(i.key)}" onclick="handleCardClick(event)">
+          ${isNewItem(i) ? `<span class="asakan-badge-new small">NEW</span>` : ""}
+          <a class="tlink" href="${esc(i.url)}" target="_blank" rel="noopener">${thumb(i, "asakan-sub-img")}</a>
+          <h3 class="asakan-sub-title"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.title)}</a></h3>
+          <p class="asakan-sub-meta num">${esc(i.maker || "")}${i.maker ? "｜" : ""}${esc(fmtDate(i))}${fmtPrice(i) ? "｜" + fmtPrice(i) : ""}</p>
+        </article>`).join("")}
+    </div>` : "";
+
+  const newsHtml = NEWS_COMMON.length ? `
+    <section class="asakan-news">
+      <h2 class="asakan-section-title">本日のピックアップニュース</h2>
+      <ul class="asakan-news-list">
+        ${NEWS_COMMON.map(n => `
+          <li class="asakan-news-item">
+            <span class="asakan-news-tag">${esc(newsCommonTag(n.key))}</span>
+            <a href="${esc(n.url)}" target="_blank" rel="noopener">${esc(n.title)}</a>
+            ${n.maker ? `<span class="asakan-news-maker">${esc(n.maker)}</span>` : ""}
+          </li>`).join("")}
+      </ul>
+    </section>` : "";
+
+  const lotteryHtml = LOTTERY_COMMON.items.length ? `
+    <section class="asakan-lottery">
+      <h2 class="asakan-section-title asakan-lottery-title">締切間近</h2>
+      <ul class="asakan-lottery-list">
+        ${LOTTERY_COMMON.items.map(n => `
+          <li class="asakan-lottery-item">
+            <span class="asakan-deadline num">${fmtLotteryDeadlineJa(n.lottery_deadline)}</span>
+            <a href="${esc(n.url)}" target="_blank" rel="noopener">${esc(n.title)}</a>
+            ${n.maker ? `<span class="asakan-lottery-shop">${esc(n.maker)}</span>` : ""}
+          </li>`).join("")}
+      </ul>
+    </section>` : "";
+
+  const facetsHtml = categoryFacetsHtml(list, pickedKeys);
+
+  // 紙面一覧: 従来の朝刊の日付グループ一覧（既存の折りたたみ・日付ジャンプ
+  // 機能をそのまま流用）。本日のピックアップ商品として既に出た分は除外する。
+  const restList = list.filter(i => !pickedKeys.has(i.key));
+  const g = groupItemsByDate(restList);
+  const shimenHtml = restList.length ? `
+    <div class="asakan-section-title asakan-shimen-title">紙面一覧<span class="asakan-shimen-cnt num">${restList.length}件</span></div>
     <div id="jumpNavC">${renderJumpNavFromGroups(g, "secC")}</div>
-    <div class="flist">
-      ${renderDateSectionsFromGroups(g, flistItemHtml, "secC")}
-    </div>
+    <div class="flist">${renderDateSectionsFromGroups(g, flistItemHtml, "secC")}</div>` : "";
+
+  el.innerHTML = `
+    <header class="asakan-masthead">
+      <div class="asakan-masthead-row">
+        <div class="asakan-title-block">
+          <div class="asakan-vtitle">新商品ウォッチ</div>
+          <div class="asakan-hanko">朝刊</div>
+        </div>
+        <div class="asakan-issue-info">
+          <p class="asakan-issue-date num">2026年8月10日（月）</p>
+          <p class="asakan-issue-note">毎朝7時更新</p>
+        </div>
+      </div>
+      <div class="asakan-rule-double"></div>
+    </header>
+    <div class="asakan-summary num">本日の新着 <strong>${newCount}</strong>件｜締切間近 <strong>${deadlineCount}</strong>件</div>
+    ${(topHtml || subHtml) ? `<div class="asakan-topblock">${topHtml}${subHtml}</div>` : ""}
+    ${newsHtml}
+    ${lotteryHtml}
+    ${facetsHtml}
+    ${shimenHtml}
     ${lotteryCompactHtml()}`;
   observeLazyImages();
 }
