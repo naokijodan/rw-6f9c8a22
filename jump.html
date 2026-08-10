@@ -357,9 +357,18 @@ img{max-width:100%}
   font-size:10.5px; color:var(--muted); width:100%}
 @media(min-width:640px){.asakan-news-maker{width:auto; margin-left:auto}}
 
-/* ── 締切間近 ── */
+/* ── 締切間近（2026-08-10改修: 期限グループ表示。朱色見出し・罫線の
+   トーンは既存のまま、内側に「7日以内」「2週間以内（8〜14日）」の
+   小見出し付きリストを追加し、末尾に「15日以降」の件数のみの誘導行を置く） ── */
 .asakan-lottery{border:2px solid var(--accent); padding:14px 16px 16px; margin-top:24px}
 .asakan-lottery-title{color:var(--accent); border-bottom-color:var(--accent); margin-top:0}
+.asakan-lottery-group{margin-top:12px}
+.asakan-lottery-group:first-of-type{margin-top:6px}
+.asakan-lottery-group-title{font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;
+  font-weight:700; font-size:13px; color:var(--accent); margin:0 0 4px;
+  display:flex; align-items:baseline; gap:6px}
+.asakan-lottery-group-count{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+  font-weight:400; font-size:11px; color:var(--muted)}
 .asakan-lottery-list{list-style:none; margin:0; padding:0}
 .asakan-lottery-item{display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 10px; padding:8px 0;
   border-bottom:1px dashed var(--line)}
@@ -368,6 +377,9 @@ img{max-width:100%}
 .asakan-lottery-item a{color:var(--ink); font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif}
 .asakan-lottery-shop{font-size:11px; color:var(--muted); width:100%}
 @media(min-width:640px){.asakan-lottery-shop{width:auto; margin-left:auto}}
+.asakan-lottery-more{margin:12px 0 0; padding-top:10px; border-top:1px dashed var(--line); font-size:12px}
+.asakan-lottery-more a{color:var(--indigo); font-weight:700}
+.asakan-lottery-more a:hover{text-decoration:underline}
 
 /* ── カテゴリ面（そのページのcattabs軸のタブごとに3件程度＋誘導リンク） ── */
 .asakan-catfaces{display:grid; grid-template-columns:1fr; gap:20px 28px; margin-top:24px}
@@ -472,7 +484,7 @@ img{max-width:100%}
 <header class="mast">
   <div class="mast-in">
     <div class="brand">新商品<b>ウォッチ</b></div>
-    <div class="today num">2026年8月10日（月） 10:00更新</div>
+    <div class="today num">2026年8月10日（月） 10:11更新</div>
     <a class="theme-toggle" href="https://docs.google.com/spreadsheets/d/1g8d_tYSgmwsxorlktBztrlCTUnI-iZyjKpcMLdGV1KU/edit" target="_blank" rel="noopener">📋 台帳</a>
     <div class="switch" role="tablist" aria-label="デザイン案の切り替え">
       <button id="bA" class="on" onclick="show('A')">ポータル</button>
@@ -517,11 +529,15 @@ const LOTTERY_SITES = [{"name": "ポケモンセンターオンライン", "url"
 // （src/report.py _build_news_common/_build_lottery_common が生成日1回だけ
 // 計算し、18ページ全てに同じものを埋め込む。DATAの複製ではなく最大5件のみ）。
 // NEWS_COMMON: ニュース直近5件（{key,title,url,maker}の配列）。
-// LOTTERY_COMMON: 締切間近{items:[{title,url,maker,lottery_deadline}の配列、
-// 最大5件], total:該当総数}。サマリー行の「締切間近◯件」は表示上限5件では
-// なくtotalを使う（捏造禁止＝表示件数と集計件数を混同しない）。
+// LOTTERY_COMMON: 締切を期限グループ別に持つ（2026-08-10改修、ユーザー原文
+// 「期限ごとに表示したら？例えば7日以内、２週間以内とかっていう感じ」）。
+// {within7:{items:[{title,url,maker,lottery_deadline}の配列、最大5件],
+// total:該当総数(0〜7日後)}, within14:{items:同形式最大5件, total:該当総数
+// (8〜14日後)}, beyond15:{total:該当総数(15日以降)。一覧は持たない}}。
+// サマリー行・グループ見出しの件数は表示上限5件ではなく各totalを使う
+// （捏造禁止＝表示件数と集計件数を混同しない）。
 const NEWS_COMMON = [{"key": "gamewatch:https://game.watch.impress.co.jp/docs/kikaku/2128149.html", "title": "劇場アニメ『SEKIRO: NO DEFEAT』公開目前！ 原作ゲームが“屈指の名作”として語り継がれる理由を紹介没入感のあるストーリーと独創的な発明だった剣戟アクション", "url": "https://game.watch.impress.co.jp/docs/kikaku/2128149.html", "maker": ""}, {"key": "gamewatch:https://game.watch.impress.co.jp/docs/news/2131582.html", "title": "第3期放送記念！　アニメ「薬屋のひとりごと」第1期・第2期全話を「TVer」にて期間限定で順次無料配信開始", "url": "https://game.watch.impress.co.jp/docs/news/2131582.html", "maker": ""}, {"key": "gamewatch:https://game.watch.impress.co.jp/docs/news/2131631.html", "title": "ユニクロ「マリオカート ワールド」UTが本日発売！　TシャツやKIDSスウェットがラインナップ", "url": "https://game.watch.impress.co.jp/docs/news/2131631.html", "maker": "ユニクロ"}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/feature/2130131.html", "title": "【特集】夏真っ盛り！ 夏の瑞々しさが感じられる美少女フィギュアを集めてみた！【あみあみ展示撮り下ろし特別編】", "url": "https://hobby.watch.impress.co.jp/docs/feature/2130131.html", "maker": ""}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2126594.html", "title": "ガチャ「肩ズンFig. ディズニープリンセス」8月下旬発売！穏やかに眠るジャスミンやアリエルたちが登場", "url": "https://hobby.watch.impress.co.jp/docs/news/2126594.html", "maker": "タカラトミーアーツ"}];
-const LOTTERY_COMMON = {"items": [{"title": "ONE PIECEカードゲーム ブースターパック 世界最強の戦士【OP-17】", "url": "https://cardchusen.com/onepiece/op17-saikyo-no-senshi#card-op17-saikyo-no-senshi-joshin-app", "maker": "Joshin（上新電機）アプリ", "lottery_deadline": "2026-08-10T23:59:00+09:00"}, {"title": "ONE PIECEカードゲーム ブースターパック 世界最強の戦士【OP-17】", "url": "https://cardchusen.com/onepiece/op17-saikyo-no-senshi#card-op17-saikyo-no-senshi-usagiya-tsutaya-tochigi-jonai", "maker": "うさぎやTSUTAYA栃木城内店", "lottery_deadline": "2026-08-10T21:00:00+09:00"}, {"title": "ONE PIECEカードゲーム ブースターパック 世界最強の戦士【OP-17】", "url": "https://cardchusen.com/onepiece/op17-saikyo-no-senshi#card-op17-saikyo-no-senshi-wondergoo-newseido", "maker": "WonderGOO・Ganryu・新星堂 各店", "lottery_deadline": "2026-08-10T20:59:00+09:00"}, {"title": "ONE PIECEカードゲーム ブースターパック 世界最強の戦士【OP-17】", "url": "https://cardchusen.com/onepiece/op17-saikyo-no-senshi#card-op17-saikyo-no-senshi-yamatoya-nakazato", "maker": "ヤマト屋書店TSUTAYA中里店", "lottery_deadline": "2026-08-10T21:00:00+09:00"}, {"title": "ポケモンカードゲーム MEGA 拡張パック 30th CELEBRATION", "url": "https://cardchusen.com/pokeka/30th-celebration#card-30th-celebration-cardbox-ikebukuro", "maker": "カードボックス池袋店", "lottery_deadline": "2026-08-10T23:59:00+09:00"}], "total": 118};
+const LOTTERY_COMMON = {"within7": {"items": [{"title": "ONE PIECEカードゲーム ブースターパック 世界最強の戦士【OP-17】", "url": "https://cardchusen.com/onepiece/op17-saikyo-no-senshi#card-op17-saikyo-no-senshi-joshin-app", "maker": "Joshin（上新電機）アプリ", "lottery_deadline": "2026-08-10T23:59:00+09:00"}, {"title": "ONE PIECEカードゲーム ブースターパック 世界最強の戦士【OP-17】", "url": "https://cardchusen.com/onepiece/op17-saikyo-no-senshi#card-op17-saikyo-no-senshi-usagiya-tsutaya-tochigi-jonai", "maker": "うさぎやTSUTAYA栃木城内店", "lottery_deadline": "2026-08-10T21:00:00+09:00"}, {"title": "ONE PIECEカードゲーム ブースターパック 世界最強の戦士【OP-17】", "url": "https://cardchusen.com/onepiece/op17-saikyo-no-senshi#card-op17-saikyo-no-senshi-wondergoo-newseido", "maker": "WonderGOO・Ganryu・新星堂 各店", "lottery_deadline": "2026-08-10T20:59:00+09:00"}, {"title": "ONE PIECEカードゲーム ブースターパック 世界最強の戦士【OP-17】", "url": "https://cardchusen.com/onepiece/op17-saikyo-no-senshi#card-op17-saikyo-no-senshi-yamatoya-nakazato", "maker": "ヤマト屋書店TSUTAYA中里店", "lottery_deadline": "2026-08-10T21:00:00+09:00"}, {"title": "ポケモンカードゲーム MEGA 拡張パック 30th CELEBRATION", "url": "https://cardchusen.com/pokeka/30th-celebration#card-30th-celebration-cardbox-ikebukuro", "maker": "カードボックス池袋店", "lottery_deadline": "2026-08-10T23:59:00+09:00"}], "total": 98}, "within14": {"items": [{"title": "ONE PIECEカードゲーム ブースターパック 世界最強の戦士【OP-17】", "url": "https://cardchusen.com/onepiece/op17-saikyo-no-senshi#card-op17-saikyo-no-senshi-premium-bandai", "maker": "プレミアムバンダイ", "lottery_deadline": "2026-08-18T23:00:00+09:00"}, {"title": "ONE PIECEカードゲーム ブースターパック「世界最強の戦士」【OP-17】", "url": "https://cardchusen.com/onepiece/op17-saikyo-no-senshi#card-op17-saikyo-no-senshi-mintgames-ikebukuro", "maker": "MINT GAMES 池袋", "lottery_deadline": "2026-08-19T21:00:00+09:00"}, {"title": "ONE PIECEカードゲーム ブースターパック「世界最強の戦士」【OP-17】", "url": "https://cardchusen.com/onepiece/op17-saikyo-no-senshi#card-op17-saikyo-no-senshi-tierone-hamamatsu", "maker": "TierOne 浜松店", "lottery_deadline": "2026-08-19T23:59:00+09:00"}, {"title": "ONE PIECEカードゲーム ブースターパック「世界最強の戦士」【OP-17】", "url": "https://cardchusen.com/onepiece/op17-saikyo-no-senshi#card-op17-saikyo-no-senshi-tierone-shibuya", "maker": "TierOne 渋谷店", "lottery_deadline": "2026-08-19T23:59:00+09:00"}, {"title": "ONE PIECEカードゲーム ブースターパック 世界最強の戦士【OP-17】", "url": "https://cardchusen.com/onepiece/op17-saikyo-no-senshi#card-op17-saikyo-no-senshi-jungle-toreca", "maker": "ジャングルトレカ 本店", "lottery_deadline": "2026-08-20T23:59:00+09:00"}], "total": 8}, "beyond15": {"total": 12}};
 const TODAY_ISO = "2026-08-10";
 // "default"（トレカ/フィギュア/くじタブ）/ "comic"（出版社別タブ）/
 // "game"（プラットフォーム別タブ）/ "sports"（競技別タブ）/ "jump"（ジャンル別タブ）/
@@ -1683,6 +1699,24 @@ function fmtLotteryDeadlineJa(iso){
   const d = new Date(+m[1], +m[2]-1, +m[3]);
   return `${+m[2]}月${+m[3]}日（${WD_JA[d.getDay()]}）${m[4]}:${m[5]}締切`;
 }
+// 締切間近の期限グループ1つ分（「7日以内」「2週間以内（8〜14日）」）の
+// HTMLを組み立てる（2026-08-10追加）。group = LOTTERY_COMMON.within7 /
+// within14（{items:[...最大5件], total:該当総数}）。0件（total===0、
+// itemsも同時に空になる）ならグループごと非表示にする。
+function lotteryDeadlineGroupHtml(label, group){
+  if(!group.items.length) return "";
+  return `<div class="asakan-lottery-group">
+    <h3 class="asakan-lottery-group-title">${esc(label)}<span class="asakan-lottery-group-count num">${group.total}件</span></h3>
+    <ul class="asakan-lottery-list">
+      ${group.items.map(n => `
+        <li class="asakan-lottery-item">
+          <span class="asakan-deadline num">${fmtLotteryDeadlineJa(n.lottery_deadline)}</span>
+          <a href="${esc(n.url)}" target="_blank" rel="noopener">${esc(n.title)}</a>
+          ${n.maker ? `<span class="asakan-lottery-shop">${esc(n.maker)}</span>` : ""}
+        </li>`).join("")}
+    </ul>
+  </div>`;
+}
 // 朝刊トップ記事のリード文で使う動詞（it.kind／PAGE_MODEに応じて出し分け。
 // 実データのkind/PAGE_MODEをそのまま使うため捏造ではない）。
 function pickupVerb(it){
@@ -1767,10 +1801,12 @@ function renderC(){
   pickedSubs.forEach(i => pickedKeys.add(i.key));
 
   // サマリー行: 「本日の新着」はこのページのDATA（currentData()適用後）、
-  // 「締切間近」は共通データ（LOTTERY_COMMON.total、表示上限5件ではなく
-  // 実数）から機械集計する（捏造禁止）。
+  // 「締切 7日以内」「2週間以内」は共通データ（LOTTERY_COMMON.within7/
+  // within14のtotal、表示上限5件ではなく実数）から機械集計する（捏造禁止。
+  // 2026-08-10改修: 日数上限なしの単一件数から期限グループの件数へ変更）。
   const newCount = list.filter(i => i.first_seen === TODAY_ISO).length;
-  const deadlineCount = LOTTERY_COMMON.total;
+  const deadline7Count = LOTTERY_COMMON.within7.total;
+  const deadline14Count = LOTTERY_COMMON.within14.total;
 
   const topHtml = pickedTop ? `
     <article class="asakan-top" data-key="${esc(pickedTop.key)}" onclick="handleCardClick(event)">
@@ -1808,17 +1844,18 @@ function renderC(){
       </ul>
     </section>` : "";
 
-  const lotteryHtml = LOTTERY_COMMON.items.length ? `
+  // 締切間近を期限グループ（7日以内/2週間以内(8〜14日)/15日以降）で表示する
+  // （2026-08-10改修、ユーザー原文「期限ごとに表示したら？例えば7日以内、
+  // ２週間以内とかっていう感じ」）。各グループ0件はそのグループごと非表示、
+  // 全グループ0件（lotteryTotal===0）ならボックス自体を非表示にする
+  // （従来仕様を踏襲）。
+  const lotteryTotal = LOTTERY_COMMON.within7.total + LOTTERY_COMMON.within14.total + LOTTERY_COMMON.beyond15.total;
+  const lotteryHtml = lotteryTotal ? `
     <section class="asakan-lottery">
       <h2 class="asakan-section-title asakan-lottery-title">締切間近</h2>
-      <ul class="asakan-lottery-list">
-        ${LOTTERY_COMMON.items.map(n => `
-          <li class="asakan-lottery-item">
-            <span class="asakan-deadline num">${fmtLotteryDeadlineJa(n.lottery_deadline)}</span>
-            <a href="${esc(n.url)}" target="_blank" rel="noopener">${esc(n.title)}</a>
-            ${n.maker ? `<span class="asakan-lottery-shop">${esc(n.maker)}</span>` : ""}
-          </li>`).join("")}
-      </ul>
+      ${lotteryDeadlineGroupHtml("7日以内", LOTTERY_COMMON.within7)}
+      ${lotteryDeadlineGroupHtml("2週間以内（8〜14日）", LOTTERY_COMMON.within14)}
+      ${LOTTERY_COMMON.beyond15.total ? `<p class="asakan-lottery-more"><a href="lottery.html">ほか 15日以降の締切 ${LOTTERY_COMMON.beyond15.total}件 &rarr; 予約・抽選ページへ</a></p>` : ""}
     </section>` : "";
 
   const facetsHtml = categoryFacetsHtml(list, pickedKeys);
@@ -1846,7 +1883,7 @@ function renderC(){
       </div>
       <div class="asakan-rule-double"></div>
     </header>
-    <div class="asakan-summary num">本日の新着 <strong>${newCount}</strong>件｜締切間近 <strong>${deadlineCount}</strong>件</div>
+    <div class="asakan-summary num">本日の新着 <strong>${newCount}</strong>件｜締切 7日以内 <strong>${deadline7Count}</strong>件｜2週間以内 <strong>${deadline14Count}</strong>件</div>
     ${(topHtml || subHtml) ? `<div class="asakan-topblock">${topHtml}${subHtml}</div>` : ""}
     ${newsHtml}
     ${lotteryHtml}
