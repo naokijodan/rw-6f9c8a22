@@ -484,7 +484,7 @@ img{max-width:100%}
 <header class="mast">
   <div class="mast-in">
     <div class="brand">新商品<b>ウォッチ</b></div>
-    <div class="today num">2026年9月11日（金） 07:54更新</div>
+    <div class="today num">2026年9月12日（土） 07:52更新</div>
     <a class="theme-toggle" href="https://docs.google.com/spreadsheets/d/1g8d_tYSgmwsxorlktBztrlCTUnI-iZyjKpcMLdGV1KU/edit" target="_blank" rel="noopener">📋 台帳</a>
     <div class="switch" role="tablist" aria-label="デザイン案の切り替え">
       <button id="bA" class="on" onclick="show('A')">ポータル</button>
@@ -522,7 +522,7 @@ img{max-width:100%}
 
 <script>
 const DATA = [{"key": "lorcana:https://www.takaratomy.co.jp/products/disneylorcana/product/attack-of-the-vine/booster-pack/", "cat": "トレカ", "title": "ＡＴＴＡＣＫ ＯＦ ＴＨＥ ＶＩＮＥ!　ヴァインズ・アタック！ ブースターパック", "maker": "タカラトミー", "date": "2026-07-17", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 5280, "url": "https://www.takaratomy.co.jp/products/disneylorcana/product/attack-of-the-vine/booster-pack/", "series": ["ロルカナ"], "maker_groups": ["タカラトミー"], "resale": false, "img": "https://www.takaratomy.co.jp/products/disneylorcana/img/product/attack-of-the-vine/booster-pack/pic_product01@2x.png?20260610", "first_seen": "2026-08-01", "en_q": "Attack of the Vine Booster Pack", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": "", "picked": "sub"}, {"key": "lorcana:https://www.takaratomy.co.jp/products/disneylorcana/product/hyperia-city/booster-pack/", "cat": "トレカ", "title": "ハイぺリアシティ​ ブースターパック", "maker": "タカラトミー", "date": "2026-10-16", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 5280, "url": "https://www.takaratomy.co.jp/products/disneylorcana/product/hyperia-city/booster-pack/", "series": ["ロルカナ"], "maker_groups": ["タカラトミー"], "resale": false, "img": "https://www.takaratomy.co.jp/products/disneylorcana/img/product/hyperia-city/booster-pack/pic_product01@2x.png", "first_seen": "2026-09-08", "en_q": "Shadowverse EVOLVE Hyperia City booster pack", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": "", "picked": "top"}];
-const STATS = {"new": 418, "changed": 21, "errors": 2};
+const STATS = {"new": 410, "changed": 10, "errors": 2};
 const LOTTERY_SITES = [{"name": "ポケモンセンターオンライン", "url": "https://www.pokemoncenter-online.com/"}, {"name": "楽天ブックス", "url": "https://books.rakuten.co.jp/"}, {"name": "あみあみ", "url": "https://www.amiami.jp/"}, {"name": "駿河屋", "url": "https://www.suruga-ya.jp/"}];
 // 朝刊ビュー（案C）専用の共通データ（2026-08-10追加）。全ページ共通の内容
 // （src/report.py _build_news_common/_build_lottery_common が生成日1回だけ
@@ -535,9 +535,9 @@ const LOTTERY_SITES = [{"name": "ポケモンセンターオンライン", "url"
 // (8〜14日後)}, beyond15:{total:該当総数(15日以降)。一覧は持たない}}。
 // サマリー行・グループ見出しの件数は表示上限5件ではなく各totalを使う
 // （捏造禁止＝表示件数と集計件数を混同しない）。
-const NEWS_COMMON = [{"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2139696.html", "title": "ハセガワ、プラモデル「1/350 日本海軍 航空母艦 隼鷹」再販分を本日出荷開始！", "url": "https://hobby.watch.impress.co.jp/docs/news/2139696.html", "maker": ""}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2139695.html", "title": "ファインモールド、プラモデル「1/72 アメリカ空軍 F-4G ワイルド・ウィーゼル“SEA迷彩”」本日出荷開始！", "url": "https://hobby.watch.impress.co.jp/docs/news/2139695.html", "maker": "ファインモールド"}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2133295.html", "title": "ガチャ「『真・女神転生』シリーズ 悪魔いっぱいコレクション」が9月下旬発売「ジャックフロスト」などおなじみの悪魔が大集合", "url": "https://hobby.watch.impress.co.jp/docs/news/2133295.html", "maker": "タカラトミーアーツ"}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2139251.html", "title": "カイゲンファーマのかぜ薬とコラボしたカプセルトイ「改源 グッズコレクション」が9月下旬発売", "url": "https://hobby.watch.impress.co.jp/docs/news/2139251.html", "maker": "ケンエレファント"}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2139771.html", "title": "キタンクラブのカプセルトイ「おさんぽカメレオン」が新仕様で再登場！ 「おさんぽカメレオン Fit」9月18日より順次発売", "url": "https://hobby.watch.impress.co.jp/docs/news/2139771.html", "maker": "キタンクラブ"}];
+const NEWS_COMMON = [{"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2140062.html", "title": "「マクロスF」×「トップガン マーヴェリック」コラボより「DX超合金 VF-25 メサイアバルキリー トップガン マーヴェリックVer.」本日発売！", "url": "https://hobby.watch.impress.co.jp/docs/news/2140062.html", "maker": ""}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2140061.html", "title": "タミヤ、プラモデル「1/24 NISSAN レパード2ドア ハードトップ280X･SF-L」本日発売！", "url": "https://hobby.watch.impress.co.jp/docs/news/2140061.html", "maker": "タミヤ"}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2139698.html", "title": "「超合金魂 GX-04S UFOロボグレンダイザー宇宙の王者セット」再販分が本日発売！", "url": "https://hobby.watch.impress.co.jp/docs/news/2139698.html", "maker": ""}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2139697.html", "title": "プラモデル「30MM 1/144 EXM-A9p スピナティオ(海賊仕様)」＆「カスタマイズウェポンズ(海賊武装)」本日発売！", "url": "https://hobby.watch.impress.co.jp/docs/news/2139697.html", "maker": ""}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/special/2138870.html", "title": "はじける笑顔がまぶしい！「ワトラ 競泳水着Ver. design by かにビーム」【あみあみ展示撮り下ろし】かにビーム氏のオリジナルキャラクターを立体化", "url": "https://hobby.watch.impress.co.jp/docs/special/2138870.html", "maker": ""}];
 const LOTTERY_COMMON = {"within7": {"items": [{"title": "ポケモンカード 30th CELEBRATION BOX", "url": "https://cardchusen.com/pokeka/30th-celebration#card-30th-celebration-bookoff-akihabara", "maker": "ブックオフ秋葉原駅前店", "lottery_deadline": "2026-09-12T23:59:00+09:00"}, {"title": "ポケモンカード 30th CELEBRATION BOX", "url": "https://cardchusen.com/pokeka/30th-celebration#card-30th-celebration-magi", "maker": "magiトレカ", "lottery_deadline": "2026-09-15T23:59:00+09:00"}, {"title": "ポケモンカード 30th CELEBRATION BOX", "url": "https://cardchusen.com/pokeka/30th-celebration#card-30th-celebration-magi-fukuoka-tenjin", "maker": "magi福岡天神店", "lottery_deadline": "2026-09-16T23:59:00+09:00"}, {"title": "ポケモンカード 30th CELEBRATION BOX", "url": "https://cardchusen.com/pokeka/30th-celebration#card-30th-celebration-magi-tachikawa", "maker": "magi立川駅前店", "lottery_deadline": "2026-09-16T23:59:00+09:00"}, {"title": "ポケモンカード 30th CELEBRATION BOX", "url": "https://cardchusen.com/pokeka/30th-celebration#card-30th-celebration-ninja-soldier", "maker": "ニンジャソルジャー", "lottery_deadline": "2026-09-16T23:59:00+09:00"}], "total": 7}, "within14": {"items": [], "total": 0}, "beyond15": {"total": 0}};
-const TODAY_ISO = "2026-09-11";
+const TODAY_ISO = "2026-09-12";
 // "default"（トレカ/フィギュア/くじタブ）/ "comic"（出版社別タブ）/
 // "game"（プラットフォーム別タブ）/ "sports"（競技別タブ）/ "jump"（ジャンル別タブ）/
 // "news"（媒体別タブ）。
@@ -1876,7 +1876,7 @@ function renderC(){
           <div class="asakan-hanko">朝刊</div>
         </div>
         <div class="asakan-issue-info">
-          <p class="asakan-issue-date num">2026年9月11日（金）</p>
+          <p class="asakan-issue-date num">2026年9月12日（土）</p>
           <p class="asakan-issue-note">毎朝7時更新</p>
         </div>
       </div>
