@@ -484,7 +484,7 @@ img{max-width:100%}
 <header class="mast">
   <div class="mast-in">
     <div class="brand">新商品<b>ウォッチ</b></div>
-    <div class="today num">2026年9月17日（木） 08:28更新</div>
+    <div class="today num">2026年9月18日（金） 07:54更新</div>
     <a class="theme-toggle" href="https://docs.google.com/spreadsheets/d/1g8d_tYSgmwsxorlktBztrlCTUnI-iZyjKpcMLdGV1KU/edit" target="_blank" rel="noopener">📋 台帳</a>
     <div class="switch" role="tablist" aria-label="デザイン案の切り替え">
       <button id="bA" class="on" onclick="show('A')">ポータル</button>
@@ -522,7 +522,7 @@ img{max-width:100%}
 
 <script>
 const DATA = [{"key": "lorcana:https://www.takaratomy.co.jp/products/disneylorcana/product/attack-of-the-vine/booster-pack/", "cat": "トレカ", "title": "ＡＴＴＡＣＫ ＯＦ ＴＨＥ ＶＩＮＥ!　ヴァインズ・アタック！ ブースターパック", "maker": "タカラトミー", "date": "2026-07-17", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 5280, "url": "https://www.takaratomy.co.jp/products/disneylorcana/product/attack-of-the-vine/booster-pack/", "series": ["ロルカナ"], "maker_groups": ["タカラトミー"], "resale": false, "img": "https://www.takaratomy.co.jp/products/disneylorcana/img/product/attack-of-the-vine/booster-pack/pic_product01@2x.png?20260610", "first_seen": "2026-08-01", "en_q": "Attack of the Vine Booster Pack", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": "", "picked": "sub"}, {"key": "lorcana:https://www.takaratomy.co.jp/products/disneylorcana/product/hyperia-city/booster-pack/", "cat": "トレカ", "title": "ハイぺリアシティ​ ブースターパック", "maker": "タカラトミー", "date": "2026-10-16", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 5280, "url": "https://www.takaratomy.co.jp/products/disneylorcana/product/hyperia-city/booster-pack/", "series": ["ロルカナ"], "maker_groups": ["タカラトミー"], "resale": false, "img": "https://www.takaratomy.co.jp/products/disneylorcana/img/product/hyperia-city/booster-pack/pic_product01@2x.png", "first_seen": "2026-09-08", "en_q": "Shadowverse EVOLVE Hyperia City booster pack", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": "", "picked": "top"}];
-const STATS = {"new": 234, "changed": 73, "errors": 1};
+const STATS = {"new": 228, "changed": 64, "errors": 2};
 const LOTTERY_SITES = [{"name": "ポケモンセンターオンライン", "url": "https://www.pokemoncenter-online.com/"}, {"name": "楽天ブックス", "url": "https://books.rakuten.co.jp/"}, {"name": "あみあみ", "url": "https://www.amiami.jp/"}, {"name": "駿河屋", "url": "https://www.suruga-ya.jp/"}];
 // 朝刊ビュー（案C）専用の共通データ（2026-08-10追加）。全ページ共通の内容
 // （src/report.py _build_news_common/_build_lottery_common が生成日1回だけ
@@ -535,9 +535,9 @@ const LOTTERY_SITES = [{"name": "ポケモンセンターオンライン", "url"
 // (8〜14日後)}, beyond15:{total:該当総数(15日以降)。一覧は持たない}}。
 // サマリー行・グループ見出しの件数は表示上限5件ではなく各totalを使う
 // （捏造禁止＝表示件数と集計件数を混同しない）。
-const NEWS_COMMON = [{"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2141215.html", "title": "東京マルイ、「リコリス・リコイル」コラボモデル「たきなの銃」本日発売！", "url": "https://hobby.watch.impress.co.jp/docs/news/2141215.html", "maker": "東京マルイ"}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2134946.html", "title": "ガチャ「『踊る大捜査線 N.E.W.』めじるしガチャマスコット」9月下旬発売！", "url": "https://hobby.watch.impress.co.jp/docs/news/2134946.html", "maker": "タカラトミーアーツ"}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2141542.html", "title": "プライズフィギュア「すーぱーそに子 BiCute Bunnies FigureーNewly Drawn Costume 燕尾ver.ー」が2027年3月頃より再登場", "url": "https://hobby.watch.impress.co.jp/docs/news/2141542.html", "maker": "フリュー"}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2141532.html", "title": "「創彩少女庭園」より「きるプラ 薬師寺 久遠【桃桜高校・制服】」、「けもみみエミュレータさん【水着】/ドリーミングスタイル トワイライトキャット」が9月17日に予約開始", "url": "https://hobby.watch.impress.co.jp/docs/news/2141532.html", "maker": "コトブキヤ"}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2141495.html", "title": "「METAL ROBOT魂（Ka signature） ＜SIDE MS＞ 強化型ZZガンダム」、「ROBOT魂（Ka signature） ＜SIDE MS＞ ゲーマルク [Re:Coordinate]」の2次受注がプレバンにて9月18日に開始", "url": "https://hobby.watch.impress.co.jp/docs/news/2141495.html", "maker": ""}];
+const NEWS_COMMON = [{"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2141218.html", "title": "ハセガワ、1/350スケールプラモデル「日本海軍 航空母艦 飛鷹」本日出荷開始！", "url": "https://hobby.watch.impress.co.jp/docs/news/2141218.html", "maker": "ハセガワ"}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2141216.html", "title": "ファインモールド、プラモデル「1/72 ドイツ空軍 F-4F 戦闘機 “メルダース”」本日出荷開始！", "url": "https://hobby.watch.impress.co.jp/docs/news/2141216.html", "maker": "ファインモールド"}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2134971.html", "title": "ガチャ「サンリオキャラクターズ Yummy！　スイーツマスコット チルサイダー」9月下旬発売！", "url": "https://hobby.watch.impress.co.jp/docs/news/2134971.html", "maker": "タカラトミーアーツ"}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2141938.html", "title": "コトブキヤ、「フレームアームズ・ガール」と思われるシルエット画像公開！9月24日に一部情報解禁予定「ダークネスクイーン」と「輝鎚・甲」がフィギュア化か？", "url": "https://hobby.watch.impress.co.jp/docs/news/2141938.html", "maker": "コトブキヤ"}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2141798.html", "title": "TVスペシャルアニメ「五等分の花嫁∽」より中野一花がカドプラシリーズに登場。9月17日より予約開始", "url": "https://hobby.watch.impress.co.jp/docs/news/2141798.html", "maker": "KADOKAWA"}];
 const LOTTERY_COMMON = {"within7": {"items": [], "total": 0}, "within14": {"items": [], "total": 0}, "beyond15": {"total": 1}};
-const TODAY_ISO = "2026-09-17";
+const TODAY_ISO = "2026-09-18";
 // "default"（トレカ/フィギュア/くじタブ）/ "comic"（出版社別タブ）/
 // "game"（プラットフォーム別タブ）/ "sports"（競技別タブ）/ "jump"（ジャンル別タブ）/
 // "news"（媒体別タブ）。
@@ -1876,7 +1876,7 @@ function renderC(){
           <div class="asakan-hanko">朝刊</div>
         </div>
         <div class="asakan-issue-info">
-          <p class="asakan-issue-date num">2026年9月17日（木）</p>
+          <p class="asakan-issue-date num">2026年9月18日（金）</p>
           <p class="asakan-issue-note">毎朝7時更新</p>
         </div>
       </div>
