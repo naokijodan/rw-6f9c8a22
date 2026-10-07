@@ -484,7 +484,7 @@ img{max-width:100%}
 <header class="mast">
   <div class="mast-in">
     <div class="brand">新商品<b>ウォッチ</b></div>
-    <div class="today num">2026年10月7日（水） 07:50更新</div>
+    <div class="today num">2026年10月8日（木） 08:02更新</div>
     <a class="theme-toggle" href="https://docs.google.com/spreadsheets/d/1g8d_tYSgmwsxorlktBztrlCTUnI-iZyjKpcMLdGV1KU/edit" target="_blank" rel="noopener">📋 台帳</a>
     <div class="switch" role="tablist" aria-label="デザイン案の切り替え">
       <button id="bA" class="on" onclick="show('A')">ポータル</button>
@@ -522,7 +522,7 @@ img{max-width:100%}
 
 <script>
 const DATA = [{"key": "lorcana:https://www.takaratomy.co.jp/products/disneylorcana/product/attack-of-the-vine/booster-pack/", "cat": "トレカ", "title": "ＡＴＴＡＣＫ ＯＦ ＴＨＥ ＶＩＮＥ!　ヴァインズ・アタック！ ブースターパック", "maker": "タカラトミー", "date": "2026-07-17", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 5280, "url": "https://www.takaratomy.co.jp/products/disneylorcana/product/attack-of-the-vine/booster-pack/", "series": ["ロルカナ"], "maker_groups": ["タカラトミー"], "resale": false, "img": "https://www.takaratomy.co.jp/products/disneylorcana/img/product/attack-of-the-vine/booster-pack/pic_product01@2x.png?20260610", "first_seen": "2026-08-01", "en_q": "Attack of the Vine Booster Pack", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": "", "picked": "sub"}, {"key": "lorcana:https://www.takaratomy.co.jp/products/disneylorcana/product/hyperia-city/booster-pack/", "cat": "トレカ", "title": "ハイぺリアシティ​ ブースターパック", "maker": "タカラトミー", "date": "2026-10-16", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 5280, "url": "https://www.takaratomy.co.jp/products/disneylorcana/product/hyperia-city/booster-pack/", "series": ["ロルカナ"], "maker_groups": ["タカラトミー"], "resale": false, "img": "https://www.takaratomy.co.jp/products/disneylorcana/img/product/hyperia-city/booster-pack/pic_product01@2x.png", "first_seen": "2026-09-08", "en_q": "Shadowverse EVOLVE Hyperia City booster pack", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": "", "picked": "sub"}, {"key": "lorcana:https://www.takaratomy.co.jp/products/disneylorcana/product/hyperia-city/goods/", "cat": "トレカ", "title": "ハイぺリアシティ​ 周辺グッズ", "maker": "タカラトミー", "date": "2026-10-16", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 1210, "url": "https://www.takaratomy.co.jp/products/disneylorcana/product/hyperia-city/goods/", "series": ["ロルカナ"], "maker_groups": ["タカラトミー"], "resale": false, "img": "https://www.takaratomy.co.jp/products/disneylorcana/img/product/hyperia-city/goods/pic_product02@2x.png", "first_seen": "2026-09-25", "en_q": "Hyperia City", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": "", "picked": "top"}];
-const STATS = {"new": 82, "changed": 5, "errors": 2};
+const STATS = {"new": 405, "changed": 65, "errors": 1};
 const LOTTERY_SITES = [{"name": "ポケモンセンターオンライン", "url": "https://www.pokemoncenter-online.com/"}, {"name": "楽天ブックス", "url": "https://books.rakuten.co.jp/"}, {"name": "あみあみ", "url": "https://www.amiami.jp/"}, {"name": "駿河屋", "url": "https://www.suruga-ya.jp/"}];
 // 朝刊ビュー（案C）専用の共通データ（2026-08-10追加）。全ページ共通の内容
 // （src/report.py _build_news_common/_build_lottery_common が生成日1回だけ
@@ -535,9 +535,9 @@ const LOTTERY_SITES = [{"name": "ポケモンセンターオンライン", "url"
 // (8〜14日後)}, beyond15:{total:該当総数(15日以降)。一覧は持たない}}。
 // サマリー行・グループ見出しの件数は表示上限5件ではなく各totalを使う
 // （捏造禁止＝表示件数と集計件数を混同しない）。
-const NEWS_COMMON = [{"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2145492.html", "title": "ハセガワ、1/72プラモデル「F-14A トムキャット “大西洋空母航空団”」再販分を本日出荷開始！", "url": "https://hobby.watch.impress.co.jp/docs/news/2145492.html", "maker": ""}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2141998.html", "title": "ガチャ「スター・ウォーズ プラプラマスコット」第3弾はエピソード1がテーマ！ クワイ＝ガン・ジンなど全5種で10月中旬発売", "url": "https://hobby.watch.impress.co.jp/docs/news/2141998.html", "maker": "タカラトミーアーツ"}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2146131.html", "title": "レゴグループとサンリオ、複数年にわたるパートナーシップを締結。2027年より「レゴ サンリオ」セットを発売予定", "url": "https://hobby.watch.impress.co.jp/docs/news/2146131.html", "maker": "レゴジャパン"}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2146100.html", "title": "Amazonにて美少女プラモ「30MP 鹿目まどか/暁美ほむら（ワルプルギスの廻天Ver.）」の2次受注分が予約受付中！", "url": "https://hobby.watch.impress.co.jp/docs/news/2146100.html", "maker": ""}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2146056.html", "title": "食玩「星のカービィ チョコボックス ボックスフィギュアコレクション」が2027年3月に発売", "url": "https://hobby.watch.impress.co.jp/docs/news/2146056.html", "maker": "バンダイ"}];
+const NEWS_COMMON = [{"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2146198.html", "title": "フジミ模型、「ちび丸艦隊シリーズ」より「比叡 特別仕様(エフェクトパーツ付き)」＆「瑞鶴 特別仕様(エフェクトパーツ付き)」本日出荷開始！", "url": "https://hobby.watch.impress.co.jp/docs/news/2146198.html", "maker": "フジミ模型"}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2146196.html", "title": "「初音ミク×シナモロール」のトレーディングフィギュアが本日出荷開始！全高約90mmにサイズアップしたデフォルメフィギュアも同日出荷", "url": "https://hobby.watch.impress.co.jp/docs/news/2146196.html", "maker": "グッドスマイルカンパニー"}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2141950.html", "title": "ハローキティたちがかわいい魔女見習いに！ ガチャ「サンリオキャラクターズ 夢見る魔女見習い」10月中旬発売", "url": "https://hobby.watch.impress.co.jp/docs/news/2141950.html", "maker": "タカラトミーアーツ"}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2146486.html", "title": "楽天ブックスにて美少女プラモ「30MS オプションパーツセット29(アクションウエアβ)[カラーB]」が販売再開！", "url": "https://hobby.watch.impress.co.jp/docs/news/2146486.html", "maker": ""}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2146460.html", "title": "「一番くじ 機動戦士ガンダム UNIVERSAL CENTURY SAGA INTERLUDE」の全ラインナップが公開", "url": "https://hobby.watch.impress.co.jp/docs/news/2146460.html", "maker": ""}];
 const LOTTERY_COMMON = {"within7": {"items": [{"title": "ONE PIECEカードゲーム エクストラブースター ONE PIECE Heroines Edition vol.2【EB-05】", "url": "https://www.onepiece-cardgame.com/", "maker": "バンダイ", "lottery_deadline": "2026-10-11"}], "total": 1}, "within14": {"items": [{"title": "METAL ROBOT魂 ＜SIDE MS＞ ガンダムダブルエックス", "url": "https://tamashiiweb.com/item/14878/", "maker": "BANDAI SPIRITS", "lottery_deadline": "2026-10-18"}], "total": 1}, "beyond15": {"total": 0}};
-const TODAY_ISO = "2026-10-07";
+const TODAY_ISO = "2026-10-08";
 // "default"（トレカ/フィギュア/くじタブ）/ "comic"（出版社別タブ）/
 // "game"（プラットフォーム別タブ）/ "sports"（競技別タブ）/ "jump"（ジャンル別タブ）/
 // "news"（媒体別タブ）。
@@ -1876,7 +1876,7 @@ function renderC(){
           <div class="asakan-hanko">朝刊</div>
         </div>
         <div class="asakan-issue-info">
-          <p class="asakan-issue-date num">2026年10月7日（水）</p>
+          <p class="asakan-issue-date num">2026年10月8日（木）</p>
           <p class="asakan-issue-note">毎朝7時更新</p>
         </div>
       </div>
