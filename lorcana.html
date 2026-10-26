@@ -484,7 +484,7 @@ img{max-width:100%}
 <header class="mast">
   <div class="mast-in">
     <div class="brand">新商品<b>ウォッチ</b></div>
-    <div class="today num">2026年10月26日（月） 07:58更新</div>
+    <div class="today num">2026年10月27日（火） 07:53更新</div>
     <a class="theme-toggle" href="https://docs.google.com/spreadsheets/d/1g8d_tYSgmwsxorlktBztrlCTUnI-iZyjKpcMLdGV1KU/edit" target="_blank" rel="noopener">📋 台帳</a>
     <div class="switch" role="tablist" aria-label="デザイン案の切り替え">
       <button id="bA" class="on" onclick="show('A')">ポータル</button>
@@ -522,7 +522,7 @@ img{max-width:100%}
 
 <script>
 const DATA = [{"key": "lorcana:https://www.takaratomy.co.jp/products/disneylorcana/product/attack-of-the-vine/booster-pack/", "cat": "トレカ", "title": "ＡＴＴＡＣＫ ＯＦ ＴＨＥ ＶＩＮＥ!　ヴァインズ・アタック！ ブースターパック", "maker": "タカラトミー", "date": "2026-07-17", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 5280, "url": "https://www.takaratomy.co.jp/products/disneylorcana/product/attack-of-the-vine/booster-pack/", "series": ["ロルカナ"], "maker_groups": ["タカラトミー"], "resale": false, "img": "https://www.takaratomy.co.jp/products/disneylorcana/img/product/attack-of-the-vine/booster-pack/pic_product01@2x.png?20260610", "first_seen": "2026-08-01", "en_q": "Attack of the Vine Booster Pack", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": "", "picked": "sub"}, {"key": "lorcana:https://www.takaratomy.co.jp/products/disneylorcana/product/hyperia-city/booster-pack/", "cat": "トレカ", "title": "ハイぺリアシティ​ ブースターパック", "maker": "タカラトミー", "date": "2026-10-16", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 5280, "url": "https://www.takaratomy.co.jp/products/disneylorcana/product/hyperia-city/booster-pack/", "series": ["ロルカナ"], "maker_groups": ["タカラトミー"], "resale": false, "img": "https://www.takaratomy.co.jp/products/disneylorcana/img/product/hyperia-city/booster-pack/pic_product01@2x.png", "first_seen": "2026-09-08", "en_q": "Shadowverse EVOLVE Hyperia City booster pack", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": "", "picked": "sub"}, {"key": "lorcana:https://www.takaratomy.co.jp/products/disneylorcana/product/hyperia-city/goods/", "cat": "トレカ", "title": "ハイぺリアシティ​ 周辺グッズ", "maker": "タカラトミー", "date": "2026-10-16", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 1210, "url": "https://www.takaratomy.co.jp/products/disneylorcana/product/hyperia-city/goods/", "series": ["ロルカナ"], "maker_groups": ["タカラトミー"], "resale": false, "img": "https://www.takaratomy.co.jp/products/disneylorcana/img/product/hyperia-city/goods/pic_product02@2x.png", "first_seen": "2026-09-25", "en_q": "Hyperia City", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": "", "picked": "top"}];
-const STATS = {"new": 34, "changed": 4, "errors": 5};
+const STATS = {"new": 112, "changed": 42, "errors": 4};
 const LOTTERY_SITES = [{"name": "ポケモンセンターオンライン", "url": "https://www.pokemoncenter-online.com/"}, {"name": "楽天ブックス", "url": "https://books.rakuten.co.jp/"}, {"name": "あみあみ", "url": "https://www.amiami.jp/"}, {"name": "駿河屋", "url": "https://www.suruga-ya.jp/"}];
 // 朝刊ビュー（案C）専用の共通データ（2026-08-10追加）。全ページ共通の内容
 // （src/report.py _build_news_common/_build_lottery_common が生成日1回だけ
@@ -535,9 +535,9 @@ const LOTTERY_SITES = [{"name": "ポケモンセンターオンライン", "url"
 // (8〜14日後)}, beyond15:{total:該当総数(15日以降)。一覧は持たない}}。
 // サマリー行・グループ見出しの件数は表示上限5件ではなく各totalを使う
 // （捏造禁止＝表示件数と集計件数を混同しない）。
-const NEWS_COMMON = [{"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2150547.html", "title": "「一番くじ NARUTO-ナルト- 疾風伝 飛段・角都編」本日より順次発売！シカマルとアスマ、飛段と角都がMASTERLISEでフィギュア化", "url": "https://hobby.watch.impress.co.jp/docs/news/2150547.html", "maker": ""}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/interview/2149444.html", "title": "「METAL ROBOT魂 ＜SIDE MS＞ インフィニットジャスティスガンダム（SEED FREEDOM ZERO Ver.）」企画担当者インタビュー", "url": "https://hobby.watch.impress.co.jp/docs/interview/2149444.html", "maker": ""}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/special/2148948.html", "title": "「ゴマ豆腐アザラシ」【ガチャ撮り下ろし】豆腐とアザラシがまさかの合体！「焼き豆腐」「冷ややっこ」など4種類の豆腐の質感やタレ・薬味まで再現", "url": "https://hobby.watch.impress.co.jp/docs/special/2148948.html", "maker": ""}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2143897.html", "title": "ガチャ「日清食品お椀で食べるシリーズめじるしガチャマスコット」10月発売！", "url": "https://hobby.watch.impress.co.jp/docs/news/2143897.html", "maker": "タカラトミーアーツ"}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2150975.html", "title": "「ブルアカ」よりやさしく微笑む「ノア（パジャマ）」のフィギュアが10月29日より予約開始", "url": "https://hobby.watch.impress.co.jp/docs/news/2150975.html", "maker": "Yostar"}];
-const LOTTERY_COMMON = {"within7": {"items": [{"title": "ポケモンカードゲーム 拡張パック ハドウシーカー BOX", "url": "https://www.pokemon-card.com/products/", "maker": "ポケモン", "lottery_deadline": "2026-10-26"}], "total": 1}, "within14": {"items": [], "total": 0}, "beyond15": {"total": 0}};
-const TODAY_ISO = "2026-10-26";
+const NEWS_COMMON = [{"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2150999.html", "title": "フジミ模型、プラモデル「1/700 WN12 日本海軍戦艦 榛名 昭和19年/捷一号作戦」本日出荷開始！スナップ仕様のウォーターラインモデル「波シリーズ」に榛名が登場", "url": "https://hobby.watch.impress.co.jp/docs/news/2150999.html", "maker": "フジミ模型"}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2143838.html", "title": "ガチャ「肩ズンFig. トイ・ストーリー5 Part1」10月下旬発売！", "url": "https://hobby.watch.impress.co.jp/docs/news/2143838.html", "maker": "タカラトミーアーツ"}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2151300.html", "title": "「機動新世紀ガンダムX」のガンプラ「HG 1/144 ガンダムヴァサーゴ」のサンプル画像公開！10月31日発売予定", "url": "https://hobby.watch.impress.co.jp/docs/news/2151300.html", "maker": ""}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2151289.html", "title": "「創彩少女庭園」より「薬師寺 久遠【チャイナコスチューム】」が10月27日に予約開始コトブキヤショップ限定品「アフタースクール 久遠の役者小物セット2」も同時予約開始", "url": "https://hobby.watch.impress.co.jp/docs/news/2151289.html", "maker": "コトブキヤ"}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2151285.html", "title": "ガシャポン「機動戦士ガンダム MOBILE SUIT ENSEMBLE ホロライブプロダクションコラボVol.1」が10月27日より予約開始", "url": "https://hobby.watch.impress.co.jp/docs/news/2151285.html", "maker": "バンダイ"}];
+const LOTTERY_COMMON = {"within7": {"items": [], "total": 0}, "within14": {"items": [], "total": 0}, "beyond15": {"total": 0}};
+const TODAY_ISO = "2026-10-27";
 // "default"（トレカ/フィギュア/くじタブ）/ "comic"（出版社別タブ）/
 // "game"（プラットフォーム別タブ）/ "sports"（競技別タブ）/ "jump"（ジャンル別タブ）/
 // "news"（媒体別タブ）。
@@ -1876,7 +1876,7 @@ function renderC(){
           <div class="asakan-hanko">朝刊</div>
         </div>
         <div class="asakan-issue-info">
-          <p class="asakan-issue-date num">2026年10月26日（月）</p>
+          <p class="asakan-issue-date num">2026年10月27日（火）</p>
           <p class="asakan-issue-note">毎朝7時更新</p>
         </div>
       </div>
