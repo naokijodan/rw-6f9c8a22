@@ -484,7 +484,7 @@ img{max-width:100%}
 <header class="mast">
   <div class="mast-in">
     <div class="brand">新商品<b>ウォッチ</b></div>
-    <div class="today num">2026年11月16日（月） 08:04更新</div>
+    <div class="today num">2026年11月17日（火） 08:27更新</div>
     <a class="theme-toggle" href="https://docs.google.com/spreadsheets/d/1g8d_tYSgmwsxorlktBztrlCTUnI-iZyjKpcMLdGV1KU/edit" target="_blank" rel="noopener">📋 台帳</a>
     <div class="switch" role="tablist" aria-label="デザイン案の切り替え">
       <button id="bA" class="on" onclick="show('A')">ポータル</button>
@@ -522,7 +522,7 @@ img{max-width:100%}
 
 <script>
 const DATA = [{"key": "lorcana:https://www.takaratomy.co.jp/products/disneylorcana/product/attack-of-the-vine/booster-pack/", "cat": "トレカ", "title": "ＡＴＴＡＣＫ ＯＦ ＴＨＥ ＶＩＮＥ!　ヴァインズ・アタック！ ブースターパック", "maker": "タカラトミー", "date": "2026-07-17", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 5280, "url": "https://www.takaratomy.co.jp/products/disneylorcana/product/attack-of-the-vine/booster-pack/", "series": ["ロルカナ"], "maker_groups": ["タカラトミー"], "resale": false, "img": "https://www.takaratomy.co.jp/products/disneylorcana/img/product/attack-of-the-vine/booster-pack/pic_product01@2x.png?20260610", "first_seen": "2026-08-01", "en_q": "Attack of the Vine Booster Pack", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": "", "picked": "sub"}, {"key": "lorcana:https://www.takaratomy.co.jp/products/disneylorcana/product/hyperia-city/booster-pack/", "cat": "トレカ", "title": "ハイぺリアシティ​ ブースターパック", "maker": "タカラトミー", "date": "2026-10-16", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 5280, "url": "https://www.takaratomy.co.jp/products/disneylorcana/product/hyperia-city/booster-pack/", "series": ["ロルカナ"], "maker_groups": ["タカラトミー"], "resale": false, "img": "https://www.takaratomy.co.jp/products/disneylorcana/img/product/hyperia-city/booster-pack/pic_product01@2x.png", "first_seen": "2026-09-08", "en_q": "Shadowverse EVOLVE Hyperia City booster pack", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": "", "picked": "sub"}, {"key": "lorcana:https://www.takaratomy.co.jp/products/disneylorcana/product/hyperia-city/goods/", "cat": "トレカ", "title": "ハイぺリアシティ​ 周辺グッズ", "maker": "タカラトミー", "date": "2026-10-16", "preorder_start": "", "lottery_deadline": "", "kind": "発売", "price": 1210, "url": "https://www.takaratomy.co.jp/products/disneylorcana/product/hyperia-city/goods/", "series": ["ロルカナ"], "maker_groups": ["タカラトミー"], "resale": false, "img": "https://www.takaratomy.co.jp/products/disneylorcana/img/product/hyperia-city/goods/pic_product02@2x.png", "first_seen": "2026-09-25", "en_q": "Hyperia City", "lottery": [], "manual_links": [], "platform": [], "sport": "", "genres": [], "game": "", "ozensa": false, "gear": "", "picked": "top"}];
-const STATS = {"new": 22, "changed": 4, "errors": 2};
+const STATS = {"new": 153, "changed": 39, "errors": 1};
 const LOTTERY_SITES = [{"name": "ポケモンセンターオンライン", "url": "https://www.pokemoncenter-online.com/"}, {"name": "楽天ブックス", "url": "https://books.rakuten.co.jp/"}, {"name": "あみあみ", "url": "https://www.amiami.jp/"}, {"name": "駿河屋", "url": "https://www.suruga-ya.jp/"}];
 // 朝刊ビュー（案C）専用の共通データ（2026-08-10追加）。全ページ共通の内容
 // （src/report.py _build_news_common/_build_lottery_common が生成日1回だけ
@@ -535,9 +535,9 @@ const LOTTERY_SITES = [{"name": "ポケモンセンターオンライン", "url"
 // (8〜14日後)}, beyond15:{total:該当総数(15日以降)。一覧は持たない}}。
 // サマリー行・グループ見出しの件数は表示上限5件ではなく各totalを使う
 // （捏造禁止＝表示件数と集計件数を混同しない）。
-const NEWS_COMMON = [{"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2156388.html", "title": "ハセガワ、1/700スケールプラモデル「日本海軍 航空母艦 赤城 “真珠湾攻撃”」再販分を本日出荷開始！", "url": "https://hobby.watch.impress.co.jp/docs/news/2156388.html", "maker": ""}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2156549.html", "title": "「学園アイドルマスター」より氷渡香名江がプライズフィギュア＆ちびぐるみ化決定", "url": "https://hobby.watch.impress.co.jp/docs/news/2156549.html", "maker": ""}, {"key": "prtimes:https://prtimes.jp/main/html/rd/p/000001679.000030865.html", "title": "ROF-MAOが2026年11月15日(日)に200kmマラソンの完走をもって活動再開！キービジュアルやロゴを一新し、新曲リリースや新グッズ発売など情報解禁！", "url": "https://prtimes.jp/main/html/rd/p/000001679.000030865.html", "maker": "ANYCOLOR株式会社"}, {"key": "prtimes:https://prtimes.jp/main/html/rd/p/000000009.000183437.html", "title": "【クリスマス2026】VTuber事務所「りぷらい！」所属の16名がちびっこ姿に！描き下ろし限定グッズを11月15日より販売", "url": "https://prtimes.jp/main/html/rd/p/000000009.000183437.html", "maker": "株式会社MissionTime"}, {"key": "gamewatch:https://game.watch.impress.co.jp/docs/news/2154732.html", "title": "「パペットスンスン マスコットつきグミ」本日11月16日発売「パペットスンスン」のキャラを立体化したボールチェーン付きマスコットが付属", "url": "https://game.watch.impress.co.jp/docs/news/2154732.html", "maker": "バンダイ"}];
+const NEWS_COMMON = [{"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2156563.html", "title": "「超時空要塞マクロス」よりプラモデル「PLAMAX PX19 1/72 VF-1S スーパーバトロイドバルキリー ロイ・フォッカースペシャル」本日出荷開始！", "url": "https://hobby.watch.impress.co.jp/docs/news/2156563.html", "maker": "マックスファクトリー"}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2156562.html", "title": "フジミ模型、プラモデル「1/72 C44 日本海軍 九九式艦上爆撃機11型 “九九艦爆11型・真珠湾”」本日出荷開始”", "url": "https://hobby.watch.impress.co.jp/docs/news/2156562.html", "maker": "フジミ模型"}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/interview/2155640.html", "title": "独学で技術を学び、世界的なフィギュアアーティストに!　「GAKI RACE」クリエイター・JT氏インタビュー", "url": "https://hobby.watch.impress.co.jp/docs/interview/2155640.html", "maker": ""}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2156846.html", "title": "氷渡香名江もラインナップ。カプセルトイ「学園アイドルマスター　むぎゅみにコレクションフィギュア vol.3」が2027年5月下旬に発売", "url": "https://hobby.watch.impress.co.jp/docs/news/2156846.html", "maker": "ブシロードクリエイティブ"}, {"key": "hobbywatch:https://hobby.watch.impress.co.jp/docs/news/2156837.html", "title": "「無限邂逅メガロマリア」よりメイドに扮したキュートなアサシン「クラリス」が11月17日に予約開始", "url": "https://hobby.watch.impress.co.jp/docs/news/2156837.html", "maker": "コトブキヤ"}];
 const LOTTERY_COMMON = {"within7": {"items": [], "total": 0}, "within14": {"items": [{"title": "METAL ROBOT魂 ＜SIDE MS＞ デスティニーガンダム SpecII 最終決戦 Ver.", "url": "https://tamashii-nation.tamashiiweb.com/", "maker": "BANDAI SPIRITS", "lottery_deadline": "2026-11-30"}, {"title": "METAL BUILD ゴッドガンダム（明鏡止水）", "url": "https://tamashiiweb.com/item/15077/", "maker": "BANDAI SPIRITS", "lottery_deadline": "2026-11-30"}], "total": 2}, "beyond15": {"total": 0}};
-const TODAY_ISO = "2026-11-16";
+const TODAY_ISO = "2026-11-17";
 // "default"（トレカ/フィギュア/くじタブ）/ "comic"（出版社別タブ）/
 // "game"（プラットフォーム別タブ）/ "sports"（競技別タブ）/ "jump"（ジャンル別タブ）/
 // "news"（媒体別タブ）。
@@ -1876,7 +1876,7 @@ function renderC(){
           <div class="asakan-hanko">朝刊</div>
         </div>
         <div class="asakan-issue-info">
-          <p class="asakan-issue-date num">2026年11月16日（月）</p>
+          <p class="asakan-issue-date num">2026年11月17日（火）</p>
           <p class="asakan-issue-note">毎朝7時更新</p>
         </div>
       </div>
